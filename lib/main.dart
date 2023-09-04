@@ -3,6 +3,8 @@ import 'package:go_router/go_router.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_web_plugins/url_strategy.dart';
 
+import 'app_bar_stuff.dart';
+
 // private navigators
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorAKey = GlobalKey<NavigatorState>(debugLabel: 'shellA');
@@ -167,6 +169,7 @@ class ScaffoldWithNavigationRail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // appBar: createAppBar(),
       body: Row(
         children: [
           NavigationRail(
@@ -196,7 +199,7 @@ class ScaffoldWithNavigationRail extends StatelessWidget {
 }
 
 /// Widget for the root/initial pages in the bottom navigation bar.
-class RootScreen extends StatelessWidget {
+class RootScreen extends StatefulWidget {
   /// Creates a RootScreen
   const RootScreen({required this.label, required this.detailsPath, Key? key})
       : super(key: key);
@@ -208,20 +211,52 @@ class RootScreen extends StatelessWidget {
   final String detailsPath;
 
   @override
+  State<RootScreen> createState() => _RootScreenState();
+}
+
+class _RootScreenState extends State<RootScreen> {
+
+  List<Widget> buttonList = <Widget>[
+    IconButton(onPressed: () {}, icon: const Icon(Icons.share_outlined)),
+    IconButton(onPressed: () {}, icon: const Icon(Icons.add)),
+    IconButton(onPressed: () {}, icon: const Icon(Icons.delete_outline)),
+    IconButton(onPressed: () {}, icon: const Icon(Icons.archive_outlined)),
+    IconButton(onPressed: () {}, icon: const Icon(Icons.settings_outlined)),
+    IconButton(onPressed: () {}, icon: const Icon(Icons.favorite_border)),
+  ];
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Tab root - $label'),
-      ),
+      appBar: createAppBar(() {
+        showModalBottomSheet<void>(
+          showDragHandle: true,
+          context: context,
+          // TODO: Remove when this is in the framework https://github.com/flutter/flutter/issues/118619
+          constraints: const BoxConstraints(maxWidth: 640),
+          builder: (context) {
+            return SizedBox(
+              height: 150,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                child: ListView(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  children: buttonList,
+                ),
+              ),
+            );
+          },
+        );
+      }),
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Text('Screen $label',
+            Text('Screen ${widget.label}',
                 style: Theme.of(context).textTheme.titleLarge),
             const Padding(padding: EdgeInsets.all(4)),
             TextButton(
-              onPressed: () => context.go(detailsPath),
+              onPressed: () => context.go(widget.detailsPath),
               child: const Text('View details'),
             ),
           ],
