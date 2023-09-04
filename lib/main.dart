@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_web_plugins/url_strategy.dart';
@@ -216,6 +217,8 @@ class RootScreen extends StatefulWidget {
 
 class _RootScreenState extends State<RootScreen> {
 
+  final TextEditingController _controllerOutlined = TextEditingController();
+
   List<Widget> buttonList = <Widget>[
     IconButton(onPressed: () {}, icon: const Icon(Icons.share_outlined)),
     IconButton(onPressed: () {}, icon: const Icon(Icons.add)),
@@ -224,36 +227,22 @@ class _RootScreenState extends State<RootScreen> {
     IconButton(onPressed: () {}, icon: const Icon(Icons.settings_outlined)),
     IconButton(onPressed: () {}, icon: const Icon(Icons.favorite_border)),
   ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: createAppBar(() {
-        showModalBottomSheet<void>(
-          showDragHandle: true,
-          context: context,
-          // TODO: Remove when this is in the framework https://github.com/flutter/flutter/issues/118619
-          constraints: const BoxConstraints(maxWidth: 640),
-          builder: (context) {
-            return SizedBox(
-              height: 150,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                child: ListView(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  children: buttonList,
-                ),
-              ),
-            );
-          },
-        );
+        bottomsheet(context);
       }),
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Text('Screen ${widget.label}',
-                style: Theme.of(context).textTheme.titleLarge),
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .titleLarge),
             const Padding(padding: EdgeInsets.all(4)),
             TextButton(
               onPressed: () => context.go(widget.detailsPath),
@@ -264,8 +253,54 @@ class _RootScreenState extends State<RootScreen> {
       ),
     );
   }
-}
 
+  void bottomsheet(BuildContext context) {
+    if (true) {
+      showModalBottomSheet<void>(
+        showDragHandle: true,
+        context: context,
+        // TODO: Remove when this is in the framework https://github.com/flutter/flutter/issues/118619
+        // constraints: const BoxConstraints(maxWidth: 640),
+        builder: (context) {
+          return LangField();
+          // return SizedBox(
+          //   height: 150,
+          //   width: double.infinity,
+          //   child: Padding(
+          //     padding: const EdgeInsets.symmetric(horizontal: 32.0),
+          //     child: ListView(
+          //       shrinkWrap: true,
+          //       scrollDirection: Axis.horizontal,
+          //       children: buttonList,
+          //     ),
+          //   ),
+          // );
+        },
+      );
+    } else {
+      showBottomSheet<void>(
+        enableDrag: true,
+        elevation: 8.0,
+        context: context,
+        // TODO: Remove when this is in the framework https://github.com/flutter/flutter/issues/118619
+        constraints: const BoxConstraints(maxWidth: 640),
+        builder: (context) {
+          return SizedBox(
+            height: 150,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32.0),
+              child: ListView(
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                children: buttonList,
+              ),
+            ),
+          );
+        },
+      );
+    }
+  }
+}
 /// The details screen for either the A or B screen.
 class DetailsScreen extends StatefulWidget {
   /// Constructs a [DetailsScreen].
