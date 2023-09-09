@@ -7,7 +7,11 @@ const smallSpacing = 10.0;
 
 class ForecastScreen extends StatefulWidget {
   /// Creates a RootScreen
-  const ForecastScreen({required this.label, required this.detailsPath, Key? key})
+  const ForecastScreen(
+      {required this.label,
+      required this.detailsPath,
+      required this.bottomSheetFunction,
+      Key? key})
       : super(key: key);
 
   /// The label
@@ -15,6 +19,8 @@ class ForecastScreen extends StatefulWidget {
 
   /// The path to the detail page
   final String detailsPath;
+
+  final Function bottomSheetFunction;
 
   @override
   State<ForecastScreen> createState() => _ForecastScreenState();
@@ -35,11 +41,13 @@ class _ClearButton extends StatelessWidget {
 class _ForecastScreenState extends State<ForecastScreen> {
   final TextEditingController _controllerOutlined = TextEditingController();
 
+  _ForecastScreenState();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: createAppBar(() {
-        bottomsheet(context);
+        widget.bottomSheetFunction(context);
       }),
       body: Center(
         child: Column(

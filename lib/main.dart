@@ -5,11 +5,19 @@ import 'package:go_router/go_router.dart';
 import 'package:langbar/ui/screens/details_screen.dart';
 import 'package:langbar/ui/screens/forecast_screen.dart';
 import 'package:langbar/ui/screens/root_screen.dart';
+import 'package:langbar/ui/utils.dart';
 
 // private navigators
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorAKey = GlobalKey<NavigatorState>(debugLabel: 'shellA');
 final _shellNavigatorBKey = GlobalKey<NavigatorState>(debugLabel: 'shellB');
+
+class Functions {
+  // how bad that you cannot just pass in a final function and have to go through this static travesty:
+  static void bottomsheetFunction(context) {
+    bottomsheet(context);
+  }
+}
 
 final goRouter = GoRouter(
   initialLocation: '/a',
@@ -33,7 +41,12 @@ final goRouter = GoRouter(
             GoRoute(
               path: '/a',
               pageBuilder: (context, state) => const NoTransitionPage(
-                child: ForecastScreen(label: 'A', detailsPath: '/a/details'),
+                child: ForecastScreen(
+                  label: 'Weather Forecast',
+                  detailsPath: '/forecast',
+                  bottomSheetFunction: Functions.bottomsheetFunction,
+                ),
+                // child: ForecastScreen(label: 'A', detailsPath: '/a/details', bottomSheetFunction: (context) {bottomsheet(context)}),
               ),
               routes: [
                 GoRoute(
