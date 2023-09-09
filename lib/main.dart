@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 
 // ignore: depend_on_referenced_packages
 import 'package:flutter_web_plugins/url_strategy.dart';
+import 'package:langbar/ui/screens/forecast_screen.dart';
+import 'package:langbar/ui/utils.dart';
 
 import 'app_bar_stuff.dart';
 
@@ -34,7 +36,7 @@ final goRouter = GoRouter(
             GoRoute(
               path: '/a',
               pageBuilder: (context, state) => const NoTransitionPage(
-                child: RootScreen(label: 'A', detailsPath: '/a/details'),
+                child: ForecastScreen(label: 'A', detailsPath: '/a/details'),
               ),
               routes: [
                 GoRoute(
