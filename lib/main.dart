@@ -6,9 +6,13 @@ import 'package:langbar/ui/screens/details_screen.dart';
 import 'package:langbar/ui/screens/forecast_screen.dart';
 import 'package:langbar/ui/screens/root_screen.dart';
 import 'package:langbar/ui/utils.dart';
+import 'package:provider/provider.dart';
+
+import 'app_bar_stuff.dart';
 
 // private navigators
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
+final _blaNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'bla');
 final _shellNavigatorAKey = GlobalKey<NavigatorState>(debugLabel: 'shellA');
 final _shellNavigatorBKey = GlobalKey<NavigatorState>(debugLabel: 'shellB');
 
@@ -17,6 +21,10 @@ class Functions {
   static void bottomsheetFunction(context) {
     bottomsheet(context);
   }
+}
+
+class GlobalContextService {
+  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 }
 
 final goRouter = GoRouter(
@@ -32,7 +40,10 @@ final goRouter = GoRouter(
     // https://github.com/flutter/packages/blob/main/packages/go_router/example/lib/stateful_shell_route.dart
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {
-        return ScaffoldWithNestedNavigation(navigationShell: navigationShell);
+        return Consumer<CartModel>(builder: (context, cart, child) {
+          return ScaffoldWithNestedNavigation(
+              navigationShell: navigationShell, showBottomSheet: cart.value);
+        });
       },
       branches: [
         StatefulShellBranch(
@@ -40,11 +51,13 @@ final goRouter = GoRouter(
           routes: [
             GoRoute(
               path: '/a',
-              pageBuilder: (context, state) => const NoTransitionPage(
+              pageBuilder: (context, state) => NoTransitionPage(
                 child: ForecastScreen(
                   label: 'Weather Forecast',
                   detailsPath: '/forecast',
-                  bottomSheetFunction: Functions.bottomsheetFunction,
+                  bottomSheetFunction: (context) {
+                    bottomsheet(_builderContext!);
+                  },
                 ),
                 // child: ForecastScreen(label: 'A', detailsPath: '/a/details', bottomSheetFunction: (context) {bottomsheet(context)}),
               ),
@@ -91,14 +104,23 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      routerConfig: goRouter,
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.indigo,
-        useMaterial3: true,
-      ),
-    );
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(
+            create: (context) => CartModel(),
+            child: const MyApp(),
+          ),
+        ],
+        child: Consumer<CartModel>(builder: (context, cart, child) {
+          return MaterialApp.router(
+            routerConfig: goRouter,
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              primarySwatch: Colors.indigo,
+              useMaterial3: true,
+            ),
+          );
+        }));
   }
 }
 
@@ -108,9 +130,11 @@ class ScaffoldWithNestedNavigation extends StatelessWidget {
   const ScaffoldWithNestedNavigation({
     Key? key,
     required this.navigationShell,
+    required this.showBottomSheet,
   }) : super(
             key: key ?? const ValueKey<String>('ScaffoldWithNestedNavigation'));
   final StatefulNavigationShell navigationShell;
+  final bool showBottomSheet;
 
   void _goBranch(int index) {
     navigationShell.goBranch(
@@ -128,10 +152,10 @@ class ScaffoldWithNestedNavigation extends StatelessWidget {
     return LayoutBuilder(builder: (context, constraints) {
       if (constraints.maxWidth < 450) {
         return ScaffoldWithNavigationBar(
-          body: navigationShell,
-          selectedIndex: navigationShell.currentIndex,
-          onDestinationSelected: _goBranch,
-        );
+            body: navigationShell,
+            selectedIndex: navigationShell.currentIndex,
+            onDestinationSelected: _goBranch,
+            showBottomSheet: showBottomSheet);
       } else {
         return ScaffoldWithNavigationRail(
           body: navigationShell,
@@ -143,31 +167,48 @@ class ScaffoldWithNestedNavigation extends StatelessWidget {
   }
 }
 
+BuildContext? _builderContext;
+
 class ScaffoldWithNavigationBar extends StatelessWidget {
   const ScaffoldWithNavigationBar({
     super.key,
     required this.body,
     required this.selectedIndex,
     required this.onDestinationSelected,
+    required this.showBottomSheet,
   });
 
   final Widget body;
   final int selectedIndex;
   final ValueChanged<int> onDestinationSelected;
+  final bool showBottomSheet;
 
   @override
   Widget build(BuildContext context) {
+    // if(showBottomSheet) {
+    //   bottomsheet(context);
+    // }
     return Scaffold(
-      body: body,
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: selectedIndex,
-        destinations: const [
-          NavigationDestination(label: 'Section A', icon: Icon(Icons.home)),
-          NavigationDestination(label: 'Section B', icon: Icon(Icons.settings)),
-        ],
-        onDestinationSelected: onDestinationSelected,
-      ),
-    );
+        body: new Builder(builder: (context) {
+          _builderContext = context;
+          return body;
+        }),
+        bottomNavigationBar: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text("bottomsheet here: ${showBottomSheet}"),
+            NavigationBar(
+              selectedIndex: selectedIndex,
+              destinations: const [
+                NavigationDestination(
+                    label: 'Section A', icon: Icon(Icons.home)),
+                NavigationDestination(
+                    label: 'Section B', icon: Icon(Icons.settings)),
+              ],
+              onDestinationSelected: onDestinationSelected,
+            )
+          ],
+        ));
   }
 }
 
@@ -216,4 +257,3 @@ class ScaffoldWithNavigationRail extends StatelessWidget {
 }
 
 /// Widget for the root/initial pages in the bottom navigation bar.
-

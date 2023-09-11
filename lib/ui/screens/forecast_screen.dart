@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../app_bar_stuff.dart';
 import '../utils.dart';
@@ -7,7 +8,7 @@ const smallSpacing = 10.0;
 
 class ForecastScreen extends StatefulWidget {
   /// Creates a RootScreen
-  const ForecastScreen(
+  ForecastScreen(
       {required this.label,
       required this.detailsPath,
       required this.bottomSheetFunction,
@@ -47,6 +48,7 @@ class _ForecastScreenState extends State<ForecastScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: createAppBar(() {
+        Provider.of<CartModel>(context, listen: false).toggle();
         widget.bottomSheetFunction(context);
       }),
       body: Center(
