@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../app_bar_stuff.dart';
 import '../utils.dart';
@@ -48,8 +47,8 @@ class _ForecastScreenState extends State<ForecastScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: createAppBar(() {
-        Provider.of<CartModel>(context, listen: false).toggle();
         widget.bottomSheetFunction(context);
+        // bottomsheet(context);
       }),
       body: Center(
         child: Column(

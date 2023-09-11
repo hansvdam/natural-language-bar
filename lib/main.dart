@@ -40,7 +40,7 @@ final goRouter = GoRouter(
     // https://github.com/flutter/packages/blob/main/packages/go_router/example/lib/stateful_shell_route.dart
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {
-        return Consumer<CartModel>(builder: (context, cart, child) {
+        return Consumer<ChatHistory>(builder: (context, cart, child) {
           return ScaffoldWithNestedNavigation(
               navigationShell: navigationShell, showBottomSheet: cart.value);
         });
@@ -107,11 +107,11 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(
-            create: (context) => CartModel(),
+            create: (context) => ChatHistory(),
             child: const MyApp(),
           ),
         ],
-        child: Consumer<CartModel>(builder: (context, cart, child) {
+        child: Consumer<ChatHistory>(builder: (context, cart, child) {
           return MaterialApp.router(
             routerConfig: goRouter,
             debugShowCheckedModeBanner: false,
@@ -189,14 +189,13 @@ class ScaffoldWithNavigationBar extends StatelessWidget {
     //   bottomsheet(context);
     // }
     return Scaffold(
-        body: new Builder(builder: (context) {
+        body: Builder(builder: (context) {
           _builderContext = context;
           return body;
         }),
         bottomNavigationBar: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Text("bottomsheet here: ${showBottomSheet}"),
             NavigationBar(
               selectedIndex: selectedIndex,
               destinations: const [

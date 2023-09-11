@@ -38,8 +38,8 @@ PreferredSizeWidget createAppBar(
 }
 
 void bottomsheet(BuildContext context) {
-  showModalBottomSheet<void>(
-    showDragHandle: true,
+  showBottomSheet<void>(
+    // showDragHandle: true,
     context: context,
     // TODO: Remove when this is in the framework https://github.com/flutter/flutter/issues/118619
     // constraints: const BoxConstraints(maxWidth: 640),
