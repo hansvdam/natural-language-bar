@@ -4,6 +4,7 @@ import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:go_router/go_router.dart';
 import 'package:langbar/ui/screens/details_screen.dart';
 import 'package:langbar/ui/screens/forecast_screen.dart';
+import 'package:langbar/ui/screens/front_screen.dart';
 import 'package:langbar/ui/screens/root_screen.dart';
 import 'package:langbar/ui/utils.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +14,7 @@ import 'app_bar_stuff.dart';
 // private navigators
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _blaNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'bla');
+final _shellNavigator1Key = GlobalKey<NavigatorState>(debugLabel: 'shell1');
 final _shellNavigatorAKey = GlobalKey<NavigatorState>(debugLabel: 'shellA');
 final _shellNavigatorBKey = GlobalKey<NavigatorState>(debugLabel: 'shellB');
 
@@ -40,12 +42,26 @@ final goRouter = GoRouter(
     // https://github.com/flutter/packages/blob/main/packages/go_router/example/lib/stateful_shell_route.dart
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {
-        return Consumer<ChatHistory>(builder: (context, cart, child) {
-          return ScaffoldWithNestedNavigation(
-              navigationShell: navigationShell, showBottomSheet: cart.value);
-        });
+        return ScaffoldWithNestedNavigation(navigationShell: navigationShell);
       },
       branches: [
+        StatefulShellBranch(
+          navigatorKey: _shellNavigator1Key,
+          routes: [
+            GoRoute(
+              path: '/1',
+              pageBuilder: (context, state) => NoTransitionPage(
+                child: FrontScreen(
+                  label: 'Front Screen',
+                  bottomSheetFunction: (context) {
+                    bottomsheet(_builderContext!);
+                  },
+                ),
+              ),
+              routes: [],
+            ),
+          ],
+        ),
         StatefulShellBranch(
           navigatorKey: _shellNavigatorAKey,
           routes: [
@@ -134,11 +150,9 @@ class ScaffoldWithNestedNavigation extends StatelessWidget {
   const ScaffoldWithNestedNavigation({
     Key? key,
     required this.navigationShell,
-    required this.showBottomSheet,
   }) : super(
             key: key ?? const ValueKey<String>('ScaffoldWithNestedNavigation'));
   final StatefulNavigationShell navigationShell;
-  final bool showBottomSheet;
 
   void _goBranch(int index) {
     navigationShell.goBranch(
@@ -158,8 +172,7 @@ class ScaffoldWithNestedNavigation extends StatelessWidget {
         return ScaffoldWithNavigationBar(
             body: navigationShell,
             selectedIndex: navigationShell.currentIndex,
-            onDestinationSelected: _goBranch,
-            showBottomSheet: showBottomSheet);
+            onDestinationSelected: _goBranch);
       } else {
         return ScaffoldWithNavigationRail(
           body: navigationShell,
@@ -179,19 +192,14 @@ class ScaffoldWithNavigationBar extends StatelessWidget {
     required this.body,
     required this.selectedIndex,
     required this.onDestinationSelected,
-    required this.showBottomSheet,
   });
 
   final Widget body;
   final int selectedIndex;
   final ValueChanged<int> onDestinationSelected;
-  final bool showBottomSheet;
 
   @override
   Widget build(BuildContext context) {
-    // if(showBottomSheet) {
-    //   bottomsheet(context);
-    // }
     return Scaffold(
         body: Builder(builder: (context) {
           _builderContext = context;
@@ -204,7 +212,9 @@ class ScaffoldWithNavigationBar extends StatelessWidget {
               selectedIndex: selectedIndex,
               destinations: const [
                 NavigationDestination(
-                    label: 'Section A', icon: Icon(Icons.home)),
+                    label: 'Section 1', icon: Icon(Icons.home)),
+                NavigationDestination(
+                    label: 'Section A', icon: Icon(Icons.cloud)),
                 NavigationDestination(
                     label: 'Section B', icon: Icon(Icons.settings)),
               ],
