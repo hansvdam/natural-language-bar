@@ -17,8 +17,6 @@ class _LangFieldState extends State<LangField> {
 
   @override
   Widget build(BuildContext context) => TextField(
-        // maxLength: 10,
-        // maxLengthEnforcement: MaxLengthEnforcement.none,
         controller: _controllerOutlined,
         onSubmitted: (final String value) {
           var apiKey2 = getOpenAIKey();
@@ -28,13 +26,6 @@ class _LangFieldState extends State<LangField> {
           _controllerOutlined.clear();
           Provider.of<ChatHistory>(context, listen: false)
               .add(Message(value, true));
-
-          // ScaffoldMessenger.of(context).showSnackBar(
-          //   SnackBar(
-          //     content: Text('You typed: $value'),
-          //     duration: const Duration(seconds: 1),
-          //   ),
-          // );
         },
         decoration: InputDecoration(
           prefixIcon: Icon(Icons.search),
