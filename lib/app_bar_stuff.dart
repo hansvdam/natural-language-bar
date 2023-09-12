@@ -48,9 +48,8 @@ class _LangFieldState extends State<LangField> {
 
   Future<void> sendToOpenai(ChatOpenAI llm, String query) async {
     final result = await llm([ChatMessage.human(query)]);
-    setState(() {
-      _controllerOutlined.text = result.content.trim();
-    });
+    Provider.of<ChatHistory>(context, listen: false)
+        .add(Message(result.content.trim(), false));
   }
 }
 
