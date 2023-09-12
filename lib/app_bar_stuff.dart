@@ -17,11 +17,11 @@ class _LangFieldState extends State<LangField> {
 
   @override
   Widget build(BuildContext context) => TextField(
-    // maxLength: 10,
-    // maxLengthEnforcement: MaxLengthEnforcement.none,
-    controller: _controllerOutlined,
-    onSubmitted: (final String value) {
-      var apiKey2 = getOpenAIKey();
+        // maxLength: 10,
+        // maxLengthEnforcement: MaxLengthEnforcement.none,
+        controller: _controllerOutlined,
+        onSubmitted: (final String value) {
+          var apiKey2 = getOpenAIKey();
           var client = OpenAIClient.instanceFor(apiKey: apiKey2);
           final llm = ChatOpenAI(apiClient: client);
           sendToOpenai(llm, this._controllerOutlined.text);
@@ -30,22 +30,18 @@ class _LangFieldState extends State<LangField> {
               .add(Message(value, true));
 
           // ScaffoldMessenger.of(context).showSnackBar(
-      //   SnackBar(
-      //     content: Text('You typed: $value'),
-      //     duration: const Duration(seconds: 1),
-      //   ),
-      // );
-    },
-    decoration: InputDecoration(
-      prefixIcon: const Icon(Icons.search),
+          //   SnackBar(
+          //     content: Text('You typed: $value'),
+          //     duration: const Duration(seconds: 1),
+          //   ),
+          // );
+        },
+        decoration: InputDecoration(
+          prefixIcon: Icon(Icons.search),
           suffixIcon: ShowHistoryButton(),
-          // labelText: 'Filled',
-          // hintText: 'hint text',
-          // helperText: 'supporting text',
           filled: true,
-          // errorText: 'error text',
-    ),
-  );
+        ),
+      );
 
   Future<void> sendToOpenai(ChatOpenAI llm, String query) async {
     final result = await llm([ChatMessage.human(query)]);
@@ -55,7 +51,7 @@ class _LangFieldState extends State<LangField> {
 }
 
 class ShowHistoryButton extends StatelessWidget {
-  const ShowHistoryButton();
+  const ShowHistoryButton({super.key});
 
   @override
   Widget build(BuildContext context) {
