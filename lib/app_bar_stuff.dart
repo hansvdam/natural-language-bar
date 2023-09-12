@@ -17,34 +17,35 @@ class _LangFieldState extends State<LangField> {
 
   @override
   Widget build(BuildContext context) => TextField(
-        // maxLength: 10,
-        // maxLengthEnforcement: MaxLengthEnforcement.none,
-        controller: _controllerOutlined,
-        onSubmitted: (final String value) {
-          var apiKey2 = getOpenAIKey();
+    // maxLength: 10,
+    // maxLengthEnforcement: MaxLengthEnforcement.none,
+    controller: _controllerOutlined,
+    onSubmitted: (final String value) {
+      var apiKey2 = getOpenAIKey();
           var client = OpenAIClient.instanceFor(apiKey: apiKey2);
           final llm = ChatOpenAI(apiClient: client);
           sendToOpenai(llm, this._controllerOutlined.text);
+          _controllerOutlined.clear();
           Provider.of<ChatHistory>(context, listen: false)
               .add(Message(value, true));
 
           // ScaffoldMessenger.of(context).showSnackBar(
-          //   SnackBar(
-          //     content: Text('You typed: $value'),
-          //     duration: const Duration(seconds: 1),
-          //   ),
-          // );
-        },
-        decoration: InputDecoration(
-          prefixIcon: const Icon(Icons.search),
-          suffixIcon: _ClearButton(controller: _controllerOutlined),
+      //   SnackBar(
+      //     content: Text('You typed: $value'),
+      //     duration: const Duration(seconds: 1),
+      //   ),
+      // );
+    },
+    decoration: InputDecoration(
+      prefixIcon: const Icon(Icons.search),
+          suffixIcon: ShowHistoryButton(),
           // labelText: 'Filled',
           // hintText: 'hint text',
           // helperText: 'supporting text',
           filled: true,
           // errorText: 'error text',
-        ),
-      );
+    ),
+  );
 
   Future<void> sendToOpenai(ChatOpenAI llm, String query) async {
     final result = await llm([ChatMessage.human(query)]);
@@ -53,16 +54,19 @@ class _LangFieldState extends State<LangField> {
   }
 }
 
-class _ClearButton extends StatelessWidget {
-  const _ClearButton({required this.controller});
-
-  final TextEditingController controller;
+class ShowHistoryButton extends StatelessWidget {
+  const ShowHistoryButton();
 
   @override
-  Widget build(BuildContext context) => IconButton(
-        icon: const Icon(Icons.clear),
-        onPressed: () => controller.clear(),
-      );
+  Widget build(BuildContext context) {
+    var langbarState = Provider.of<LangBarState>(context, listen: false);
+    bool showHistory = langbarState.showHistory;
+    return IconButton(
+        icon: Icon(showHistory ? Icons.arrow_downward : Icons.arrow_upward),
+        onPressed: () {
+          langbarState.setShowHistory(!showHistory);
+        });
+  }
 }
 
 class Message {
@@ -105,6 +109,15 @@ class ChatHistory extends ChangeNotifier {
   void removeAll() {
     items.clear();
     // This call tells the widgets that are listening to this model to rebuild.
+    notifyListeners();
+  }
+}
+
+class LangBarState extends ChangeNotifier {
+  bool showHistory = false;
+
+  void setShowHistory(bool value) {
+    showHistory = value;
     notifyListeners();
   }
 }

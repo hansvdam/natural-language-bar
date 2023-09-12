@@ -108,7 +108,11 @@ class MyApp extends StatelessWidget {
         providers: [
           ChangeNotifierProvider(
             create: (context) => ChatHistory(),
-            child: const MyApp(),
+            // child: const MyApp(),
+          ),
+          ChangeNotifierProvider(
+            create: (context) => LangBarState(),
+            // child: const MyApp(),
           ),
         ],
         child: Consumer<ChatHistory>(builder: (context, cart, child) {

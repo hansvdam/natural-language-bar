@@ -27,16 +27,12 @@ class _BottomSheetButton extends StatelessWidget {
   }
 }
 
-PreferredSizeWidget createAppBar(
-    Function() showBottomSheet) {
-  return AppBar(
-      title: const Text('Langbar'),
-      actions: [
-        _BottomSheetButton(
-          showBottomSheet: showBottomSheet,
-        ),
-      ]
-  );
+PreferredSizeWidget createAppBar(Function() showBottomSheet) {
+  return AppBar(title: const Text('Langbar'), actions: [
+    _BottomSheetButton(
+      showBottomSheet: showBottomSheet,
+    ),
+  ]);
 }
 
 void bottomsheet(BuildContext context) {
@@ -46,12 +42,18 @@ void bottomsheet(BuildContext context) {
     // TODO: Remove when this is in the framework https://github.com/flutter/flutter/issues/118619
     // constraints: const BoxConstraints(maxWidth: 640),
     builder: (context) {
-      return Column(mainAxisSize: MainAxisSize.min, children: [
-        Consumer<ChatHistory>(builder: (context, chathistory, child) {
-          return ChatHistoryView(messages: chathistory.items);
-        }),
-        LangField()
-      ]);
+      return Consumer<LangBarState>(builder: (context, langbarState, child) {
+        List<Widget> children = [];
+        if (langbarState.showHistory) {
+          children.add(
+            Consumer<ChatHistory>(builder: (context, chathistory, child) {
+              return ChatHistoryView(messages: chathistory.items);
+            }),
+          );
+        }
+        children.add(LangField());
+        return Column(mainAxisSize: MainAxisSize.min, children: children);
+      });
       // return SizedBox(
       //   height: 150,
       //   width: double.infinity,
@@ -67,4 +69,3 @@ void bottomsheet(BuildContext context) {
     },
   );
 }
-
