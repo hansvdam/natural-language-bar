@@ -1,9 +1,9 @@
-import 'dart:collection';
-
 import 'package:flutter/material.dart';
 import 'package:langchain/langchain.dart';
 import 'package:langchain_openai/langchain_openai.dart';
 import 'package:provider/provider.dart';
+
+import 'openAIKey.dart';
 
 class LangField extends StatefulWidget {
   const LangField();
@@ -17,14 +17,16 @@ class _LangFieldState extends State<LangField> {
 
   @override
   Widget build(BuildContext context) => TextField(
-    // maxLength: 10,
-    // maxLengthEnforcement: MaxLengthEnforcement.none,
-    controller: _controllerOutlined,
-    onSubmitted: (final String value) {
-      var apiKey2 = "";
-      var client = OpenAIClient.instanceFor(apiKey: apiKey2);
-      final llm = ChatOpenAI(apiClient: client);
-      sendToOpenai(llm, this._controllerOutlined.text);
+        // maxLength: 10,
+        // maxLengthEnforcement: MaxLengthEnforcement.none,
+        controller: _controllerOutlined,
+        onSubmitted: (final String value) {
+          var apiKey2 = getOpenAIKey();
+          var client = OpenAIClient.instanceFor(apiKey: apiKey2);
+          final llm = ChatOpenAI(apiClient: client);
+          sendToOpenai(llm, this._controllerOutlined.text);
+          Provider.of<ChatHistory>(context, listen: false)
+              .add(Message(value, true));
 
           // ScaffoldMessenger.of(context).showSnackBar(
           //   SnackBar(
@@ -75,10 +77,7 @@ class ChatHistory extends ChangeNotifier {
   bool value = false;
 
   /// Internal, private state of the cart.
-  final List<Message> _items = [];
-
-  /// An unmodifiable view of the items in the cart.
-  UnmodifiableListView<Message> get items => UnmodifiableListView(_items);
+  final List<Message> items = [Message("Hello", false)];
 
   //
   // /// The current total price of all items (assuming all items cost $42).
@@ -88,7 +87,7 @@ class ChatHistory extends ChangeNotifier {
   /// cart from the outside.
   ///
   void add(Message item) {
-    _items.add(item);
+    items.add(item);
     // This call tells the widgets that are listening to this model to rebuild.
     notifyListeners();
   }
@@ -105,7 +104,7 @@ class ChatHistory extends ChangeNotifier {
 
   // Removes all items from the cart.
   void removeAll() {
-    _items.clear();
+    items.clear();
     // This call tells the widgets that are listening to this model to rebuild.
     notifyListeners();
   }

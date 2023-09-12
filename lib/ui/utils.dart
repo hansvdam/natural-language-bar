@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../app_bar_stuff.dart';
+import 'chatview.dart';
 
 class _BottomSheetButton extends StatelessWidget {
   const _BottomSheetButton({
@@ -44,7 +46,12 @@ void bottomsheet(BuildContext context) {
     // TODO: Remove when this is in the framework https://github.com/flutter/flutter/issues/118619
     // constraints: const BoxConstraints(maxWidth: 640),
     builder: (context) {
-      return LangField();
+      return Column(mainAxisSize: MainAxisSize.min, children: [
+        Consumer<ChatHistory>(builder: (context, chathistory, child) {
+          return ChatHistoryView(messages: chathistory.items);
+        }),
+        LangField()
+      ]);
       // return SizedBox(
       //   height: 150,
       //   width: double.infinity,
