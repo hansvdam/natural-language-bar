@@ -9,7 +9,7 @@ import '../utils.dart';
 const smallSpacing = 10.0;
 
 class ForecastScreen extends StatefulWidget {
-  var place;
+  String? place;
 
   /// Creates a RootScreen
   ForecastScreen(
@@ -17,7 +17,7 @@ class ForecastScreen extends StatefulWidget {
       required this.detailsPath,
       required this.bottomSheetFunction,
       Key? key,
-      required this.place})
+      this.place})
       : super(key: key);
 
   /// The label
@@ -94,26 +94,6 @@ Future<Forecast> fetchForecast(String value) async {
   }
 }
 
-class Album {
-  final int userId;
-  final int id;
-  final String title;
-
-  const Album({
-    required this.userId,
-    required this.id,
-    required this.title,
-  });
-
-  factory Album.fromJson(Map<String, dynamic> json) {
-    return Album(
-      userId: json['userId'],
-      id: json['id'],
-      title: json['title'],
-    );
-  }
-}
-
 class _ClearButton extends StatelessWidget {
   const _ClearButton({required this.controller});
 
@@ -134,10 +114,12 @@ class _ForecastScreenState extends State<ForecastScreen> {
   @override
   void initState() {
     super.initState();
-    _controllerOutlined = TextEditingController(text: widget.place);
+    String? place = widget.place;
+    _controllerOutlined = TextEditingController(text: place);
+    if (place != null) futureForecast = fetchForecast(place);
   }
 
-  Future<Forecast>? futureAlbum;
+  Future<Forecast>? futureForecast;
 
   @override
   Widget build(BuildContext context) {
@@ -152,7 +134,7 @@ class _ForecastScreenState extends State<ForecastScreen> {
           controller: _controllerOutlined,
           onSubmitted: (final String value) {
             setState(() {
-              futureAlbum = fetchForecast(value);
+              futureForecast = fetchForecast(value);
             });
           },
           decoration: InputDecoration(
@@ -164,9 +146,9 @@ class _ForecastScreenState extends State<ForecastScreen> {
           ),
         ),
       ),
-      if (futureAlbum != null)
+      if (futureForecast != null)
         FutureBuilder<Forecast>(
-          future: futureAlbum,
+          future: futureForecast,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return Text(

@@ -67,19 +67,15 @@ final goRouter = GoRouter(
           routes: [
             GoRoute(
               path: '/a',
-// builder: (context, state) =>
-//     // state.params["id"]
-//     Text("bla"),
               pageBuilder: (context, state) => NoTransitionPage(
                 child: ForecastScreen(
                   label: 'Weather Forecast',
                   detailsPath: '/forecast',
-                  place: state.pathParameters["place"].toString(),
+                  place: state.uri.queryParameters["place"].toString(),
                   bottomSheetFunction: (context) {
                     bottomsheet(_builderContext!);
                   },
                 ),
-                // child: ForecastScreen(label: 'A', detailsPath: '/a/details', bottomSheetFunction: (context) {bottomsheet(context)}),
               ),
               routes: [
                 GoRoute(

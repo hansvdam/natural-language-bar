@@ -38,7 +38,7 @@ class _FrontScreenState extends State<FrontScreen> {
           TextButton(
               onPressed: () {
                 // context.go("/a/:utrecht");
-                context.go("/a?location=utrecht");
+                context.go("/a?place=utrecht");
               },
               child: Text("test")),
           Text('Screen ${widget.label}',
