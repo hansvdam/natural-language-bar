@@ -111,15 +111,31 @@ class _ForecastScreenState extends State<ForecastScreen> {
 
   _ForecastScreenState();
 
+  String? place;
+
   @override
   void initState() {
     super.initState();
+    updatePlace();
+  }
+
+  void updatePlace() {
     String? place = widget.place;
     _controllerOutlined = TextEditingController(text: place);
     if (place != null) futureForecast = fetchForecast(place);
   }
 
   Future<Forecast>? futureForecast;
+
+  @override
+  void didUpdateWidget(ForecastScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.place != widget.place) {
+      setState(() {
+        updatePlace();
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
