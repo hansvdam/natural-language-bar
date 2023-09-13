@@ -112,6 +112,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // uggly hack to open langbar immediately:
+    Future.delayed(Duration.zero, () => bottomsheet(_builderContext!, true));
+
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(

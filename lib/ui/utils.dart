@@ -37,8 +37,8 @@ PreferredSizeWidget createAppBar(Function() showBottomSheet) {
 
 PersistentBottomSheetController? bottomsheetController;
 
-void bottomsheet(BuildContext context) {
-  if (bottomsheetController != null) {
+void bottomsheet(BuildContext context, [bool? forceOpen]) {
+  if (bottomsheetController != null && forceOpen == null) {
     bottomsheetController?.close();
     bottomsheetController = null;
     return;
@@ -61,18 +61,6 @@ void bottomsheet(BuildContext context) {
         children.add(LangField());
         return Column(mainAxisSize: MainAxisSize.min, children: children);
       });
-      // return SizedBox(
-      //   height: 150,
-      //   width: double.infinity,
-      //   child: Padding(
-      //     padding: const EdgeInsets.symmetric(horizontal: 32.0),
-      //     child: ListView(
-      //       shrinkWrap: true,
-      //       scrollDirection: Axis.horizontal,
-      //       children: buttonList,
-      //     ),
-      //   ),
-      // );
     },
   );
 }
