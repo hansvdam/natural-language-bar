@@ -35,8 +35,15 @@ PreferredSizeWidget createAppBar(Function() showBottomSheet) {
   ]);
 }
 
+PersistentBottomSheetController? bottomsheetController;
+
 void bottomsheet(BuildContext context) {
-  showBottomSheet<void>(
+  if (bottomsheetController != null) {
+    bottomsheetController?.close();
+    bottomsheetController = null;
+    return;
+  }
+  bottomsheetController = showBottomSheet<void>(
     // showDragHandle: true,
     context: context,
     // TODO: Remove when this is in the framework https://github.com/flutter/flutter/issues/118619

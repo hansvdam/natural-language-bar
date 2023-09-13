@@ -13,17 +13,9 @@ import 'app_bar_stuff.dart';
 
 // private navigators
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
-final _blaNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'bla');
 final _shellNavigator1Key = GlobalKey<NavigatorState>(debugLabel: 'shell1');
 final _shellNavigatorAKey = GlobalKey<NavigatorState>(debugLabel: 'shellA');
 final _shellNavigatorBKey = GlobalKey<NavigatorState>(debugLabel: 'shellB');
-
-class Functions {
-  // how bad that you cannot just pass in a final function and have to go through this static travesty:
-  static void bottomsheetFunction(context) {
-    bottomsheet(context);
-  }
-}
 
 class GlobalContextService {
   static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
