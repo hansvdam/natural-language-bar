@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../app_bar_stuff.dart';
@@ -34,6 +35,12 @@ class _FrontScreenState extends State<FrontScreen> {
       builder: (context, chatHistory, child) {
         var lastMessage = chatHistory.items.last;
         var children = <Widget>[
+          TextButton(
+              onPressed: () {
+                // context.go("/a/:utrecht");
+                context.go("/a?location=utrecht");
+              },
+              child: Text("test")),
           Text('Screen ${widget.label}',
               style: Theme.of(context).textTheme.titleLarge),
           const Padding(padding: EdgeInsets.all(4)),

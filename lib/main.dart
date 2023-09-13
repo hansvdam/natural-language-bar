@@ -30,7 +30,7 @@ class GlobalContextService {
 }
 
 final goRouter = GoRouter(
-  initialLocation: '/a',
+  initialLocation: '/1',
   // * Passing a navigatorKey causes an issue on hot reload:
   // * https://github.com/flutter/flutter/issues/113757#issuecomment-1518421380
   // * However it's still necessary otherwise the navigator pops back to
@@ -67,10 +67,14 @@ final goRouter = GoRouter(
           routes: [
             GoRoute(
               path: '/a',
+// builder: (context, state) =>
+//     // state.params["id"]
+//     Text("bla"),
               pageBuilder: (context, state) => NoTransitionPage(
                 child: ForecastScreen(
                   label: 'Weather Forecast',
                   detailsPath: '/forecast',
+                  place: state.pathParameters["place"].toString(),
                   bottomSheetFunction: (context) {
                     bottomsheet(_builderContext!);
                   },

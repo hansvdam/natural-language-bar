@@ -9,11 +9,15 @@ import '../utils.dart';
 const smallSpacing = 10.0;
 
 class ForecastScreen extends StatefulWidget {
+  var place;
+
   /// Creates a RootScreen
-  ForecastScreen({required this.label,
-    required this.detailsPath,
-    required this.bottomSheetFunction,
-    Key? key})
+  ForecastScreen(
+      {required this.label,
+      required this.detailsPath,
+      required this.bottomSheetFunction,
+      Key? key,
+      required this.place})
       : super(key: key);
 
   /// The label
@@ -123,9 +127,15 @@ class _ClearButton extends StatelessWidget {
 }
 
 class _ForecastScreenState extends State<ForecastScreen> {
-  final TextEditingController _controllerOutlined = TextEditingController();
+  late TextEditingController _controllerOutlined;
 
   _ForecastScreenState();
+
+  @override
+  void initState() {
+    super.initState();
+    _controllerOutlined = TextEditingController(text: widget.place);
+  }
 
   Future<Forecast>? futureAlbum;
 
