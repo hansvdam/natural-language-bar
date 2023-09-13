@@ -164,19 +164,22 @@ class ScaffoldWithNestedNavigation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
-      if (constraints.maxWidth < 450) {
-        return ScaffoldWithNavigationBar(
-            body: navigationShell,
-            selectedIndex: navigationShell.currentIndex,
-            onDestinationSelected: _goBranch);
-      } else {
-        return ScaffoldWithNavigationRail(
+      // later re-add the navigation rail for larger screen. For now focus on MVP
+      // if (constraints.maxWidth < 450) {
+      return ScaffoldWithNavigationBar(
           body: navigationShell,
           selectedIndex: navigationShell.currentIndex,
-          onDestinationSelected: _goBranch,
+          onDestinationSelected: _goBranch);
+    }
+        // else {
+        //   return ScaffoldWithNavigationRail(
+        //     body: navigationShell,
+        //     selectedIndex: navigationShell.currentIndex,
+        //     onDestinationSelected: _goBranch,
+        //   );
+        // }
+        // }
         );
-      }
-    });
   }
 }
 
@@ -245,7 +248,7 @@ class ScaffoldWithNavigationRail extends StatelessWidget {
             labelType: NavigationRailLabelType.all,
             destinations: const <NavigationRailDestination>[
               NavigationRailDestination(
-                label: Text('Section A'),
+                label: Text('Weather A'),
                 icon: Icon(Icons.home),
               ),
               NavigationRailDestination(

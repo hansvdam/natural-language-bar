@@ -167,8 +167,9 @@ class _ForecastScreenState extends State<ForecastScreen> {
           future: futureForecast,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return Text(
-                  snapshot.data!.daily!.temperature2mMax![0].toString());
+              return Text("max temp today: " +
+                  snapshot.data!.daily!.temperature2mMax![0].toString() +
+                  " °C");
             } else if (snapshot.hasError) {
               return Text('${snapshot.error}');
             }
