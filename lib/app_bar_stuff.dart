@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:langbar/ui/screens/forecast_tool.dart';
 import 'package:langchain/langchain.dart';
 import 'package:langchain_openai/langchain_openai.dart';
 import 'package:provider/provider.dart';
@@ -22,7 +23,7 @@ class _LangFieldState extends State<LangField> {
           var apiKey2 = getOpenAIKey();
           var client = OpenAIClient.instanceFor(apiKey: apiKey2);
           final llm = ChatOpenAI(apiClient: client);
-          sendToOpenai(llm, this._controllerOutlined.text);
+          sendToOpenai(llm, this._controllerOutlined.text, context);
           _controllerOutlined.clear();
           Provider.of<ChatHistory>(context, listen: false)
               .add(Message(value, true));
@@ -34,10 +35,17 @@ class _LangFieldState extends State<LangField> {
         ),
       );
 
-  Future<void> sendToOpenai(ChatOpenAI llm, String query) async {
-    final result = await llm([ChatMessage.human(query)]);
+  Future<void> sendToOpenai(
+      ChatOpenAI llm, String query, BuildContext context) async {
+    final tool = ForecastTool(context);
+    final agent = OpenAIFunctionsAgent.fromLLMAndTools(llm: llm, tools: [tool]);
+    final executor = AgentExecutor(agent: agent);
+    // final res = await executor.run('What is 40 raised to the 0.43 power?');
+    final res = await executor.run(query);
+    print(res);
+
     Provider.of<ChatHistory>(context, listen: false)
-        .add(Message(result.content.trim(), false));
+        .add(Message(res.trim(), false));
   }
 }
 

@@ -1,7 +1,8 @@
 import 'dart:async';
 
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:go_router/go_router.dart';
 import 'package:langchain/langchain.dart';
-import 'package:math_expressions/math_expressions.dart';
 
 final class Parameter {
   final String name;
@@ -26,49 +27,36 @@ final class Parameter {
   }
 }
 
-final class Planner extends BaseTool {
-  Planner()
+/// {@template calculator_tool}
+/// A tool that can be used to calculate the result of a math expression.
+/// {@endtemplate}
+final class ForecastTool extends BaseTool {
+  BuildContext context;
+
+  /// {@macro calculator_tool}
+  ForecastTool(BuildContext this.context)
       : super(
-          name: 'planner',
-          description:
-              'plans a train trip in the Netherlands from station to station',
+          name: 'forecast',
+          description: 'get weatherforecast information for a place on earth',
           returnDirect: true,
-          // handleToolError: false,
           inputJsonSchema: {
             'type': 'object',
             'properties': {
-              ...origin,
-              ...destination2.asFunctionParam(),
+              ...place.asFunctionParam(),
             },
             'required': ['input'],
           },
         ) {}
 
-  static const origin = {
-    'origin': {
-      'type': 'string',
-      'description': 'origin station of the trip',
-    }
-  };
-
-  // static const origin = 'origin';
-  static const destination = {
-    'destination': {
-      'type': 'string',
-      'description': 'destination station of the trip',
-    }
-  };
-
-  static const destination2 =
-      Parameter('destination', 'string', 'destination station of the trip');
-
-
-  final _parser = Parser();
+  static const place = Parameter('place', 'string', 'place on earth');
 
   @override
   FutureOr<String> runInternal(Map<String, dynamic> toolInput) {
     // TODO: implement runInternal
     print(name + "," + toolInput.toString());
+    Uri uri = Uri(path: "/a", queryParameters: toolInput);
+    var path = uri.toString();
+    context.go(path);
     return toolInput.toString();
   }
 }
