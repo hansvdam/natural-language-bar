@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import '../models/forecast.dart';
 import '../utils.dart';
 
 const smallSpacing = 10.0;
@@ -27,18 +28,65 @@ class ForecastScreen extends StatefulWidget {
   State<ForecastScreen> createState() => _ForecastScreenState();
 }
 
-Future<Album> fetchAlbum() async {
-  final response = await http
-      .get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'));
+class Place {
+  final String displayName;
+  final String latitude;
+  final String longitude;
 
-  if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-    return Album.fromJson(jsonDecode(response.body));
+  Place(
+      {required this.displayName,
+      required this.latitude,
+      required this.longitude});
+}
+
+Future<Forecast> fetchForecast(String value) async {
+  // https://api.open-meteo.com/v1/forecast?latitude=52.0908&longitude=5.1222&daily=temperature_2m_max&forecast_days=1&timezone=auto
+  // {"latitude":52.1,"longitude":5.1199994,"generationtime_ms":0.6630420684814453,"utc_offset_seconds":7200,"timezone":"Europe/Amsterdam","timezone_abbreviation":"CEST","elevation":10.0,"daily_units":{"time":"iso8601","temperature_2m_max":"°C"},"daily":{"time":["2023-09-13"],"temperature_2m_max":[19.6]}}
+
+  var url = Uri.parse('https://geocode.maps.co/search?q={${value}');
+
+  var response1 = await http.get(url);
+
+  if (response1.statusCode == 200) {
+    var result = response1.body;
+
+    String jsonArray = result;
+    List<dynamic> list = jsonDecode(jsonArray);
+    Map<String, dynamic> firstObject = list[0];
+
+    Place place = Place(
+      displayName: firstObject['display_name'],
+      latitude: firstObject['lat'],
+      longitude: firstObject['lon'],
+    );
+
+    print('Display Name: ${place.displayName}');
+    print('Latitude: ${place.latitude}');
+    print('Longitude: ${place.longitude}');
+
+    String baseUrl = "api.open-meteo.com";
+    String endpoint = "/v1/forecast";
+    Map<String, String> queryParams = {
+      'latitude': '${place.latitude}',
+      'longitude': '${place.longitude}',
+      'daily': 'temperature_2m_max',
+      'forecast_days': '1',
+      'timezone': 'auto'
+    };
+
+    // for api explanation see: https://open-meteo.com/en/docs
+    Uri url = Uri.https(baseUrl, endpoint, queryParams);
+    var response = await http.get(url);
+    // final response = await http.get(Uri.parse(
+    //     'https://api.open-meteo.com/v1/forecast?latitude=52.0908&longitude=5.1222&daily=temperature_2m_max&forecast_days=1&timezone=auto'));
+
+    if (response.statusCode == 200) {
+      return Forecast.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception('Failed to fetch data');
+    }
   } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
-    throw Exception('Failed to load album');
+    throw Exception('Failed to fetch data');
   }
 }
 
@@ -79,7 +127,7 @@ class _ForecastScreenState extends State<ForecastScreen> {
 
   _ForecastScreenState();
 
-  Future<Album>? futureAlbum;
+  Future<Forecast>? futureAlbum;
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +142,7 @@ class _ForecastScreenState extends State<ForecastScreen> {
           controller: _controllerOutlined,
           onSubmitted: (final String value) {
             setState(() {
-              futureAlbum = fetchAlbum();
+              futureAlbum = fetchForecast(value);
             });
           },
           decoration: InputDecoration(
@@ -107,11 +155,12 @@ class _ForecastScreenState extends State<ForecastScreen> {
         ),
       ),
       if (futureAlbum != null)
-        FutureBuilder<Album>(
+        FutureBuilder<Forecast>(
           future: futureAlbum,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return Text(snapshot.data!.title);
+              return Text(
+                  snapshot.data!.daily!.temperature2mMax![0].toString());
             } else if (snapshot.hasError) {
               return Text('${snapshot.error}');
             }
