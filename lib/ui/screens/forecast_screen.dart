@@ -12,7 +12,7 @@ class ForecastScreen extends StatefulWidget {
   late final String? place;
   late final int numDays;
 
-  final Map<String, String> queryParameters;
+  final Map<String, String> _queryParameters;
 
   /// Creates a RootScreen
   ForecastScreen(
@@ -20,21 +20,22 @@ class ForecastScreen extends StatefulWidget {
       required this.detailsPath,
       required this.bottomSheetFunction,
       Key? key,
-      required this.queryParameters})
-      : super(key: key) {
-    place = queryParameters["place"].toString();
-    numDays = int.parse(queryParameters["numDays"] ?? "1");
+      required Map<String, String> queryParameters})
+      : _queryParameters = queryParameters,
+        super(key: key) {
+    place = _queryParameters[_placeParam.name].toString();
+    numDays = int.parse(_queryParameters[_numDaysParam.name] ?? "1");
   }
 
-  static getTool(BuildContext context) {
-    var placeParam = const Parameter('place', 'string', 'place on earth');
-    var numDaysParam = const Parameter(
-        'numDays', 'integer', 'The number of days to forecast',
-        required: false);
-    var parameters = [placeParam, numDaysParam];
+  static const _placeParam = Parameter('place', 'string', 'place on earth');
+  static const _numDaysParam = Parameter(
+      'numDays', 'integer', 'The number of days to forecast',
+      required: false);
+  static const _parameters = [_placeParam, _numDaysParam];
 
+  static getTool(BuildContext context) {
     return GenericScreenTool(context, 'forecast',
-        'get weatherforecast information for a place on earth', parameters);
+        'get weatherforecast information for a place on earth', _parameters);
   }
 
   /// The label
@@ -76,7 +77,7 @@ class _ForecastScreenState extends State<ForecastScreen> {
   @override
   void didUpdateWidget(ForecastScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.queryParameters != widget.queryParameters) {
+    if (oldWidget._queryParameters != widget._queryParameters) {
       setState(() {
         updateState();
       });
