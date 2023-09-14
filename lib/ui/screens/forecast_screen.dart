@@ -8,7 +8,7 @@ const smallSpacing = 10.0;
 
 class ForecastScreen extends StatefulWidget {
   String? place;
-  int? num_days;
+  late int num_days;
 
   Map<String, String> queryParameters;
 
@@ -47,14 +47,15 @@ class _ForecastScreenState extends State<ForecastScreen> {
   @override
   void initState() {
     super.initState();
-    updatePlace();
+    updateState();
   }
 
-  void updatePlace() {
+  void updateState() {
     String? place = widget.place;
-    int? days = widget.num_days;
-    _controllerOutlined = TextEditingController(text: place);
-    if (place != null) futureForecast = fetchForecast(place, days: days);
+    if (place != null) {
+      _controllerOutlined = TextEditingController(text: place);
+      futureForecast = fetchForecast(place, days: widget.num_days);
+    }
   }
 
   Future<Forecast>? futureForecast;
@@ -62,9 +63,9 @@ class _ForecastScreenState extends State<ForecastScreen> {
   @override
   void didUpdateWidget(ForecastScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.place != widget.place) {
+    if (oldWidget.queryParameters != widget.queryParameters) {
       setState(() {
-        updatePlace();
+        updateState();
       });
     }
   }
