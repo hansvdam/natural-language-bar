@@ -42,7 +42,7 @@ final class GenericScreenTool extends BaseTool {
   @override
   FutureOr<String> runInternal(Map<String, dynamic> toolInput) {
     Uri uri = Uri(
-        path: "/a",
+        path: "/$name",
         queryParameters:
             toolInput.map((key, value) => MapEntry(key, value.toString())));
     var path = uri.toString();

@@ -32,10 +32,11 @@ class ForecastScreen extends StatefulWidget {
       'numDays', 'integer', 'The number of days to forecast',
       required: false);
   static const _parameters = [_placeParam, _numDaysParam];
+  static const name = 'forecast';
 
   static getTool(BuildContext context) {
-    return GenericScreenTool(context, 'forecast',
-        'get weatherforecast information for a place on earth', _parameters);
+    return GenericScreenTool(context, name,
+        'get weather forecast information for a place on earth', _parameters);
   }
 
   /// The label

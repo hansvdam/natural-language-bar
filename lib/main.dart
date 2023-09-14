@@ -58,11 +58,11 @@ final goRouter = GoRouter(
           navigatorKey: _shellNavigatorAKey,
           routes: [
             GoRoute(
-              path: '/a',
+              path: "/${ForecastScreen.name}",
               pageBuilder: (context, state) => NoTransitionPage(
                 child: ForecastScreen(
                   label: 'Weather Forecast',
-                  detailsPath: '/forecast',
+                  detailsPath: '/forecast/details',
                   queryParameters: state.uri.queryParameters,
                   bottomSheetFunction: (context) {
                     bottomsheet(_builderContext!);
@@ -208,7 +208,7 @@ class ScaffoldWithNavigationBar extends StatelessWidget {
                 NavigationDestination(
                     label: 'Section 1', icon: Icon(Icons.home)),
                 NavigationDestination(
-                    label: 'Section A', icon: Icon(Icons.cloud)),
+                    label: 'Weather', icon: Icon(Icons.cloud)),
                 NavigationDestination(
                     label: 'Section B', icon: Icon(Icons.settings)),
               ],
