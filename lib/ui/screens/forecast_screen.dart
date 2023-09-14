@@ -10,6 +10,7 @@ const smallSpacing = 10.0;
 
 class ForecastScreen extends StatefulWidget {
   String? place;
+  int? num_days;
 
   /// Creates a RootScreen
   ForecastScreen(
@@ -17,7 +18,8 @@ class ForecastScreen extends StatefulWidget {
       required this.detailsPath,
       required this.bottomSheetFunction,
       Key? key,
-      this.place})
+      this.place,
+      this.num_days = 1})
       : super(key: key);
 
   /// The label
@@ -43,11 +45,12 @@ class Place {
       required this.longitude});
 }
 
-Future<Forecast> fetchForecast(String value) async {
+Future<Forecast> fetchForecast(String placeName, {int? days}) async {
   // https://api.open-meteo.com/v1/forecast?latitude=52.0908&longitude=5.1222&daily=temperature_2m_max&forecast_days=1&timezone=auto
   // {"latitude":52.1,"longitude":5.1199994,"generationtime_ms":0.6630420684814453,"utc_offset_seconds":7200,"timezone":"Europe/Amsterdam","timezone_abbreviation":"CEST","elevation":10.0,"daily_units":{"time":"iso8601","temperature_2m_max":"°C"},"daily":{"time":["2023-09-13"],"temperature_2m_max":[19.6]}}
 
-  var url = Uri.parse('https://geocode.maps.co/search?q={${value}');
+  // could also have been done using https://open-meteo.com/en/docs/geocoding-api
+  var url = Uri.parse('https://geocode.maps.co/search?q={${placeName}');
 
   var response1 = await http.get(url);
 
@@ -74,7 +77,7 @@ Future<Forecast> fetchForecast(String value) async {
       'latitude': '${place.latitude}',
       'longitude': '${place.longitude}',
       'daily': 'temperature_2m_max',
-      'forecast_days': '1',
+      'forecast_days': (days ?? 1).toString(),
       'timezone': 'auto'
     };
 
@@ -112,6 +115,7 @@ class _ForecastScreenState extends State<ForecastScreen> {
   _ForecastScreenState();
 
   String? place;
+  int? days;
 
   @override
   void initState() {
@@ -121,8 +125,9 @@ class _ForecastScreenState extends State<ForecastScreen> {
 
   void updatePlace() {
     String? place = widget.place;
+    int? days = widget.num_days;
     _controllerOutlined = TextEditingController(text: place);
-    if (place != null) futureForecast = fetchForecast(place);
+    if (place != null) futureForecast = fetchForecast(place, days: days);
   }
 
   Future<Forecast>? futureForecast;
@@ -167,8 +172,8 @@ class _ForecastScreenState extends State<ForecastScreen> {
           future: futureForecast,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return Text("max temp today: " +
-                  snapshot.data!.daily!.temperature2mMax![0].toString() +
+              return Text("max temp from today: " +
+                  snapshot.data!.daily!.temperature2mMax!.toString() +
                   " °C");
             } else if (snapshot.hasError) {
               return Text('${snapshot.error}');

@@ -64,6 +64,8 @@ final goRouter = GoRouter(
                   label: 'Weather Forecast',
                   detailsPath: '/forecast',
                   place: state.uri.queryParameters["place"].toString(),
+                  num_days:
+                      int.parse(state.uri.queryParameters["num_days"] ?? "1"),
                   bottomSheetFunction: (context) {
                     bottomsheet(_builderContext!);
                   },
