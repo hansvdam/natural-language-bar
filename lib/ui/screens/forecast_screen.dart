@@ -3,14 +3,15 @@ import 'package:flutter/material.dart';
 import '../../data/meteo_fetchers.dart';
 import '../models/forecast.dart';
 import '../utils.dart';
+import 'forecast_tool.dart';
 
 const smallSpacing = 10.0;
 
 class ForecastScreen extends StatefulWidget {
-  String? place;
-  late int num_days;
+  late final String? place;
+  late final int num_days;
 
-  Map<String, String> queryParameters;
+  final Map<String, String> queryParameters;
 
   /// Creates a RootScreen
   ForecastScreen(
@@ -22,6 +23,12 @@ class ForecastScreen extends StatefulWidget {
       : super(key: key) {
     place = queryParameters["place"].toString();
     num_days = int.parse(queryParameters["num_days"] ?? "1");
+  }
+
+  static getTool(BuildContext context) {
+    return ForecastTool(context);
+    // var placeParam = Parameter(ForecastScreen.c, 'string', 'place on earth');
+    // return [place, daysAhead];
   }
 
   /// The label

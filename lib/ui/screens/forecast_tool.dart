@@ -4,30 +4,10 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:go_router/go_router.dart';
 import 'package:langchain/langchain.dart';
 
-final class Parameter {
-  final String name;
-
-  final String description;
-
-  final String type;
-
-  final bool required;
-
-  const Parameter(this.name, this.type, this.description,
-      {this.required = true});
-
-  Map<String, dynamic> asFunctionParam() {
-    return {
-      name: {
-        'description': description,
-        'type': type,
-      }
-    };
-  }
-}
+import '../../for_langchain/tool.dart';
 
 /// {@template calculator_tool}
-/// A tool that can be used to calculate the result of a math expression.
+/// A for forecasting the weather from an api.
 /// {@endtemplate}
 final class ForecastTool extends BaseTool {
   BuildContext context;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:langbar/ui/screens/forecast_tool.dart';
+import 'package:langbar/ui/screens/forecast_screen.dart';
 import 'package:langchain/langchain.dart';
 import 'package:langchain_openai/langchain_openai.dart';
 import 'package:provider/provider.dart';
@@ -37,7 +37,7 @@ class _LangFieldState extends State<LangField> {
 
   Future<void> sendToOpenai(
       ChatOpenAI llm, String query, BuildContext context) async {
-    final tool = ForecastTool(context);
+    final tool = ForecastScreen.getTool(context);
     final agent = OpenAIFunctionsAgent.fromLLMAndTools(llm: llm, tools: [tool]);
     final executor = AgentExecutor(agent: agent);
     // final res = await executor.run('What is 40 raised to the 0.43 power?');
