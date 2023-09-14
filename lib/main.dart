@@ -63,9 +63,7 @@ final goRouter = GoRouter(
                 child: ForecastScreen(
                   label: 'Weather Forecast',
                   detailsPath: '/forecast',
-                  place: state.uri.queryParameters["place"].toString(),
-                  num_days:
-                      int.parse(state.uri.queryParameters["num_days"] ?? "1"),
+                  queryParameters: state.uri.queryParameters,
                   bottomSheetFunction: (context) {
                     bottomsheet(_builderContext!);
                   },

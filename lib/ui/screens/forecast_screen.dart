@@ -10,15 +10,19 @@ class ForecastScreen extends StatefulWidget {
   String? place;
   int? num_days;
 
+  Map<String, String> queryParameters;
+
   /// Creates a RootScreen
   ForecastScreen(
       {required this.label,
       required this.detailsPath,
       required this.bottomSheetFunction,
       Key? key,
-      this.place,
-      this.num_days = 1})
-      : super(key: key);
+      required this.queryParameters})
+      : super(key: key) {
+    place = queryParameters["place"].toString();
+    num_days = int.parse(queryParameters["num_days"] ?? "1");
+  }
 
   /// The label
   final String label;
