@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:langbar/for_langchain/tool.dart';
 
 import '../../data/meteo_fetchers.dart';
+import '../../for_langbar_lib/generic_screen_tool.dart';
 import '../models/forecast.dart';
 import '../utils.dart';
-import 'forecast_tool.dart';
 
 const smallSpacing = 10.0;
 
 class ForecastScreen extends StatefulWidget {
   late final String? place;
-  late final int num_days;
+  late final int numDays;
 
   final Map<String, String> queryParameters;
 
@@ -22,13 +23,18 @@ class ForecastScreen extends StatefulWidget {
       required this.queryParameters})
       : super(key: key) {
     place = queryParameters["place"].toString();
-    num_days = int.parse(queryParameters["num_days"] ?? "1");
+    numDays = int.parse(queryParameters["numDays"] ?? "1");
   }
 
   static getTool(BuildContext context) {
-    return ForecastTool(context);
-    // var placeParam = Parameter(ForecastScreen.c, 'string', 'place on earth');
-    // return [place, daysAhead];
+    var placeParam = const Parameter('place', 'string', 'place on earth');
+    var numDaysParam = const Parameter(
+        'numDays', 'integer', 'The number of days to forecast',
+        required: false);
+    var parameters = [placeParam, numDaysParam];
+
+    return GenericScreenTool(context, 'forecast',
+        'get weatherforecast information for a place on earth', parameters);
   }
 
   /// The label
@@ -61,7 +67,7 @@ class _ForecastScreenState extends State<ForecastScreen> {
     String? place = widget.place;
     if (place != null) {
       _controllerOutlined = TextEditingController(text: place);
-      futureForecast = fetchForecast(place, days: widget.num_days);
+      futureForecast = fetchForecast(place, days: widget.numDays);
     }
   }
 

@@ -4,24 +4,17 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:go_router/go_router.dart';
 import 'package:langchain/langchain.dart';
 
-import '../../for_langchain/tool.dart';
+import '../for_langchain/tool.dart';
 
 /// {@template calculator_tool}
 /// A for forecasting the weather from an api.
 /// {@endtemplate}
-final class ForecastTool extends BaseTool {
-  BuildContext context;
-
-  static const place = Parameter('place', 'string', 'place on earth');
-  static const daysAhead = Parameter(
-      'num_days', 'integer', 'The number of days to forecast',
-      required: false);
-
-  var parameters = [place, daysAhead];
+final class GenericScreenTool extends BaseTool {
+  final BuildContext context;
 
   /// {@macro calculator_tool}
-  factory ForecastTool(BuildContext context) {
-    var parameters = [place, daysAhead];
+  factory GenericScreenTool(BuildContext context, String name,
+      String description, List<Parameter> parameters) {
     var inputJsonSchema = {
       'type': 'object',
       'properties': {
@@ -33,21 +26,21 @@ final class ForecastTool extends BaseTool {
           .toList(),
     };
 
-    return ForecastTool._internal(context, inputJsonSchema);
+    return GenericScreenTool._internal(
+        context, name, description, inputJsonSchema);
   }
 
-  ForecastTool._internal(this.context, Map<String, dynamic> inputJsonSchema)
+  GenericScreenTool._internal(this.context, String name, String description,
+      Map<String, dynamic> inputJsonSchema)
       : super(
-          name: 'forecast',
-          description: 'get weatherforecast information for a place on earth',
+          name: name,
+          description: description,
           returnDirect: true,
           inputJsonSchema: inputJsonSchema,
         );
 
   @override
   FutureOr<String> runInternal(Map<String, dynamic> toolInput) {
-    // TODO: implement runInternal
-    print(name + "," + toolInput.toString());
     Uri uri = Uri(
         path: "/a",
         queryParameters:
