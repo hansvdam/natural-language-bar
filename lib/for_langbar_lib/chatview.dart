@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import 'langbar_stuff.dart';
 
@@ -57,6 +58,9 @@ class ChatHistoryView extends StatelessWidget {
                     cursor: SystemMouseCursors.click,
                     child: GestureDetector(
                       onTap: () {
+                        var langbarState =
+                            Provider.of<LangBarState>(context, listen: false);
+                        langbarState.setShowHistory(false);
                         context.go(reversedMessages[index].navUri!);
                       },
                       child: Text(
