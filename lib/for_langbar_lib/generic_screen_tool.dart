@@ -47,6 +47,6 @@ final class GenericScreenTool extends BaseTool {
             toolInput.map((key, value) => MapEntry(key, value.toString())));
     var path = uri.toString();
     context.go(path);
-    return toolInput.toString();
+    return path;
   }
 }

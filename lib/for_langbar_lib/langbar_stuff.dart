@@ -25,8 +25,6 @@ class _LangFieldState extends State<LangField> {
           final llm = ChatOpenAI(apiClient: client);
           sendToOpenai(llm, this._controllerOutlined.text, context);
           _controllerOutlined.clear();
-          Provider.of<ChatHistory>(context, listen: false)
-              .add(Message(value, true));
         },
         decoration: InputDecoration(
           prefixIcon: Icon(Icons.search),
@@ -41,11 +39,13 @@ class _LangFieldState extends State<LangField> {
     final agent = OpenAIFunctionsAgent.fromLLMAndTools(llm: llm, tools: [tool]);
     final executor = AgentExecutor(agent: agent);
     // final res = await executor.run('What is 40 raised to the 0.43 power?');
-    final res = await executor.run(query);
-    print(res);
+    final path = await executor.run(query);
+    print(path);
+    Provider.of<ChatHistory>(context, listen: false)
+        .add(Message(query, true, navUri: path));
 
     Provider.of<ChatHistory>(context, listen: false)
-        .add(Message(res.trim(), false));
+        .add(Message(path.trim(), false, navUri: path));
   }
 }
 
@@ -65,8 +65,9 @@ class ShowHistoryButton extends StatelessWidget {
 }
 
 class Message {
-  Message(this.text, this.isHuman);
+  Message(this.text, this.isHuman, {this.navUri});
 
+  final String? navUri;
   final String text;
   final bool isHuman;
 }

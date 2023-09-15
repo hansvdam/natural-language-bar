@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import 'langbar_stuff.dart';
 
@@ -52,15 +53,24 @@ class ChatHistoryView extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: Text(
-                    reversedMessages[index].text,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: reversedMessages[index].isHuman
-                          ? Colors.black
-                          : Colors.white,
-                      fontSize: 15,
-                      fontWeight: FontWeight.normal,
+                  child: MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: GestureDetector(
+                      onTap: () {
+                        context.go(reversedMessages[index].navUri!);
+                      },
+                      child: Text(
+                        reversedMessages[index].text,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: reversedMessages[index].isHuman
+                              ? Colors.black
+                              : Colors.white,
+                          fontSize: 15,
+                          fontWeight: FontWeight.normal,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
                     ),
                   ),
                 ),
