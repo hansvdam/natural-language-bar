@@ -1,5 +1,7 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:langbar/for_langchain/tool.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../data/meteo_fetchers.dart';
 import '../../for_langbar_lib/generic_screen_tool.dart';
@@ -115,9 +117,26 @@ class _ForecastScreenState extends State<ForecastScreen> {
           future: futureForecast,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return Text("max temp from today: " +
-                  snapshot.data!.daily!.temperature2mMax!.toString() +
-                  " °C");
+              var dailyData = snapshot.data!.daily!;
+              List<DateTime> dateTimes =
+                  dailyData.time!.map((date) => DateTime.parse(date)).toList();
+              List<double> temps = dailyData.temperature2mMax!;
+              List<Widget> children = [
+                Text("max temp from today: " + temps.toString() + " °C")
+              ];
+              if (temps.length > 1) {
+                var bla = IterableZip([dateTimes, temps]).toList();
+                children.add(SfCartesianChart(
+                    primaryXAxis: DateTimeAxis(),
+                    series: <ChartSeries>[
+                      // Renders line chart
+                      LineSeries<List, DateTime>(
+                          dataSource: bla,
+                          xValueMapper: (List sales, _) => sales[0],
+                          yValueMapper: (List sales, _) => sales[1])
+                    ]));
+              }
+              return Column(mainAxisSize: MainAxisSize.min, children: children);
             } else if (snapshot.hasError) {
               return Text('${snapshot.error}');
             }
