@@ -16,7 +16,6 @@ class ForecastScreen extends StatefulWidget {
 
   final Map<String, String> _queryParameters;
 
-  /// Creates a RootScreen
   ForecastScreen(
       {required this.label,
       required this.detailsPath,
@@ -25,7 +24,7 @@ class ForecastScreen extends StatefulWidget {
       required Map<String, String> queryParameters})
       : _queryParameters = queryParameters,
         super(key: key) {
-    place = _queryParameters[_placeParam.name].toString();
+    place = _queryParameters[_placeParam.name];
     numDays = int.parse(_queryParameters[_numDaysParam.name] ?? "1");
   }
 
@@ -41,10 +40,8 @@ class ForecastScreen extends StatefulWidget {
         'get weather forecast information for a place on earth', _parameters);
   }
 
-  /// The label
   final String label;
 
-  /// The path to the detail page
   final String detailsPath;
 
   final Function bottomSheetFunction;
@@ -54,7 +51,8 @@ class ForecastScreen extends StatefulWidget {
 }
 
 class _ForecastScreenState extends State<ForecastScreen> {
-  late TextEditingController _controllerOutlined;
+  final TextEditingController _controllerOutlined = TextEditingController();
+  final TextEditingController daysController = TextEditingController();
 
   _ForecastScreenState();
 
@@ -64,14 +62,16 @@ class _ForecastScreenState extends State<ForecastScreen> {
   @override
   void initState() {
     super.initState();
+    days = widget.numDays;
+    place = widget.place;
     updateState();
   }
 
   void updateState() {
-    String? place = widget.place;
     if (place != null) {
-      _controllerOutlined = TextEditingController(text: place);
-      futureForecast = fetchForecast(place, days: widget.numDays);
+      _controllerOutlined.text = place!;
+      daysController.text = days.toString();
+      futureForecast = fetchForecast(place!, days: days);
     }
   }
 
@@ -81,6 +81,8 @@ class _ForecastScreenState extends State<ForecastScreen> {
   void didUpdateWidget(ForecastScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget._queryParameters != widget._queryParameters) {
+      place = widget.place ?? place;
+      days = widget.numDays;
       setState(() {
         updateState();
       });
@@ -89,28 +91,61 @@ class _ForecastScreenState extends State<ForecastScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // list of dropdown menu entries ranging from 1 to 14
+    final List<DropdownMenuEntry<int>> numberOfDaysAhead =
+        List<DropdownMenuEntry<int>>.generate(
+      15,
+      (int index) =>
+          DropdownMenuEntry<int>(value: index, label: index.toString()),
+    );
+
     List<Widget> children = [];
     var children2 = <Widget>[
       Text('Screen ${widget.label}',
           style: Theme.of(context).textTheme.titleLarge),
       const Padding(padding: EdgeInsets.all(4)),
-      Padding(
-        padding: const EdgeInsets.all(smallSpacing),
-        child: TextField(
-          controller: _controllerOutlined,
-          onSubmitted: (final String value) {
-            setState(() {
-              futureForecast = fetchForecast(value);
-            });
-          },
-          decoration: InputDecoration(
-            prefixIcon: const Icon(Icons.search),
-            suffixIcon: ClearButton(controller: _controllerOutlined),
-            labelText: 'Area on earth',
-            hintText: 'Area on earth',
-            border: const OutlineInputBorder(),
-          ),
-        ),
+      Wrap(
+        // mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+              padding: const EdgeInsets.all(smallSpacing),
+              child: SizedBox(
+                width: 200.0,
+                child: TextField(
+                  controller: _controllerOutlined,
+                  onSubmitted: (final String value) {
+                    setState(() {
+                      place = value;
+                      updateState();
+                    });
+                  },
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(Icons.search),
+                    suffixIcon: ClearButton(controller: _controllerOutlined),
+                    labelText: 'Area on earth',
+                    hintText: 'Area on earth',
+                    border: const OutlineInputBorder(),
+                  ),
+                ),
+              )),
+          Padding(
+              padding: const EdgeInsets.all(smallSpacing),
+              child: SizedBox(
+                  width: 200.0,
+                  child: DropdownMenu<int>(
+                    menuHeight: 200,
+                    controller: daysController,
+                    leadingIcon: const Icon(Icons.search),
+                    label: const Text('Number of days ahead'),
+                    dropdownMenuEntries: numberOfDaysAhead,
+                    onSelected: (daysAhead) {
+                      setState(() {
+                        days = daysAhead;
+                        updateState();
+                      });
+                    },
+                  )))
+        ],
       ),
       if (futureForecast != null)
         FutureBuilder<Forecast>(
