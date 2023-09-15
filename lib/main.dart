@@ -6,10 +6,11 @@ import 'package:langbar/ui/screens/details_screen.dart';
 import 'package:langbar/ui/screens/forecast_screen.dart';
 import 'package:langbar/ui/screens/front_screen.dart';
 import 'package:langbar/ui/screens/root_screen.dart';
-import 'package:langbar/ui/utils.dart';
 import 'package:provider/provider.dart';
 
+import 'for_langbar_lib/history_bottom_sheet.dart';
 import 'for_langbar_lib/langbar_stuff.dart';
+import 'for_langbar_lib/langfield.dart';
 
 // private navigators
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -116,10 +117,8 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
+  @override
   Widget build(BuildContext context) {
-    // uggly hack to open langbar immediately:
-    Future.delayed(Duration.zero, () => bottomsheet(_builderContext!, true));
-
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(
@@ -183,8 +182,6 @@ class ScaffoldWithNestedNavigation extends StatelessWidget {
   }
 }
 
-BuildContext? _builderContext;
-
 class ScaffoldWithNavigationBar extends StatelessWidget {
   const ScaffoldWithNavigationBar({
     super.key,
@@ -199,11 +196,7 @@ class ScaffoldWithNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Builder(builder: (context) {
-      _builderContext = context;
-      return body;
-    }), bottomNavigationBar:
-        Consumer<LangBarState>(builder: (context, langbarState, child) {
+    return Consumer<LangBarState>(builder: (context, langbarState, child) {
       List<Widget> children = [];
       if (langbarState.showLangbar) {
         children.add(LangField());
@@ -217,11 +210,19 @@ class ScaffoldWithNavigationBar extends StatelessWidget {
         ],
         onDestinationSelected: onDestinationSelected,
       ));
-      return Column(
-        mainAxisSize: MainAxisSize.min,
-        children: children,
-      );
-    }));
+      return Scaffold(
+          body: Builder(builder: (context) {
+            // if(isBottomsheetOpen() != langbarState.showHistory) {
+            //   bottomsheet(context);
+            // }
+            setBottomsheetBuilderContext(context);
+            return body;
+          }),
+          bottomNavigationBar: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: children,
+          ));
+    });
   }
 }
 

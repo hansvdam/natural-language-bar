@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import '../for_langbar_lib/chatview.dart';
-import '../for_langbar_lib/langbar_stuff.dart';
 
 class _BottomSheetButton extends StatelessWidget {
   const _BottomSheetButton({
@@ -37,7 +33,6 @@ PreferredSizeWidget createAppBar(Function() showBottomSheet) {
   ]);
 }
 
-PersistentBottomSheetController? bottomsheetController;
 
 class ClearButton extends StatelessWidget {
   const ClearButton({required this.controller});
@@ -51,30 +46,3 @@ class ClearButton extends StatelessWidget {
       );
 }
 
-void bottomsheet(BuildContext context, [bool? forceOpen]) {
-  if (bottomsheetController != null && forceOpen == null) {
-    bottomsheetController?.close();
-    bottomsheetController = null;
-    return;
-  }
-  bottomsheetController = showBottomSheet<void>(
-    // showDragHandle: true,
-    context: context,
-    // TODO: Remove when this is in the framework https://github.com/flutter/flutter/issues/118619
-    // constraints: const BoxConstraints(maxWidth: 640),
-    builder: (context) {
-      return Consumer<LangBarState>(builder: (context, langbarState, child) {
-        List<Widget> children = [];
-        if (langbarState.showHistory) {
-          children.add(
-            Consumer<ChatHistory>(builder: (context, chathistory, child) {
-              return ChatHistoryView(messages: chathistory.items);
-            }),
-          );
-        }
-        // children.add(LangField());
-        return Column(mainAxisSize: MainAxisSize.min, children: children);
-      });
-    },
-  );
-}

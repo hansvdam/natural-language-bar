@@ -9,9 +9,9 @@ ScrollController listScrollController = ScrollController();
 class ChatHistoryView extends StatelessWidget {
   ChatHistoryView({required this.messages, super.key});
 
-  List<Message> messages = [];
+  List<HistoryMessage> messages = [];
 
-  late List<Message> reversedMessages = messages.reversed.toList();
+  late List<HistoryMessage> reversedMessages = messages.reversed.toList();
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +60,7 @@ class ChatHistoryView extends StatelessWidget {
                       onTap: () {
                         var langbarState =
                             Provider.of<LangBarState>(context, listen: false);
-                        langbarState.setShowHistory(false);
+                        langbarState.toggleHistoryShowing();
                         context.go(reversedMessages[index].navUri!);
                       },
                       child: Text(
