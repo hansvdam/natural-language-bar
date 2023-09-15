@@ -4,7 +4,7 @@ import 'package:langchain/langchain.dart';
 import 'package:langchain_openai/langchain_openai.dart';
 import 'package:provider/provider.dart';
 
-import 'openAIKey.dart';
+import '../openAIKey.dart';
 
 class LangField extends StatefulWidget {
   const LangField();

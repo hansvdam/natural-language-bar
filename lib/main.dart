@@ -9,7 +9,7 @@ import 'package:langbar/ui/screens/root_screen.dart';
 import 'package:langbar/ui/utils.dart';
 import 'package:provider/provider.dart';
 
-import 'app_bar_stuff.dart';
+import 'for_langbar_lib/langbar_stuff.dart';
 
 // private navigators
 final _rootNavigatorKey = GlobalKey<NavigatorState>();

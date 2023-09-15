@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../../app_bar_stuff.dart';
+import '../../for_langbar_lib/langbar_stuff.dart';
 import '../utils.dart';
 
 const smallSpacing = 10.0;
