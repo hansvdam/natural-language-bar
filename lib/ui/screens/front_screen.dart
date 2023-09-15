@@ -10,13 +10,13 @@ const smallSpacing = 10.0;
 class FrontScreen extends StatefulWidget {
   /// Creates a RootScreen
   FrontScreen(
-      {required this.label, required this.bottomSheetFunction, Key? key})
+      {required this.label, required this.toggleLangbarFunction, Key? key})
       : super(key: key);
 
   /// The label
   final String label;
 
-  final Function bottomSheetFunction;
+  final Function toggleLangbarFunction;
 
   @override
   State<FrontScreen> createState() => _FrontScreenState();
@@ -30,7 +30,7 @@ class _FrontScreenState extends State<FrontScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(appBar: createAppBar(() {
-      widget.bottomSheetFunction(context);
+      widget.toggleLangbarFunction();
     }), body: Consumer<ChatHistory>(
       builder: (context, chatHistory, child) {
         var lastMessage = chatHistory.items.last;

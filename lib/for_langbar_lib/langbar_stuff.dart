@@ -86,9 +86,20 @@ class ChatHistory extends ChangeNotifier {
 
 class LangBarState extends ChangeNotifier {
   bool showHistory = false;
+  bool showLangbar = true;
 
   void setShowHistory(bool value) {
     showHistory = value;
+    notifyListeners();
+  }
+
+  void setShowLangbar(bool value) {
+    showLangbar = value;
+    notifyListeners();
+  }
+
+  void toggleLangbar() {
+    showLangbar = !showLangbar;
     notifyListeners();
   }
 }

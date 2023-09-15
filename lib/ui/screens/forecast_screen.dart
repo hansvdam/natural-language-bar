@@ -19,7 +19,7 @@ class ForecastScreen extends StatefulWidget {
   ForecastScreen(
       {required this.label,
       required this.detailsPath,
-      required this.bottomSheetFunction,
+      required this.toggleLangbarFunction,
       Key? key,
       required Map<String, String> queryParameters})
       : _queryParameters = queryParameters,
@@ -44,7 +44,7 @@ class ForecastScreen extends StatefulWidget {
 
   final String detailsPath;
 
-  final Function bottomSheetFunction;
+  final Function toggleLangbarFunction;
 
   @override
   State<ForecastScreen> createState() => _ForecastScreenState();
@@ -182,7 +182,7 @@ class _ForecastScreenState extends State<ForecastScreen> {
     children.addAll(children2);
     return Scaffold(
       appBar: createAppBar(() {
-        widget.bottomSheetFunction(context);
+        widget.toggleLangbarFunction();
       }),
       body: Column(
         mainAxisSize: MainAxisSize.min,

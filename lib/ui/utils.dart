@@ -6,11 +6,11 @@ import '../for_langbar_lib/langbar_stuff.dart';
 
 class _BottomSheetButton extends StatelessWidget {
   const _BottomSheetButton({
-    required this.showBottomSheet,
+    required this.toggleLangbar,
     this.showTooltipBelow = true,
   });
 
-  final Function showBottomSheet;
+  final Function toggleLangbar;
   final bool showTooltipBelow;
 
   @override
@@ -21,7 +21,9 @@ class _BottomSheetButton extends StatelessWidget {
       message: 'Toggle brightness',
       child: IconButton(
         icon: const Icon(Icons.short_text_outlined),
-        onPressed: () => showBottomSheet(),
+        onPressed: () {
+          toggleLangbar();
+        },
       ),
     );
   }
@@ -30,7 +32,7 @@ class _BottomSheetButton extends StatelessWidget {
 PreferredSizeWidget createAppBar(Function() showBottomSheet) {
   return AppBar(title: const Text('Langbar'), actions: [
     _BottomSheetButton(
-      showBottomSheet: showBottomSheet,
+      toggleLangbar: showBottomSheet,
     ),
   ]);
 }
@@ -70,7 +72,7 @@ void bottomsheet(BuildContext context, [bool? forceOpen]) {
             }),
           );
         }
-        children.add(LangField());
+        // children.add(LangField());
         return Column(mainAxisSize: MainAxisSize.min, children: children);
       });
     },

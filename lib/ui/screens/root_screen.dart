@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
+import '../../for_langbar_lib/langbar_stuff.dart';
 import '../utils.dart';
 
 class RootScreen extends StatefulWidget {
@@ -23,7 +25,8 @@ class _RootScreenState extends State<RootScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: createAppBar(() {
-        bottomsheet(context);
+        var langbar = Provider.of<LangBarState>(context, listen: false);
+        langbar.toggleLangbar();
       }),
       body: Center(
         child: Column(

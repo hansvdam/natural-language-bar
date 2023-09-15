@@ -45,8 +45,10 @@ final goRouter = GoRouter(
               pageBuilder: (context, state) => NoTransitionPage(
                 child: FrontScreen(
                   label: 'Front Screen',
-                  bottomSheetFunction: (context) {
-                    bottomsheet(_builderContext!);
+                  toggleLangbarFunction: () {
+                    var langbar =
+                        Provider.of<LangBarState>(context, listen: false);
+                    langbar.toggleLangbar();
                   },
                 ),
               ),
@@ -64,8 +66,11 @@ final goRouter = GoRouter(
                   label: 'Weather Forecast',
                   detailsPath: '/forecast/details',
                   queryParameters: state.uri.queryParameters,
-                  bottomSheetFunction: (context) {
-                    bottomsheet(_builderContext!);
+                  toggleLangbarFunction: () {
+                    var langbar =
+                        Provider.of<LangBarState>(context, listen: false);
+                    langbar.toggleLangbar();
+                    // bottomsheet(_builderContext!);
                   },
                 ),
               ),
@@ -194,28 +199,29 @@ class ScaffoldWithNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Builder(builder: (context) {
-          _builderContext = context;
-          return body;
-        }),
-        bottomNavigationBar: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            NavigationBar(
-              selectedIndex: selectedIndex,
-              destinations: const [
-                NavigationDestination(
-                    label: 'Section 1', icon: Icon(Icons.home)),
-                NavigationDestination(
-                    label: 'Weather', icon: Icon(Icons.cloud)),
-                NavigationDestination(
-                    label: 'Section B', icon: Icon(Icons.settings)),
-              ],
-              onDestinationSelected: onDestinationSelected,
-            )
-          ],
-        ));
+    return Scaffold(body: Builder(builder: (context) {
+      _builderContext = context;
+      return body;
+    }), bottomNavigationBar:
+        Consumer<LangBarState>(builder: (context, langbarState, child) {
+      List<Widget> children = [];
+      if (langbarState.showLangbar) {
+        children.add(LangField());
+      }
+      children.add(NavigationBar(
+        selectedIndex: selectedIndex,
+        destinations: const [
+          NavigationDestination(label: 'Section 1', icon: Icon(Icons.home)),
+          NavigationDestination(label: 'Weather', icon: Icon(Icons.cloud)),
+          NavigationDestination(label: 'Section B', icon: Icon(Icons.settings)),
+        ],
+        onDestinationSelected: onDestinationSelected,
+      ));
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: children,
+      );
+    }));
   }
 }
 
