@@ -213,22 +213,15 @@ class ScaffoldWithNavigationBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         body: LangBarWrapper(body: body),
-        bottomNavigationBar: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            (NavigationBar(
-              selectedIndex: selectedIndex,
-              destinations: const [
-                NavigationDestination(
-                    label: 'Section 1', icon: Icon(Icons.home)),
-                NavigationDestination(
-                    label: 'Weather', icon: Icon(Icons.cloud)),
-                NavigationDestination(
-                    label: 'Section B', icon: Icon(Icons.settings)),
-              ],
-              onDestinationSelected: onDestinationSelected,
-            ))
+        bottomNavigationBar: NavigationBar(
+          selectedIndex: selectedIndex,
+          destinations: const [
+            NavigationDestination(label: 'Section 1', icon: Icon(Icons.home)),
+            NavigationDestination(label: 'Weather', icon: Icon(Icons.cloud)),
+            NavigationDestination(
+                label: 'Section B', icon: Icon(Icons.settings)),
           ],
+          onDestinationSelected: onDestinationSelected,
         ));
   }
 }
