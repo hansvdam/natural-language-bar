@@ -9,6 +9,7 @@ import '../models/forecast.dart';
 import '../utils.dart';
 
 const smallSpacing = 10.0;
+const defaultPadding = 16.0;
 
 class ForecastScreen extends StatefulWidget {
   late final String? place;
@@ -101,11 +102,10 @@ class _ForecastScreenState extends State<ForecastScreen> {
 
     List<Widget> children = [];
     var children2 = <Widget>[
-      Text('Screen ${widget.label}',
-          style: Theme.of(context).textTheme.titleLarge),
+      // Text('Screen ${widget.label}',
+      //     style: Theme.of(context).textTheme.titleLarge),
       const Padding(padding: EdgeInsets.all(4)),
       Wrap(
-        // mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Padding(
               padding: const EdgeInsets.all(smallSpacing),
@@ -161,17 +161,22 @@ class _ForecastScreenState extends State<ForecastScreen> {
               ];
               if (temps.length > 1) {
                 var bla = IterableZip([dateTimes, temps]).toList();
-                children.add(SfCartesianChart(
-                    primaryXAxis: DateTimeAxis(),
-                    series: <ChartSeries>[
-                      // Renders line chart
-                      LineSeries<List, DateTime>(
-                          dataSource: bla,
-                          xValueMapper: (List sales, _) => sales[0],
-                          yValueMapper: (List sales, _) => sales[1])
-                    ]));
+                children.add(Flexible(
+                    fit: FlexFit.loose,
+                    child: SfCartesianChart(
+                        primaryXAxis: DateTimeAxis(),
+                        series: <ChartSeries>[
+                          // Renders line chart
+                          LineSeries<List, DateTime>(
+                              dataSource: bla,
+                              xValueMapper: (List sales, _) => sales[0],
+                              yValueMapper: (List sales, _) => sales[1])
+                        ])));
               }
-              return Column(mainAxisSize: MainAxisSize.min, children: children);
+              return Flexible(
+                  fit: FlexFit.loose,
+                  child: Column(
+                      mainAxisSize: MainAxisSize.min, children: children));
             } else if (snapshot.hasError) {
               return Text('${snapshot.error}');
             }
@@ -181,13 +186,16 @@ class _ForecastScreenState extends State<ForecastScreen> {
     ];
     children.addAll(children2);
     return Scaffold(
-      appBar: createAppBar(() {
-        widget.toggleLangbarFunction();
-      }),
-      body: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: children,
-      ),
-    );
+        appBar: createAppBar(widget.label, () {
+          widget.toggleLangbarFunction();
+        }),
+        body: Padding(
+          padding: const EdgeInsets.only(
+              left: defaultPadding, right: defaultPadding),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: children,
+          ),
+        ));
   }
 }

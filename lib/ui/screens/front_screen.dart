@@ -29,18 +29,20 @@ class _FrontScreenState extends State<FrontScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: createAppBar(() {
-      widget.toggleLangbarFunction();
-    }), body: Consumer<ChatHistory>(
-      builder: (context, chatHistory, child) {
-        var lastMessage = chatHistory.items.last;
-        var children = <Widget>[
-          TextButton(
-              onPressed: () {
-                // context.go("/a/:utrecht");
-                context.go("/a?place=utrecht");
-              },
-              child: Text("test")),
+    return Scaffold(
+        appBar: createAppBar(widget.label, () {
+          widget.toggleLangbarFunction();
+        }),
+        body: Consumer<ChatHistory>(
+          builder: (context, chatHistory, child) {
+            var lastMessage = chatHistory.items.last;
+            var children = <Widget>[
+              TextButton(
+                  onPressed: () {
+                    // context.go("/a/:utrecht");
+                    context.go("/a?place=utrecht");
+                  },
+                  child: Text("test")),
           Text('Screen ${widget.label}',
               style: Theme.of(context).textTheme.titleLarge),
           const Padding(padding: EdgeInsets.all(4)),

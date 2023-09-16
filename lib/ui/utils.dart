@@ -25,14 +25,13 @@ class _BottomSheetButton extends StatelessWidget {
   }
 }
 
-PreferredSizeWidget createAppBar(Function() showBottomSheet) {
-  return AppBar(title: const Text('Langbar'), actions: [
+PreferredSizeWidget createAppBar(String title, Function() showBottomSheet) {
+  return AppBar(title: Text(title), actions: [
     _BottomSheetButton(
       toggleLangbar: showBottomSheet,
     ),
   ]);
 }
-
 
 class ClearButton extends StatelessWidget {
   const ClearButton({required this.controller});

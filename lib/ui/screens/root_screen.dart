@@ -24,7 +24,7 @@ class _RootScreenState extends State<RootScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: createAppBar(() {
+      appBar: createAppBar(widget.label, () {
         var langbar = Provider.of<LangBarState>(context, listen: false);
         langbar.toggleLangbar();
       }),
