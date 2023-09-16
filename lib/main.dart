@@ -33,17 +33,30 @@ final goRouter = GoRouter(
   debugLogDiagnostics: true,
   routes: [
     GoRoute(
-      name: CreditCardScreen.name,
-      // Optional, add name to your routes. Allows you navigate by name instead of path
-      path: "/${CreditCardScreen.name}",
-      builder: (context, state) => CreditCardScreen(
-          label: 'Credit Card',
-          toggleLangbarFunction: () {
-            var langbar = Provider.of<LangBarState>(context, listen: false);
-            langbar.toggleLangbar();
-          },
-          queryParameters: state.uri.queryParameters),
-    ),
+        name: CreditCardScreen.name,
+        // Optional, add name to your routes. Allows you navigate by name instead of path
+        path: "/${CreditCardScreen.name}",
+        builder: (context, state) =>
+            Consumer<LangBarState>(builder: (context, langbarState, child) {
+              List<Widget> children = [];
+              children.add(Expanded(
+                  child: (CreditCardScreen(
+                      label: 'Credit Card',
+                      toggleLangbarFunction: () {
+                        var langbar =
+                            Provider.of<LangBarState>(context, listen: false);
+                        langbar.toggleLangbar();
+                      },
+                      queryParameters: state.uri.queryParameters))));
+
+              if (langbarState.showLangbar) {
+                children.add(Material(child: LangField()));
+              }
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: children,
+              );
+            })),
     // Stateful navigation based on:
     // https://github.com/flutter/packages/blob/main/packages/go_router/example/lib/stateful_shell_route.dart
     StatefulShellRoute.indexedStack(
