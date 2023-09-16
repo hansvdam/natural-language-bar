@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:langbar/ui/screens/dummy_screens/CreditCardScreen.dart';
 import 'package:langchain/langchain.dart';
 import 'package:langchain_openai/langchain_openai.dart';
 import 'package:provider/provider.dart';
@@ -36,8 +37,10 @@ class _LangFieldState extends State<LangField> {
 
   Future<void> sendToOpenai(
       ChatOpenAI llm, String query, BuildContext context) async {
-    final tool = ForecastScreen.getTool(context);
-    final agent = OpenAIFunctionsAgent.fromLLMAndTools(llm: llm, tools: [tool]);
+    final forecastTool = ForecastScreen.getTool(context);
+    final creditCardTool = CreditCardScreen.getTool(context);
+    final agent = OpenAIFunctionsAgent.fromLLMAndTools(
+        llm: llm, tools: [forecastTool, creditCardTool]);
     final executor = AgentExecutor(agent: agent);
     // final res = await executor.run('What is 40 raised to the 0.43 power?');
     final path = await executor.run(query);

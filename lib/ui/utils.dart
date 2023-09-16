@@ -44,4 +44,3 @@ class ClearButton extends StatelessWidget {
         onPressed: () => controller.clear(),
       );
 }
-
