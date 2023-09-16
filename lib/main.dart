@@ -9,10 +9,8 @@ import 'package:langbar/ui/screens/front_screen.dart';
 import 'package:langbar/ui/screens/root_screen.dart';
 import 'package:provider/provider.dart';
 
-import 'for_langbar_lib/history_bottom_sheet.dart';
 import 'for_langbar_lib/langbar_stuff.dart';
 import 'for_langbar_lib/langbar_wrapper.dart';
-import 'for_langbar_lib/langfield.dart';
 
 // private navigators
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -213,33 +211,25 @@ class ScaffoldWithNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<LangBarState>(builder: (context, langbarState, child) {
-      List<Widget> children = [];
-      if (langbarState.showLangbar) {
-        children.add(LangField());
-      }
-      children.add(NavigationBar(
-        selectedIndex: selectedIndex,
-        destinations: const [
-          NavigationDestination(label: 'Section 1', icon: Icon(Icons.home)),
-          NavigationDestination(label: 'Weather', icon: Icon(Icons.cloud)),
-          NavigationDestination(label: 'Section B', icon: Icon(Icons.settings)),
-        ],
-        onDestinationSelected: onDestinationSelected,
-      ));
-      return Scaffold(
-          body: Builder(builder: (context) {
-            // if(isBottomsheetOpen() != langbarState.showHistory) {
-            //   bottomsheet(context);
-            // }
-            setBottomsheetBuilderContext(context);
-            return body;
-          }),
-          bottomNavigationBar: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: children,
-          ));
-    });
+    return Scaffold(
+        body: LangBarWrapper(body: body),
+        bottomNavigationBar: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            (NavigationBar(
+              selectedIndex: selectedIndex,
+              destinations: const [
+                NavigationDestination(
+                    label: 'Section 1', icon: Icon(Icons.home)),
+                NavigationDestination(
+                    label: 'Weather', icon: Icon(Icons.cloud)),
+                NavigationDestination(
+                    label: 'Section B', icon: Icon(Icons.settings)),
+              ],
+              onDestinationSelected: onDestinationSelected,
+            ))
+          ],
+        ));
   }
 }
 
