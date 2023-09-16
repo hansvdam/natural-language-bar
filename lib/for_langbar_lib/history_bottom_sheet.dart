@@ -35,4 +35,7 @@ void toggleChatHistoryBottomSheet() {
           }),
         ]);
       });
+  bottomsheetController?.closed.then((value) {
+    // do something with this responsively
+  });
 }
