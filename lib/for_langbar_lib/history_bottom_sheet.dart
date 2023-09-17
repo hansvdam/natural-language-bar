@@ -35,7 +35,12 @@ void toggleChatHistoryBottomSheet() {
           }),
         ]);
       });
+  var langbarState = Provider.of<LangBarState>(_builderContext!, listen: false);
+  langbarState.setHistoryShowing(true);
   bottomsheetController?.closed.then((value) {
-    // do something with this responsively
+    var langbarState =
+        Provider.of<LangBarState>(_builderContext!, listen: false);
+    bottomsheetController = null;
+    langbarState.setHistoryShowing(false);
   });
 }

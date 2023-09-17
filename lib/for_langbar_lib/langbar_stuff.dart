@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'history_bottom_sheet.dart';
-
 class HistoryMessage {
   HistoryMessage(this.text, this.isHuman, {this.navUri});
 
@@ -26,9 +24,8 @@ class LangBarState extends ChangeNotifier {
   bool historyShowing = false;
   bool showLangbar = true;
 
-  void toggleHistoryShowing() {
-    historyShowing = !historyShowing;
-    toggleChatHistoryBottomSheet();
+  void setHistoryShowing(bool value) {
+    historyShowing = value;
     notifyListeners();
   }
 

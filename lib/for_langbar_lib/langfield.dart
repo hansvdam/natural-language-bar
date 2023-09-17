@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../openAIKey.dart';
 import '../ui/screens/forecast_screen.dart';
+import 'history_bottom_sheet.dart';
 import 'langbar_stuff.dart';
 
 class LangField extends StatefulWidget {
@@ -63,7 +64,7 @@ class ShowHistoryButton extends StatelessWidget {
     return IconButton(
         icon: Icon(showHistory ? Icons.arrow_downward : Icons.arrow_upward),
         onPressed: () {
-          langbarState.toggleHistoryShowing();
+          toggleChatHistoryBottomSheet();
         });
   }
 }
