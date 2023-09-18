@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import 'history_bottom_sheet.dart';
 import 'langbar_stuff.dart';
 
 ScrollController listScrollController = ScrollController();
@@ -61,7 +60,7 @@ class ChatHistoryView extends StatelessWidget {
                       onTap: () {
                         var langbarState =
                             Provider.of<LangBarState>(context, listen: false);
-                        toggleChatHistoryBottomSheet();
+                        langbarState.setHistoryShowing(false);
                         context.go(reversedMessages[index].navUri!);
                       },
                       child: Text(

@@ -169,8 +169,8 @@ class _ForecastScreenState extends State<ForecastScreen> {
                           // Renders line chart
                           LineSeries<List, DateTime>(
                               dataSource: bla,
-                              xValueMapper: (List sales, _) => sales[0],
-                              yValueMapper: (List sales, _) => sales[1])
+                              xValueMapper: (List data, _) => data[0],
+                              yValueMapper: (List data, _) => data[1])
                         ])));
               }
               return Flexible(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'history_bottom_sheet.dart';
+import 'chatview.dart';
 import 'langbar_stuff.dart';
 import 'langfield.dart';
 
@@ -15,12 +15,22 @@ class LangBarWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<LangBarState>(builder: (context, langbarState, child) {
+    return Consumer2<LangBarState, ChatHistory>(
+        builder: (context, langbarState, chatHistory, child) {
       List<Widget> children = [];
-      children.add(Expanded(child: Scaffold(body: Builder(builder: (context) {
-        setBottomsheetBuilderContext(context);
-        return body;
-      }))));
+      children.add(Expanded(
+          child: Scaffold(
+              bottomSheet: langbarState.historyShowing
+                  ? Column(mainAxisSize: MainAxisSize.min, children: [
+                      Consumer<ChatHistory>(
+                          builder: (context, chathistory, child) {
+                        return ChatHistoryView(messages: chathistory.items);
+                      }),
+                    ])
+                  : null,
+              body: Builder(builder: (context) {
+                return body;
+              }))));
       if (langbarState.showLangbar) {
         children.add(Material(child: LangField()));
       }
