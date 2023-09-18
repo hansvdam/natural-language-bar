@@ -21,18 +21,13 @@ class LangBarWrapper extends StatelessWidget {
       children.add(Expanded(
           child: Scaffold(
               bottomSheet: langbarState.historyShowing
-                  ? Column(mainAxisSize: MainAxisSize.min, children: [
-                      Consumer<ChatHistory>(
-                          builder: (context, chathistory, child) {
-                        return ChatHistoryView(messages: chathistory.items);
-                      }),
-                    ])
+                  ? ChatHistoryView(messages: chatHistory.items)
                   : null,
               body: Builder(builder: (context) {
                 return body;
               }))));
       if (langbarState.showLangbar) {
-        children.add(Material(child: LangField()));
+        children.add(Material(child: LangField(chatHistory.items.isNotEmpty)));
       }
       return Column(
         mainAxisSize: MainAxisSize.min,

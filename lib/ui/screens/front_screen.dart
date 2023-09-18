@@ -106,7 +106,9 @@ class _FrontScreenState extends State<FrontScreen> {
         ),
         body: Consumer<ChatHistory>(
           builder: (context, chatHistory, child) {
-            var lastMessage = chatHistory.items.last;
+            var lastMessage = chatHistory.items.isNotEmpty
+                ? chatHistory.items.last
+                : HistoryMessage("no message yet", false);
             var children = <Widget>[
               TextButton(
                   onPressed: () {
@@ -115,9 +117,9 @@ class _FrontScreenState extends State<FrontScreen> {
                   },
                   child: Text("test")),
               Text('Screen ${widget.label}',
-              style: Theme.of(context).textTheme.titleLarge),
-          const Padding(padding: EdgeInsets.all(4)),
-          Padding(
+                  style: Theme.of(context).textTheme.titleLarge),
+              const Padding(padding: EdgeInsets.all(4)),
+              Padding(
             padding: const EdgeInsets.all(smallSpacing),
             child: Text('This screen displays the last response by the LLM:'),
           ),

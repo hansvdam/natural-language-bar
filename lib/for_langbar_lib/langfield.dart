@@ -9,7 +9,9 @@ import '../ui/screens/forecast_screen.dart';
 import 'langbar_stuff.dart';
 
 class LangField extends StatefulWidget {
-  const LangField();
+  final bool showHistoryButton;
+
+  const LangField([this.showHistoryButton = false]);
 
   @override
   State<LangField> createState() => _LangFieldState();
@@ -30,7 +32,7 @@ class _LangFieldState extends State<LangField> {
         },
         decoration: InputDecoration(
           prefixIcon: Icon(Icons.search),
-          suffixIcon: ShowHistoryButton(),
+          suffixIcon: widget.showHistoryButton ? ShowHistoryButton() : null,
           filled: true,
         ),
       );

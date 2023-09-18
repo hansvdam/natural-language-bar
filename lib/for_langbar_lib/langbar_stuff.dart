@@ -12,7 +12,7 @@ class ChatHistory extends ChangeNotifier {
   bool value = false;
 
   /// Internal, private state of the cart.
-  final List<HistoryMessage> items = [HistoryMessage("Hello", false)];
+  final List<HistoryMessage> items = [];
 
   void add(HistoryMessage item) {
     items.add(item);
