@@ -27,16 +27,17 @@ class ChatHistoryView extends StatelessWidget {
           shrinkWrap: true,
           itemCount: messages.length,
           itemBuilder: (context, index) {
+            var message = reversedMessages[index];
             return ListTile(
               title: Align(
-                alignment: reversedMessages[index].isHuman
+                alignment: message.isHuman
                     ? Alignment.centerRight
                     : Alignment.centerLeft,
                 child: Container(
                   margin: const EdgeInsets.fromLTRB(12, 15, 12, 5),
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: reversedMessages[index].isHuman
+                    color: message.isHuman
                         ? Colors.blue[50]
                         : const Color.fromARGB(255, 17, 110, 187),
                     borderRadius: const BorderRadius.only(
@@ -55,24 +56,29 @@ class ChatHistoryView extends StatelessWidget {
                     ],
                   ),
                   child: MouseRegion(
-                    cursor: SystemMouseCursors.click,
+                    cursor: message.navUri != null
+                        ? SystemMouseCursors.click
+                        : MouseCursor.defer,
                     child: GestureDetector(
-                      onTap: () {
-                        var langbarState =
-                            Provider.of<LangBarState>(context, listen: false);
-                        langbarState.setHistoryShowing(false);
-                        context.go(reversedMessages[index].navUri!);
-                      },
+                      onTap: message.navUri != null
+                          ? () {
+                              var langbarState = Provider.of<LangBarState>(
+                                  context,
+                                  listen: false);
+                              langbarState.setHistoryShowing(false);
+                              context.go(message.navUri!);
+                            }
+                          : null,
                       child: Text(
-                        reversedMessages[index].text,
+                        message.text,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          color: reversedMessages[index].isHuman
-                              ? Colors.black
-                              : Colors.white,
+                          color: message.isHuman ? Colors.black : Colors.white,
                           fontSize: 15,
                           fontWeight: FontWeight.normal,
-                          decoration: TextDecoration.underline,
+                          decoration: message.navUri != null
+                              ? TextDecoration.underline
+                              : null,
                         ),
                       ),
                     ),

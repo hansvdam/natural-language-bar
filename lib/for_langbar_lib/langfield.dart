@@ -45,13 +45,18 @@ class _LangFieldState extends State<LangField> {
         llm: llm, tools: [forecastTool, creditCardTool]);
     final executor = AgentExecutor(agent: agent);
     // final res = await executor.run('What is 40 raised to the 0.43 power?');
-    final path = await executor.run(query);
-    print(path);
-    Provider.of<ChatHistory>(context, listen: false)
-        .add(HistoryMessage(query, true, navUri: path));
-    //
-    // Provider.of<ChatHistory>(context, listen: false)
-    //     .add(HistoryMessage(path.trim(), false, navUri: path));
+    final response = await executor.run(query);
+    print(response);
+    // if response contains spaces, we assume it is not a path, but a response from the AI (when this becomes too much of a hack, we should start responding from tools with more complex objects with fields etc.
+    if (response.contains(' ')) {
+      Provider.of<ChatHistory>(context, listen: false)
+          .add(HistoryMessage(query, true));
+      Provider.of<ChatHistory>(context, listen: false)
+          .add(HistoryMessage(response, false));
+      Provider.of<LangBarState>(context, listen: false).setHistoryShowing(true);
+    } else // add the original query, but the navigation-uri-repsonse as the hyperlink when you click on it
+      Provider.of<ChatHistory>(context, listen: false)
+          .add(HistoryMessage(query, true, navUri: response));
   }
 }
 
