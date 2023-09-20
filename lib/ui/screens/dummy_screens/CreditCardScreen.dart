@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:langbar/for_langchain/tool.dart';
 import 'package:langbar/ui/screens/dummy_screens/SampleScreenTemplate.dart';
 
@@ -25,9 +26,9 @@ class CreditCardScreen extends SampleScreenTemplate {
   static const _parameters = [_creditLimit];
   static const name = 'creditcard';
 
-  static getTool(BuildContext context) {
+  static getTool(GoRouter goRouter) {
     return GenericScreenTool(
-        context,
+        goRouter,
         name,
         'raise the limit of the you creditcard or show the current limit',
         _parameters);

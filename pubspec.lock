@@ -209,21 +209,21 @@ packages:
     source: hosted
     version: "0.6.5"
   langchain:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: langchain
-      sha256: c4ebf80ba50d58dee76eb2ce8bac605071fad893a1ee2e51b10606910460f736
+      sha256: "50d060de20172de9b48ff4d649434cadfceec6a2b54db032d4f2b2cbd29db259"
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.12"
+    version: "0.0.13"
   langchain_openai:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: langchain_openai
-      sha256: "3d8f74102c2f01cef482451d1a786386333da738a300266691110fbcbd243bbd"
+      sha256: d0abd93e82053e9ee8602309f6aa8b18b6998f207f64360e1663068033600449
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.12"
+    version: "0.0.13"
   lints:
     dependency: transitive
     description:

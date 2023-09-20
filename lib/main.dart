@@ -77,19 +77,21 @@ final goRouter = GoRouter(
           routes: [
             GoRoute(
               path: "/${ForecastScreen.name}",
-              pageBuilder: (context, state) => NoTransitionPage(
-                child: ForecastScreen(
-                  label: 'Weather Forecast',
-                  detailsPath: '/forecast/details',
-                  queryParameters: state.uri.queryParameters,
-                  toggleLangbarFunction: () {
-                    var langbar =
-                        Provider.of<LangBarState>(context, listen: false);
-                    langbar.toggleLangbar();
-                    // bottomsheet(_builderContext!);
-                  },
-                ),
-              ),
+              pageBuilder: (context, state) {
+                return NoTransitionPage(
+                  child: ForecastScreen(
+                    label: 'Weather Forecast',
+                    detailsPath: '/forecast/details',
+                    queryParameters: state.uri.queryParameters,
+                    toggleLangbarFunction: () {
+                      var langbar =
+                          Provider.of<LangBarState>(context, listen: false);
+                      langbar.toggleLangbar();
+                      // bottomsheet(_builderContext!);
+                    },
+                  ),
+                );
+              },
               routes: [
                 GoRoute(
                   path: 'details',

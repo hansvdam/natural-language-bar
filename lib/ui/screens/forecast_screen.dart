@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:langbar/for_langchain/tool.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -36,8 +37,8 @@ class ForecastScreen extends StatefulWidget {
   static const _parameters = [_placeParam, _numDaysParam];
   static const name = 'forecast';
 
-  static getTool(BuildContext context) {
-    return GenericScreenTool(context, name,
+  static getTool(GoRouter goRouter) {
+    return GenericScreenTool(goRouter, name,
         'get weather forecast information for a place on earth', _parameters);
   }
 

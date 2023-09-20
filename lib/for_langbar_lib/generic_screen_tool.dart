@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:go_router/go_router.dart';
 import 'package:langchain/langchain.dart';
 
@@ -10,11 +9,11 @@ import '../for_langchain/tool.dart';
 /// A for forecasting the weather from an api.
 /// {@endtemplate}
 final class GenericScreenTool extends BaseTool {
-  final BuildContext context;
+  final GoRouter goRouter;
 
   /// {@macro calculator_tool}
-  factory GenericScreenTool(BuildContext context, String name,
-      String description, List<Parameter> parameters) {
+  factory GenericScreenTool(GoRouter goRouter, String name, String description,
+      List<Parameter> parameters) {
     var inputJsonSchema = {
       'type': 'object',
       'properties': {
@@ -27,10 +26,10 @@ final class GenericScreenTool extends BaseTool {
     };
 
     return GenericScreenTool._internal(
-        context, name, description, inputJsonSchema);
+        goRouter, name, description, inputJsonSchema);
   }
 
-  GenericScreenTool._internal(this.context, String name, String description,
+  GenericScreenTool._internal(this.goRouter, String name, String description,
       Map<String, dynamic> inputJsonSchema)
       : super(
           name: name,
@@ -46,7 +45,7 @@ final class GenericScreenTool extends BaseTool {
         queryParameters:
             toolInput.map((key, value) => MapEntry(key, value.toString())));
     var path = uri.toString();
-    context.go(path);
+    goRouter.go(path);
     return path;
   }
 }

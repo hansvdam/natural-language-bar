@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:langbar/ui/screens/dummy_screens/CreditCardScreen.dart';
 import 'package:langchain/langchain.dart';
 import 'package:langchain_openai/langchain_openai.dart';
@@ -26,7 +27,8 @@ class _LangFieldState extends State<LangField> {
         onSubmitted: (final String value) {
           var apiKey2 = getOpenAIKey();
           var client = OpenAIClient.instanceFor(apiKey: apiKey2);
-          final llm = ChatOpenAI(apiClient: client);
+          final llm =
+              ChatOpenAI(apiClient: client, temperature: 0.0, model: 'gpt-4');
           sendToOpenai(llm, this._controllerOutlined.text, context);
           _controllerOutlined.clear();
         },
@@ -37,12 +39,14 @@ class _LangFieldState extends State<LangField> {
         ),
       );
 
+  final memory = ConversationBufferMemory(returnMessages: true);
+
   Future<void> sendToOpenai(
       ChatOpenAI llm, String query, BuildContext context) async {
-    final forecastTool = ForecastScreen.getTool(context);
-    final creditCardTool = CreditCardScreen.getTool(context);
+    final forecastTool = ForecastScreen.getTool(GoRouter.of(context));
+    final creditCardTool = CreditCardScreen.getTool(GoRouter.of(context));
     final agent = OpenAIFunctionsAgent.fromLLMAndTools(
-        llm: llm, tools: [forecastTool, creditCardTool]);
+        llm: llm, tools: [forecastTool, creditCardTool], memory: memory);
     final executor = AgentExecutor(agent: agent);
     // final res = await executor.run('What is 40 raised to the 0.43 power?');
     final response = await executor.run(query);
