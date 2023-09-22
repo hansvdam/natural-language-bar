@@ -1,3 +1,4 @@
+import 'package:dart_openai/dart_openai.dart' as dart_openai;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:langbar/ui/screens/dummy_screens/CreditCardScreen.dart';
@@ -26,8 +27,10 @@ class _LangFieldState extends State<LangField> {
         controller: _controllerOutlined,
         onSubmitted: (final String value) {
           var apiKey2 = getOpenAIKey();
+          var sessionToken = getSessionToken();
           var client = OpenAIClient.instanceFor(
               apiKey: apiKey2, apiBaseUrl: openAiApiBaseUrl());
+          dart_openai.OpenAI.includeHeaders({"session": sessionToken});
           final llm =
               ChatOpenAI(apiClient: client, temperature: 0.0, model: 'gpt-4');
           sendToOpenai(llm, this._controllerOutlined.text, context);
@@ -50,8 +53,12 @@ class _LangFieldState extends State<LangField> {
         llm: llm, tools: [forecastTool, creditCardTool], memory: memory);
     final executor = AgentExecutor(agent: agent);
     // final res = await executor.run('What is 40 raised to the 0.43 power?');
-    final response = await executor.run(query);
-    print(response);
+    var response;
+    try {
+      response = await executor.run(query);
+    } catch (e) {
+      response = e.toString();
+    }
     // if response contains spaces, we assume it is not a path, but a response from the AI (when this becomes too much of a hack, we should start responding from tools with more complex objects with fields etc.
     if (response.contains(' ')) {
       Provider.of<ChatHistory>(context, listen: false)
