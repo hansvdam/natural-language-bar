@@ -1,3 +1,7 @@
 String getOpenAIKey() => "";
 
-String? openAiApiBaseUrl() => "";
+String? openAiApiBaseUrl() => null;
+
+String? getSessionToken() {
+  return null;
+}
