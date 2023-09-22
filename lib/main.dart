@@ -22,6 +22,35 @@ class GlobalContextService {
   static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 }
 
+class LlmGoRouteParam {
+  const LlmGoRouteParam({
+    required this.name,
+    required this.description,
+    required this.type,
+    this.required = true,
+  });
+
+  final String name;
+  final String description;
+  final String type;
+  final bool required;
+}
+
+class LlmGoRoute extends GoRoute {
+  LlmGoRoute({
+    required this.name,
+    required this.description,
+    required path,
+    required this.queryParameters,
+    builder,
+    pageBuilder,
+  }) : super(path: path, builder: builder, pageBuilder: pageBuilder);
+
+  final String name;
+  final String description;
+  final List<LlmGoRouteParam> queryParameters;
+}
+
 final goRouter = GoRouter(
   initialLocation: '/1',
   // * Passing a navigatorKey causes an issue on hot reload:
@@ -31,10 +60,18 @@ final goRouter = GoRouter(
   navigatorKey: _rootNavigatorKey,
   debugLogDiagnostics: true,
   routes: [
-    GoRoute(
-        name: CreditCardScreen.name,
-        // Optional, add name to your routes. Allows you navigate by name instead of path
-        path: "/${CreditCardScreen.name}",
+    LlmGoRoute(
+        path: '/creditcard',
+        name: 'creditcard',
+        description:
+            'Raise the limit of the you credit card or show the current limit',
+        queryParameters: const [
+          LlmGoRouteParam(
+            name: 'limit',
+            description: 'New limit for the credit card',
+            type: 'string',
+          ),
+        ],
         builder: (context, state) {
           return LangBarWrapper(
               body: CreditCardScreen(
