@@ -27,10 +27,12 @@ class _LangFieldState extends State<LangField> {
         controller: _controllerOutlined,
         onSubmitted: (final String value) {
           var apiKey2 = getOpenAIKey();
-          var sessionToken = getSessionToken();
           var client = OpenAIClient.instanceFor(
               apiKey: apiKey2, apiBaseUrl: openAiApiBaseUrl());
-          dart_openai.OpenAI.includeHeaders({"session": sessionToken});
+          var sessionToken = getSessionToken();
+          if (sessionToken != null) {
+            dart_openai.OpenAI.includeHeaders({"session": sessionToken});
+          }
           final llm =
               ChatOpenAI(apiClient: client, temperature: 0.0, model: 'gpt-4');
           sendToOpenai(llm, this._controllerOutlined.text, context);
