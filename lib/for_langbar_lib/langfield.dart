@@ -26,7 +26,8 @@ class _LangFieldState extends State<LangField> {
         controller: _controllerOutlined,
         onSubmitted: (final String value) {
           var apiKey2 = getOpenAIKey();
-          var client = OpenAIClient.instanceFor(apiKey: apiKey2);
+          var client = OpenAIClient.instanceFor(
+              apiKey: apiKey2, apiBaseUrl: apiBaseUrl());
           final llm =
               ChatOpenAI(apiClient: client, temperature: 0.0, model: 'gpt-4');
           sendToOpenai(llm, this._controllerOutlined.text, context);

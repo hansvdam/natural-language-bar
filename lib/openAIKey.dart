@@ -1,1 +1,3 @@
 String getOpenAIKey() => "";
+
+String? apiBaseUrl() => "";
