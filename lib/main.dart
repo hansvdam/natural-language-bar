@@ -40,16 +40,137 @@ class LlmGoRoute extends GoRoute {
   LlmGoRoute({
     required this.name,
     required this.description,
-    required path,
-    required this.queryParameters,
-    builder,
-    pageBuilder,
-  }) : super(path: path, builder: builder, pageBuilder: pageBuilder);
+    required super.path,
+    required this.parameters,
+    super.builder,
+    super.pageBuilder,
+    super.routes = const <RouteBase>[],
+  }) : super();
 
   final String name;
   final String description;
-  final List<LlmGoRouteParam> queryParameters;
+  final List<LlmGoRouteParam> parameters;
 }
+
+var routes = [
+  LlmGoRoute(
+      path: '/creditcard',
+      name: 'creditcard',
+      description:
+          'Raise the limit of the you credit card or show the current limit',
+      parameters: const [
+        LlmGoRouteParam(
+          name: 'limit',
+          description: 'New limit for the credit card',
+          type: 'string',
+        ),
+      ],
+      builder: (context, state) {
+        return LangBarWrapper(
+            body: CreditCardScreen(
+                label: 'Credit Card',
+                toggleLangbarFunction: () {
+                  var langbar =
+                      Provider.of<LangBarState>(context, listen: false);
+                  langbar.toggleLangbar();
+                },
+                queryParameters: state.uri.queryParameters));
+      }),
+// Stateful navigation based on:
+// https://github.com/flutter/packages/blob/main/packages/go_router/example/lib/stateful_shell_route.dart
+  StatefulShellRoute.indexedStack(
+    builder: (context, state, navigationShell) {
+      return ScaffoldWithNestedNavigation(navigationShell: navigationShell);
+    },
+    branches: [
+      StatefulShellBranch(
+        navigatorKey: _shellNavigator1Key,
+        routes: [
+          GoRoute(
+            path: '/1',
+            pageBuilder: (context, state) => NoTransitionPage(
+              child: FrontScreen(
+                label: 'Front Screen',
+                toggleLangbarFunction: () {
+                  var langbar =
+                      Provider.of<LangBarState>(context, listen: false);
+                  langbar.toggleLangbar();
+                },
+              ),
+            ),
+            routes: [],
+          ),
+        ],
+      ),
+      StatefulShellBranch(
+        navigatorKey: _shellNavigatorAKey,
+        routes: [
+          LlmGoRoute(
+            name: 'forecast',
+            description:
+                "get weather forecast information for a place on earth",
+            parameters: const [
+              LlmGoRouteParam(
+                name: 'place',
+                description: 'place on earth',
+                type: 'string',
+              ),
+              LlmGoRouteParam(
+                name: 'numDays',
+                description: 'The number of days to forecast',
+                type: 'integer',
+                required: false,
+              ),
+            ],
+            path: "/${ForecastScreen.name}",
+            pageBuilder: (context, state) {
+              return NoTransitionPage(
+                child: ForecastScreen(
+                  label: 'Weather Forecast',
+                  detailsPath: '/forecast/details',
+                  place: state.uri.queryParameters['place'],
+                  numDays: int.tryParse(
+                          state.uri.queryParameters['numDays'] ?? '') ??
+                      1,
+                  toggleLangbarFunction: () {
+                    var langbar =
+                        Provider.of<LangBarState>(context, listen: false);
+                    langbar.toggleLangbar();
+// bottomsheet(_builderContext!);
+                  },
+                ),
+              );
+            },
+            routes: [
+              GoRoute(
+                path: 'details',
+                builder: (context, state) => const DetailsScreen(label: 'A'),
+              ),
+            ],
+          ),
+        ],
+      ),
+      StatefulShellBranch(
+        navigatorKey: _shellNavigatorBKey,
+        routes: [
+// Shopping Cart
+          GoRoute(
+            path: '/b',
+            pageBuilder: (context, state) => const NoTransitionPage(
+              child: RootScreen(label: 'B', detailsPath: '/b/details'),
+            ),
+            routes: [
+              GoRoute(
+                path: 'details',
+                builder: (context, state) => const DetailsScreen(label: 'B'),
+              ),
+            ],
+          ),
+        ],
+      ),
+    ],
+  ),
+];
 
 final goRouter = GoRouter(
   initialLocation: '/1',
@@ -59,106 +180,7 @@ final goRouter = GoRouter(
   // * root on hot reload
   navigatorKey: _rootNavigatorKey,
   debugLogDiagnostics: true,
-  routes: [
-    LlmGoRoute(
-        path: '/creditcard',
-        name: 'creditcard',
-        description:
-            'Raise the limit of the you credit card or show the current limit',
-        queryParameters: const [
-          LlmGoRouteParam(
-            name: 'limit',
-            description: 'New limit for the credit card',
-            type: 'string',
-          ),
-        ],
-        builder: (context, state) {
-          return LangBarWrapper(
-              body: CreditCardScreen(
-                  label: 'Credit Card',
-                  toggleLangbarFunction: () {
-                    var langbar =
-                        Provider.of<LangBarState>(context, listen: false);
-                    langbar.toggleLangbar();
-                  },
-                  queryParameters: state.uri.queryParameters));
-        }),
-    // Stateful navigation based on:
-    // https://github.com/flutter/packages/blob/main/packages/go_router/example/lib/stateful_shell_route.dart
-    StatefulShellRoute.indexedStack(
-      builder: (context, state, navigationShell) {
-        return ScaffoldWithNestedNavigation(navigationShell: navigationShell);
-      },
-      branches: [
-        StatefulShellBranch(
-          navigatorKey: _shellNavigator1Key,
-          routes: [
-            GoRoute(
-              path: '/1',
-              pageBuilder: (context, state) => NoTransitionPage(
-                child: FrontScreen(
-                  label: 'Front Screen',
-                  toggleLangbarFunction: () {
-                    var langbar =
-                        Provider.of<LangBarState>(context, listen: false);
-                    langbar.toggleLangbar();
-                  },
-                ),
-              ),
-              routes: [],
-            ),
-          ],
-        ),
-        StatefulShellBranch(
-          navigatorKey: _shellNavigatorAKey,
-          routes: [
-            GoRoute(
-              path: "/${ForecastScreen.name}",
-              pageBuilder: (context, state) {
-                return NoTransitionPage(
-                  child: ForecastScreen(
-                    label: 'Weather Forecast',
-                    detailsPath: '/forecast/details',
-                    queryParameters: state.uri.queryParameters,
-                    toggleLangbarFunction: () {
-                      var langbar =
-                          Provider.of<LangBarState>(context, listen: false);
-                      langbar.toggleLangbar();
-                      // bottomsheet(_builderContext!);
-                    },
-                  ),
-                );
-              },
-              routes: [
-                GoRoute(
-                  path: 'details',
-                  builder: (context, state) => const DetailsScreen(label: 'A'),
-                ),
-              ],
-            ),
-          ],
-        ),
-        StatefulShellBranch(
-          navigatorKey: _shellNavigatorBKey,
-          routes: [
-            // Shopping Cart
-            GoRoute(
-              path: '/b',
-              pageBuilder: (context, state) => const NoTransitionPage(
-                child: RootScreen(label: 'B', detailsPath: '/b/details'),
-              ),
-              routes: [
-                GoRoute(
-                  path: 'details',
-                  builder: (context, state) => const DetailsScreen(label: 'B'),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ],
-    ),
-  ],
+  routes: routes,
 );
 
 void main() {

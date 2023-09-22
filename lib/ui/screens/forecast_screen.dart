@@ -16,19 +16,14 @@ class ForecastScreen extends StatefulWidget {
   late final String? place;
   late final int numDays;
 
-  final Map<String, String> _queryParameters;
-
   ForecastScreen(
       {required this.label,
       required this.detailsPath,
       required this.toggleLangbarFunction,
       Key? key,
-      required Map<String, String> queryParameters})
-      : _queryParameters = queryParameters,
-        super(key: key) {
-    place = _queryParameters[_placeParam.name];
-    numDays = int.parse(_queryParameters[_numDaysParam.name] ?? "1");
-  }
+      this.place,
+      this.numDays = 1})
+      : super(key: key) {}
 
   static const _placeParam = Parameter('place', 'string', 'place on earth');
   static const _numDaysParam = Parameter(
@@ -58,22 +53,19 @@ class _ForecastScreenState extends State<ForecastScreen> {
 
   _ForecastScreenState();
 
-  String? place;
-  int? days;
-
   @override
   void initState() {
     super.initState();
-    days = widget.numDays;
-    place = widget.place;
+    _controllerOutlined.text = widget.place ?? '';
+    daysController.text = widget.numDays.toString();
     updateState();
   }
 
   void updateState() {
-    if (place != null) {
-      _controllerOutlined.text = place!;
-      daysController.text = days.toString();
-      futureForecast = fetchForecast(place!, days: days);
+    if (_controllerOutlined.text.isNotEmpty && daysController.text.isNotEmpty) {
+      var place = _controllerOutlined.text;
+      var days = int.parse(daysController.text);
+      futureForecast = fetchForecast(place, days: days);
     }
   }
 
@@ -82,9 +74,10 @@ class _ForecastScreenState extends State<ForecastScreen> {
   @override
   void didUpdateWidget(ForecastScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget._queryParameters != widget._queryParameters) {
-      place = widget.place ?? place;
-      days = widget.numDays;
+    if (oldWidget.place != widget.place ||
+        oldWidget.numDays != widget.numDays) {
+      _controllerOutlined.text = widget.place ?? '';
+      daysController.text = widget.numDays.toString();
       setState(() {
         updateState();
       });
@@ -116,7 +109,6 @@ class _ForecastScreenState extends State<ForecastScreen> {
                   controller: _controllerOutlined,
                   onSubmitted: (final String value) {
                     setState(() {
-                      place = value;
                       updateState();
                     });
                   },
@@ -141,7 +133,6 @@ class _ForecastScreenState extends State<ForecastScreen> {
                     dropdownMenuEntries: numberOfDaysAhead,
                     onSelected: (daysAhead) {
                       setState(() {
-                        days = daysAhead;
                         updateState();
                       });
                     },
