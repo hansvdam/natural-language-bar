@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:langbar/for_langchain/tool.dart';
 import 'package:langbar/ui/screens/dummy_screens/SampleScreenTemplate.dart';
-
-import '../../../for_langbar_lib/generic_screen_tool.dart';
 
 const smallSpacing = 10.0;
 const defaultPadding = 16.0;
@@ -20,17 +16,5 @@ class CreditCardScreen extends SampleScreenTemplate {
             queryParameters: queryParameters,
             key: key) {}
 
-  static const _creditLimit = Parameter(
-      'limit', 'string', 'new limit for the creditcard',
-      required: false);
-  static const _parameters = [_creditLimit];
   static const name = 'creditcard';
-
-  static getTool(GoRouter goRouter) {
-    return GenericScreenTool(
-        goRouter,
-        name,
-        'raise the limit of the you creditcard or show the current limit',
-        _parameters);
-  }
 }

@@ -1,13 +1,13 @@
 import 'package:dart_openai/dart_openai.dart' as dart_openai;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:langbar/ui/screens/dummy_screens/CreditCardScreen.dart';
+import 'package:langbar/for_langbar_lib/generic_screen_tool.dart';
 import 'package:langchain/langchain.dart';
 import 'package:langchain_openai/langchain_openai.dart';
 import 'package:provider/provider.dart';
 
+import '../main.dart';
 import '../openAIKey.dart';
-import '../ui/screens/forecast_screen.dart';
 import 'langbar_stuff.dart';
 
 class LangField extends StatefulWidget {
@@ -49,10 +49,11 @@ class _LangFieldState extends State<LangField> {
 
   Future<void> sendToOpenai(
       ChatOpenAI llm, String query, BuildContext context) async {
-    final forecastTool = ForecastScreen.getTool(GoRouter.of(context));
-    final creditCardTool = CreditCardScreen.getTool(GoRouter.of(context));
+    // final forecastTool = ForecastScreen.getTool(GoRouter.of(context));
+    // final creditCardTool = CreditCardScreen.getTool(GoRouter.of(context));
+    var tools = parseRouters(GoRouter.of(context), routes);
     final agent = OpenAIFunctionsAgent.fromLLMAndTools(
-        llm: llm, tools: [forecastTool, creditCardTool], memory: memory);
+        llm: llm, tools: tools, memory: memory);
     final executor = AgentExecutor(agent: agent);
     // final res = await executor.run('What is 40 raised to the 0.43 power?');
     var response;
@@ -71,6 +72,22 @@ class _LangFieldState extends State<LangField> {
     } else // add the original query, but the navigation-uri-repsonse as the hyperlink when you click on it
       Provider.of<ChatHistory>(context, listen: false)
           .add(HistoryMessage(query, true, navUri: response));
+  }
+
+  parseRouters(GoRouter goRouter, List<RouteBase> routes) {
+    var tools = <GenericScreenTool>[];
+    for (var route in routes) {
+      if (route is LlmGoRoute) {
+        var path = route.path;
+        var tool = GenericScreenTool(goRouter, route.name, route.path,
+            route.description, route.parameters);
+        tools.add(tool);
+      }
+      if (route.routes.isNotEmpty) {
+        tools.addAll(parseRouters(goRouter, route.routes));
+      }
+    }
+    return tools;
   }
 }
 

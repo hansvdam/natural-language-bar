@@ -3,17 +3,19 @@ import 'dart:async';
 import 'package:go_router/go_router.dart';
 import 'package:langchain/langchain.dart';
 
-import '../for_langchain/tool.dart';
+import '../main.dart';
 
-/// {@template calculator_tool}
+/// {@template forecasting_tool}
 /// A for forecasting the weather from an api.
 /// {@endtemplate}
 final class GenericScreenTool extends BaseTool {
   final GoRouter goRouter;
 
+  final String path;
+
   /// {@macro calculator_tool}
-  factory GenericScreenTool(GoRouter goRouter, String name, String description,
-      List<Parameter> parameters) {
+  factory GenericScreenTool(GoRouter goRouter, String name, path,
+      String description, List<LlmGoRouteParam> parameters) {
     var inputJsonSchema = {
       'type': 'object',
       'properties': {
@@ -26,11 +28,11 @@ final class GenericScreenTool extends BaseTool {
     };
 
     return GenericScreenTool._internal(
-        goRouter, name, description, inputJsonSchema);
+        goRouter, name, path, description, inputJsonSchema);
   }
 
-  GenericScreenTool._internal(this.goRouter, String name, String description,
-      Map<String, dynamic> inputJsonSchema)
+  GenericScreenTool._internal(this.goRouter, String name, this.path,
+      description, Map<String, dynamic> inputJsonSchema)
       : super(
           name: name,
           description: description,
@@ -41,11 +43,11 @@ final class GenericScreenTool extends BaseTool {
   @override
   FutureOr<String> runInternal(Map<String, dynamic> toolInput) {
     Uri uri = Uri(
-        path: "/$name",
+        path: path,
         queryParameters:
             toolInput.map((key, value) => MapEntry(key, value.toString())));
-    var path = uri.toString();
-    goRouter.go(path);
-    return path;
+    var uriString = uri.toString();
+    goRouter.go(uriString);
+    return uriString;
   }
 }

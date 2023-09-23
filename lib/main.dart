@@ -26,7 +26,7 @@ class LlmGoRouteParam {
   const LlmGoRouteParam({
     required this.name,
     required this.description,
-    required this.type,
+    this.type = 'string',
     this.required = true,
   });
 
@@ -34,6 +34,15 @@ class LlmGoRouteParam {
   final String description;
   final String type;
   final bool required;
+
+  Map<String, dynamic> asFunctionParam() {
+    return {
+      name: {
+        'description': description,
+        'type': type,
+      }
+    };
+  }
 }
 
 class LlmGoRoute extends GoRoute {
@@ -56,8 +65,7 @@ var routes = [
   LlmGoRoute(
       path: '/creditcard',
       name: 'creditcard',
-      description:
-          'Raise the limit of the you credit card or show the current limit',
+      description: 'Show your credit card and maybe raise the current limit',
       parameters: const [
         LlmGoRouteParam(
           name: 'limit',
@@ -106,14 +114,13 @@ var routes = [
         navigatorKey: _shellNavigatorAKey,
         routes: [
           LlmGoRoute(
-            name: 'forecast',
+            name: ForecastScreen.name,
             description:
                 "get weather forecast information for a place on earth",
             parameters: const [
               LlmGoRouteParam(
                 name: 'place',
                 description: 'place on earth',
-                type: 'string',
               ),
               LlmGoRouteParam(
                 name: 'numDays',
