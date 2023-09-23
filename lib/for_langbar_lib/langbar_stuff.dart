@@ -35,7 +35,6 @@ class LangBarState extends ChangeNotifier {
   }
 
   void toggleLangbar() {
-    showLangbar = !showLangbar;
-    notifyListeners();
+    setShowLangbar(!showLangbar);
   }
 }

@@ -63,7 +63,7 @@ class LlmGoRoute extends GoRoute {
 
 var routes = [
   LlmGoRoute(
-      path: '/creditcard',
+      path: '/${CreditCardScreen.name}',
       name: 'creditcard',
       description: 'Show your credit card and maybe raise the current limit',
       parameters: const [
@@ -77,15 +77,8 @@ var routes = [
         return LangBarWrapper(
             body: CreditCardScreen(
                 label: 'Credit Card',
-                toggleLangbarFunction: () {
-                  var langbar =
-                      Provider.of<LangBarState>(context, listen: false);
-                  langbar.toggleLangbar();
-                },
                 queryParameters: state.uri.queryParameters));
       }),
-// Stateful navigation based on:
-// https://github.com/flutter/packages/blob/main/packages/go_router/example/lib/stateful_shell_route.dart
   StatefulShellRoute.indexedStack(
     builder: (context, state, navigationShell) {
       return ScaffoldWithNestedNavigation(navigationShell: navigationShell);
@@ -139,12 +132,6 @@ var routes = [
                   numDays: int.tryParse(
                           state.uri.queryParameters['numDays'] ?? '') ??
                       1,
-                  toggleLangbarFunction: () {
-                    var langbar =
-                        Provider.of<LangBarState>(context, listen: false);
-                    langbar.toggleLangbar();
-// bottomsheet(_builderContext!);
-                  },
                 ),
               );
             },
@@ -160,7 +147,6 @@ var routes = [
       StatefulShellBranch(
         navigatorKey: _shellNavigatorBKey,
         routes: [
-// Shopping Cart
           GoRoute(
             path: '/b',
             pageBuilder: (context, state) => const NoTransitionPage(

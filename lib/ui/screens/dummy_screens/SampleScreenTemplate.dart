@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../../models/forecast.dart';
+import '../../../for_langbar_lib/langbar_stuff.dart';
 import '../../utils.dart';
 
 const smallSpacing = 10.0;
@@ -11,27 +12,13 @@ class SampleScreenTemplate extends StatefulWidget {
 
   SampleScreenTemplate(
       {required this.label,
-      required this.toggleLangbarFunction,
       Key? key,
       required Map<String, String> queryParameters})
       : _queryParameters = queryParameters,
         super(key: key) {}
 
-  // static const _placeParam = Parameter('place', 'string', 'place on earth');
-  // static const _numDaysParam = Parameter(
-  //     'numDays', 'integer', 'The number of days to forecast',
-  //     required: false);
-  // static const _parameters = [_placeParam, _numDaysParam];
-  // static const name = 'forecast';
-  //
-  // static getTool(BuildContext context) {
-  //   return GenericScreenTool(context, name,
-  //       'get weather forecast information for a place on earth', _parameters);
-  // }
-
   final String label;
 
-  final Function toggleLangbarFunction;
 
   @override
   State<SampleScreenTemplate> createState() => _SampleScreenTemplateState();
@@ -40,38 +27,6 @@ class SampleScreenTemplate extends StatefulWidget {
 class _SampleScreenTemplateState extends State<SampleScreenTemplate> {
   _SampleScreenTemplateState();
 
-  String? place;
-  int? days;
-
-  @override
-  void initState() {
-    super.initState();
-    // days = widget.numDays;
-    // place = widget.place;
-    updateState();
-  }
-
-  void updateState() {
-    // if (place != null) {
-    //   _controllerOutlined.text = place!;
-    //   daysController.text = days.toString();
-    //   futureForecast = fetchForecast(place!, days: days);
-    // }
-  }
-
-  Future<Forecast>? futureForecast;
-
-  @override
-  void didUpdateWidget(SampleScreenTemplate oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget._queryParameters != widget._queryParameters) {
-      // place = widget.place ?? place;
-      // days = widget.numDays;
-      setState(() {
-        updateState();
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +36,8 @@ class _SampleScreenTemplateState extends State<SampleScreenTemplate> {
     );
     return Scaffold(
         appBar: createAppBar(widget.label, () {
-          widget.toggleLangbarFunction();
+          var langbar = Provider.of<LangBarState>(context, listen: false);
+          langbar.toggleLangbar();
         }),
         body: Padding(
           padding: const EdgeInsets.only(

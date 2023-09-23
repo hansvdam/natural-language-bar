@@ -20,7 +20,9 @@ class LangBarWrapper extends StatelessWidget {
       List<Widget> children = [];
       children.add(Expanded(
           child: Scaffold(
-              bottomSheet: langbarState.historyShowing
+              bottomSheet: langbarState.historyShowing &&
+                      langbarState.showLangbar &&
+                      chatHistory.items.isNotEmpty
                   ? ChatHistoryView(messages: chatHistory.items)
                   : null,
               body: Builder(builder: (context) {

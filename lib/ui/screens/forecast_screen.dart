@@ -1,8 +1,10 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../data/meteo_fetchers.dart';
+import '../../for_langbar_lib/langbar_stuff.dart';
 import '../models/forecast.dart';
 import '../utils.dart';
 
@@ -16,7 +18,6 @@ class ForecastScreen extends StatefulWidget {
   ForecastScreen(
       {required this.label,
       required this.detailsPath,
-      required this.toggleLangbarFunction,
       Key? key,
       this.place,
       this.numDays = 1})
@@ -25,8 +26,6 @@ class ForecastScreen extends StatefulWidget {
   final String label;
 
   final String detailsPath;
-
-  final Function toggleLangbarFunction;
 
   static const name = 'forecast';
 
@@ -166,7 +165,8 @@ class _ForecastScreenState extends State<ForecastScreen> {
     children.addAll(children2);
     return Scaffold(
         appBar: createAppBar(widget.label, () {
-          widget.toggleLangbarFunction();
+          var langbar = Provider.of<LangBarState>(context, listen: false);
+          langbar.toggleLangbar();
         }),
         body: Padding(
           padding: const EdgeInsets.only(
