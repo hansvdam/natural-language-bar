@@ -33,8 +33,8 @@ class _LangFieldState extends State<LangField> {
           if (sessionToken != null) {
             dart_openai.OpenAI.includeHeaders({"session": sessionToken});
           }
-          final llm =
-              ChatOpenAI(apiClient: client, temperature: 0.0, model: 'gpt-4');
+          final llm = ChatOpenAI(
+              apiClient: client, temperature: 0.0, model: 'gpt-3.5-turbo');
           sendToOpenai(llm, this._controllerOutlined.text, context);
           _controllerOutlined.clear();
         },
