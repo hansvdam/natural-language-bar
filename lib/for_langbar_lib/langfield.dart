@@ -79,8 +79,12 @@ class _LangFieldState extends State<LangField> {
     for (var route in routes) {
       if (route is LlmGoRoute) {
         var path = route.path;
-        var tool = GenericScreenTool(goRouter, route.name, route.path,
-            route.description, route.parameters);
+        var tool = GenericScreenTool(
+            goRouter: goRouter,
+            name: route.name,
+            path: route.path,
+            description: route.description,
+            parameters: route.parameters);
         tools.add(tool);
       }
       if (route.routes.isNotEmpty) {

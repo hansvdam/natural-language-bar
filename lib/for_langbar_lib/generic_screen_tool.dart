@@ -13,32 +13,25 @@ final class GenericScreenTool extends BaseTool {
 
   final String path;
 
-  /// {@macro calculator_tool}
-  factory GenericScreenTool(GoRouter goRouter, String name, path,
-      String description, List<LlmGoRouteParam> parameters) {
-    var inputJsonSchema = {
-      'type': 'object',
-      'properties': {
-        for (var param in parameters) ...param.asFunctionParam(),
-      },
-      'required': parameters
-          .where((param) => param.required)
-          .map((param) => param.name)
-          .toList(),
-    };
-
-    return GenericScreenTool._internal(
-        goRouter, name, path, description, inputJsonSchema);
-  }
-
-  GenericScreenTool._internal(this.goRouter, String name, this.path,
-      description, Map<String, dynamic> inputJsonSchema)
+  GenericScreenTool(
+      {required this.goRouter,
+      required super.name,
+      required this.path,
+      required super.description,
+      required List<LlmGoRouteParam> parameters})
       : super(
-          name: name,
-          description: description,
           returnDirect: true,
-          inputJsonSchema: inputJsonSchema,
-        );
+          inputJsonSchema: {
+            'type': 'object',
+            'properties': {
+              for (var param in parameters) ...param.asFunctionParam(),
+            },
+            'required': parameters
+                .where((param) => param.required)
+                .map((param) => param.name)
+                .toList(),
+          },
+        ) {}
 
   @override
   FutureOr<String> runInternal(Map<String, dynamic> toolInput) {
