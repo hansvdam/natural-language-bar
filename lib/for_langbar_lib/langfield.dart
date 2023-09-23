@@ -79,6 +79,7 @@ class _LangFieldState extends State<LangField> {
     for (var route in routes) {
       String? newPath = null;
       if (route is GoRoute) {
+        // route.path is only the local path. If the route e.g. points to a details screen, we have to prepend the path of the parent:
         newPath = (parentPath != null ? parentPath + "/" : "") + route.path;
       }
       if (route is LlmGoRoute) {

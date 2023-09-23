@@ -1,14 +1,13 @@
 import 'dart:async';
 
 import 'package:go_router/go_router.dart';
-import 'package:langchain/langchain.dart';
 
-import '../main.dart';
+import '../for_langchain/for_langchain.dart';
 
 /// {@template forecasting_tool}
 /// A for forecasting the weather from an api.
 /// {@endtemplate}
-final class GenericScreenTool extends BaseTool {
+final class GenericScreenTool extends GenericTool {
   final GoRouter goRouter;
 
   final String path;
@@ -18,20 +17,8 @@ final class GenericScreenTool extends BaseTool {
       required super.name,
       required this.path,
       required super.description,
-      required List<LlmGoRouteParam> parameters})
-      : super(
-          returnDirect: true,
-          inputJsonSchema: {
-            'type': 'object',
-            'properties': {
-              for (var param in parameters) ...param.asFunctionParam(),
-            },
-            'required': parameters
-                .where((param) => param.required)
-                .map((param) => param.name)
-                .toList(),
-          },
-        ) {}
+      required super.parameters})
+      : super(returnDirect: true) {}
 
   @override
   FutureOr<String> runInternal(Map<String, dynamic> toolInput) {

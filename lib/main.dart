@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 
 import 'for_langbar_lib/langbar_stuff.dart';
 import 'for_langbar_lib/langbar_wrapper.dart';
+import 'for_langchain/for_langchain.dart';
 
 // private navigators
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -20,29 +21,6 @@ final _shellNavigatorBKey = GlobalKey<NavigatorState>(debugLabel: 'shellB');
 
 class GlobalContextService {
   static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-}
-
-class LlmGoRouteParam {
-  const LlmGoRouteParam({
-    required this.name,
-    required this.description,
-    this.type = 'string',
-    this.required = true,
-  });
-
-  final String name;
-  final String description;
-  final String type;
-  final bool required;
-
-  Map<String, dynamic> asFunctionParam() {
-    return {
-      name: {
-        'description': description,
-        'type': type,
-      }
-    };
-  }
 }
 
 class LlmGoRoute extends GoRoute {
@@ -58,7 +36,7 @@ class LlmGoRoute extends GoRoute {
 
   final String name;
   final String description;
-  final List<LlmGoRouteParam> parameters;
+  final List<LlmFunctionParameter> parameters;
 }
 
 var routes = [
@@ -67,7 +45,7 @@ var routes = [
       name: 'creditcard',
       description: 'Show your credit card and maybe raise the current limit',
       parameters: const [
-        LlmGoRouteParam(
+        LlmFunctionParameter(
           name: 'limit',
           description: 'New limit for the credit card',
           type: 'integer',
@@ -111,11 +89,11 @@ var routes = [
             description:
                 "get weather forecast information for a place on earth",
             parameters: const [
-              LlmGoRouteParam(
+              LlmFunctionParameter(
                 name: 'place',
                 description: 'place on earth',
               ),
-              LlmGoRouteParam(
+              LlmFunctionParameter(
                 name: 'numDays',
                 description: 'The number of days to forecast',
                 type: 'integer',
@@ -158,7 +136,7 @@ var routes = [
                   name: 'zoo',
                   description: 'Show some information about the zoo',
                   parameters: const [
-                    LlmGoRouteParam(
+                    LlmFunctionParameter(
                       name: 'limit',
                       description: 'number of animals to show',
                       type: 'integer',
