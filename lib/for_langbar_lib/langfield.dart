@@ -74,21 +74,24 @@ class _LangFieldState extends State<LangField> {
           .add(HistoryMessage(query, true, navUri: response));
   }
 
-  parseRouters(GoRouter goRouter, List<RouteBase> routes) {
+  parseRouters(GoRouter, List<RouteBase> routes, {parentPath}) {
     var tools = <GenericScreenTool>[];
     for (var route in routes) {
+      String? newPath = null;
+      if (route is GoRoute) {
+        newPath = (parentPath != null ? parentPath + "/" : "") + route.path;
+      }
       if (route is LlmGoRoute) {
-        var path = route.path;
         var tool = GenericScreenTool(
             goRouter: goRouter,
             name: route.name,
-            path: route.path,
+            path: newPath!,
             description: route.description,
             parameters: route.parameters);
         tools.add(tool);
       }
       if (route.routes.isNotEmpty) {
-        tools.addAll(parseRouters(goRouter, route.routes));
+        tools.addAll(parseRouters(goRouter, route.routes, parentPath: newPath));
       }
     }
     return tools;

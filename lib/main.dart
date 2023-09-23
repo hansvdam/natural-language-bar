@@ -70,7 +70,7 @@ var routes = [
         LlmGoRouteParam(
           name: 'limit',
           description: 'New limit for the credit card',
-          type: 'string',
+          type: 'integer',
         ),
       ],
       builder: (context, state) {
@@ -153,10 +153,24 @@ var routes = [
               child: RootScreen(label: 'B', detailsPath: '/b/details'),
             ),
             routes: [
-              GoRoute(
-                path: 'details',
-                builder: (context, state) => const DetailsScreen(label: 'B'),
-              ),
+              LlmGoRoute(
+                  path: 'details',
+                  name: 'zoo',
+                  description: 'Show some information about the zoo',
+                  parameters: const [
+                    LlmGoRouteParam(
+                      name: 'limit',
+                      description: 'number of animals to show',
+                      type: 'integer',
+                    ),
+                  ],
+                  builder: (context, state) {
+                    return DetailsScreen(label: 'B');
+                  })
+              // GoRoute(
+              //   path: 'details',
+              //   builder: (context, state) => const DetailsScreen(label: 'B'),
+              // ),
             ],
           ),
         ],
