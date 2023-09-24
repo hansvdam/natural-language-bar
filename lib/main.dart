@@ -225,21 +225,19 @@ class ScaffoldWithNestedNavigation extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
       // later re-add the navigation rail for larger screen. For now focus on MVP
-      // if (constraints.maxWidth < 450) {
-      return ScaffoldWithNavigationBar(
+      if (constraints.maxWidth < 450) {
+        return ScaffoldWithNavigationBar(
+            body: navigationShell,
+            selectedIndex: navigationShell.currentIndex,
+            onDestinationSelected: _goBranch);
+      } else {
+        return ScaffoldWithNavigationRail(
           body: navigationShell,
           selectedIndex: navigationShell.currentIndex,
-          onDestinationSelected: _goBranch);
-    }
-        // else {
-        //   return ScaffoldWithNavigationRail(
-        //     body: navigationShell,
-        //     selectedIndex: navigationShell.currentIndex,
-        //     onDestinationSelected: _goBranch,
-        //   );
-        // }
-        // }
+          onDestinationSelected: _goBranch,
         );
+      }
+    });
   }
 }
 
@@ -300,6 +298,10 @@ class ScaffoldWithNavigationRail extends StatelessWidget {
                 icon: Icon(Icons.home),
               ),
               NavigationRailDestination(
+                label: Text('Weather'),
+                icon: Icon(Icons.cloud),
+              ),
+              NavigationRailDestination(
                 label: Text('Section B'),
                 icon: Icon(Icons.settings),
               ),
@@ -308,7 +310,7 @@ class ScaffoldWithNavigationRail extends StatelessWidget {
           const VerticalDivider(thickness: 1, width: 1),
           // This is the main content.
           Expanded(
-            child: body,
+            child: LangBarWrapper(body: body),
           ),
         ],
       ),
