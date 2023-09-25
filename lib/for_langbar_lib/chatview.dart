@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../main.dart';
 import 'langbar_stuff.dart';
+import 'llm_go_route.dart';
 
 ScrollController listScrollController = ScrollController();
 
@@ -62,11 +64,19 @@ class ChatHistoryView extends StatelessWidget {
                     child: GestureDetector(
                       onTap: message.navUri != null
                           ? () {
-                              var langbarState = Provider.of<LangBarState>(
+                        var langbarState = Provider.of<LangBarState>(
                                   context,
                                   listen: false);
                               langbarState.setHistoryShowing(false);
-                              context.go(message.navUri!);
+                              // modal routes are top-routes anyway, so no need dig in subroutes
+                              var openModal = routes.any((route) =>
+                                  route is LlmGoRoute &&
+                                  route.path == message.navUri &&
+                                  route.modal);
+                              if (openModal)
+                                context.push(message.navUri!);
+                              else
+                                context.go(message.navUri!);
                             }
                           : null,
                       child: Text(

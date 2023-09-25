@@ -180,6 +180,9 @@ final goRouter = GoRouter(
 );
 
 void main() {
+  see:
+  https: //codewithandrea.com/articles/flutter-navigation-gorouter-go-vs-push/
+  GoRouter.optionURLReflectsImperativeAPIs = true;
   // turn off the # in the URLs on the web
   usePathUrlStrategy();
   runApp(const MyApp());
