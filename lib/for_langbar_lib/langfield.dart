@@ -24,27 +24,43 @@ class _LangFieldState extends State<LangField> {
   final TextEditingController _controllerOutlined = TextEditingController();
 
   @override
-  Widget build(BuildContext context) => TextField(
-        controller: _controllerOutlined,
-        onSubmitted: (final String value) {
-          var apiKey2 = getOpenAIKey();
-          var client = OpenAIClient.instanceFor(
-              apiKey: apiKey2, apiBaseUrl: openAiApiBaseUrl());
-          var sessionToken = getSessionToken();
-          if (sessionToken != null) {
-            dart_openai.OpenAI.includeHeaders({"session": sessionToken});
-          }
-          final llm = ChatOpenAI(
-              apiClient: client, temperature: 0.0, model: 'gpt-3.5-turbo');
-          sendToOpenai(llm, this._controllerOutlined.text, context);
-          _controllerOutlined.clear();
-        },
-        decoration: InputDecoration(
-          prefixIcon: Icon(Icons.search),
-          suffixIcon: widget.showHistoryButton ? ShowHistoryButton() : null,
-          filled: true,
-        ),
-      );
+  Widget build(BuildContext context) =>
+      Consumer<LangBarState>(builder: (context, langbarState, child) {
+        var isLoading = langbarState.sendingToOpenAI;
+        return TextField(
+          // decoration: new InputDecoration.collapsed(hintText: 'Type here what you want'),
+          controller: _controllerOutlined,
+          onSubmitted: (final String value) {
+            var apiKey2 = getOpenAIKey();
+            var client = OpenAIClient.instanceFor(
+                apiKey: apiKey2, apiBaseUrl: openAiApiBaseUrl());
+            var sessionToken = getSessionToken();
+            if (sessionToken != null) {
+              dart_openai.OpenAI.includeHeaders({"session": sessionToken});
+            }
+            final llm = ChatOpenAI(
+                apiClient: client, temperature: 0.0, model: 'gpt-3.5-turbo');
+            langbarState.setSendingToOpenAI(true);
+            sendToOpenai(llm, this._controllerOutlined.text, context);
+            _controllerOutlined.clear();
+          },
+          decoration: InputDecoration(
+            hintText: 'Type here what you want',
+            prefixIcon: const Icon(Icons.search),
+            suffixIcon: isLoading
+                ? const SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: CircularProgressIndicator()))
+                : widget.showHistoryButton
+                    ? const ShowHistoryButton()
+                    : null,
+            filled: true,
+          ),
+        );
+      });
 
   final memory = ConversationBufferMemory(returnMessages: true);
 
@@ -63,16 +79,16 @@ class _LangFieldState extends State<LangField> {
     } catch (e) {
       response = e.toString();
     }
+    var langbarState = Provider.of<LangBarState>(context, listen: false);
+    langbarState.setSendingToOpenAI(false);
     // if response contains spaces, we assume it is not a path, but a response from the AI (when this becomes too much of a hack, we should start responding from tools with more complex objects with fields etc.
+    var chatHistory = Provider.of<ChatHistory>(context, listen: false);
     if (response.contains(' ')) {
-      Provider.of<ChatHistory>(context, listen: false)
-          .add(HistoryMessage(query, true));
-      Provider.of<ChatHistory>(context, listen: false)
-          .add(HistoryMessage(response, false));
-      Provider.of<LangBarState>(context, listen: false).setHistoryShowing(true);
+      chatHistory.add(HistoryMessage(query, true));
+      chatHistory.add(HistoryMessage(response, false));
+      langbarState.setHistoryShowing(true);
     } else // add the original query, but the navigation-uri-repsonse as the hyperlink when you click on it
-      Provider.of<ChatHistory>(context, listen: false)
-          .add(HistoryMessage(query, true, navUri: response));
+      chatHistory.add(HistoryMessage(query, true, navUri: response));
   }
 
   parseRouters(GoRouter, List<RouteBase> routes, {parentPath}) {

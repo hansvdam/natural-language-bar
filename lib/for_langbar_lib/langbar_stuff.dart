@@ -23,6 +23,7 @@ class ChatHistory extends ChangeNotifier {
 class LangBarState extends ChangeNotifier {
   bool historyShowing = false;
   bool showLangbar = true;
+  bool sendingToOpenAI = false;
 
   void setHistoryShowing(bool value) {
     historyShowing = value;
@@ -31,6 +32,11 @@ class LangBarState extends ChangeNotifier {
 
   void setShowLangbar(bool value) {
     showLangbar = value;
+    notifyListeners();
+  }
+
+  void setSendingToOpenAI(bool value) {
+    sendingToOpenAI = value;
     notifyListeners();
   }
 
