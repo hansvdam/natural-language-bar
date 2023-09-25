@@ -8,6 +8,7 @@ import 'package:langbar/ui/screens/dummy_screens/CreditCardScreen.dart';
 import 'package:langbar/ui/screens/forecast_screen.dart';
 import 'package:langbar/ui/screens/front_screen.dart';
 import 'package:langbar/ui/screens/root_screen.dart';
+import 'package:langbar/ui/utils.dart';
 import 'package:provider/provider.dart';
 
 import 'for_langbar_lib/langbar_stuff.dart';
@@ -288,10 +289,13 @@ class ScaffoldWithNavigationRail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
+      drawer: DefaultDrawer(),
       // appBar: createAppBar(),
       body: Row(
         children: [
           NavigationRail(
+            leading: HamburgerMenu(scaffoldKey: scaffoldKey),
             selectedIndex: selectedIndex,
             onDestinationSelected: onDestinationSelected,
             labelType: NavigationRailLabelType.all,

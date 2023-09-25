@@ -22,7 +22,7 @@ class _DefaultAppbarScaffoldState extends State<DefaultAppbarScaffold> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: createAppBar(widget.label, () {
+        appBar: createAppBar(context, widget.label, () {
           var langbar = Provider.of<LangBarState>(context, listen: false);
           langbar.toggleLangbar();
         }),

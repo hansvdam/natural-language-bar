@@ -35,7 +35,7 @@ class _SampleScreenTemplateState extends State<SampleScreenTemplate> {
       Text("recieved parameters: ${widget._queryParameters}"),
     );
     return Scaffold(
-        appBar: createAppBar(widget.label, () {
+        appBar: createAppBar(context, widget.label, () {
           var langbar = Provider.of<LangBarState>(context, listen: false);
           langbar.toggleLangbar();
         }, leadingHamburger: false),

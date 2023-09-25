@@ -27,22 +27,37 @@ class _BottomSheetButton extends StatelessWidget {
   }
 }
 
-PreferredSizeWidget createAppBar(String title, Function() showBottomSheet,
+class HamburgerMenu extends StatelessWidget {
+  const HamburgerMenu({
+    required this.scaffoldKey,
+  });
+
+  final GlobalKey<ScaffoldState> scaffoldKey;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.menu),
+      onPressed: () {
+        // open drawer on outer scaffold:
+        var currentState = scaffoldKey.currentState;
+        currentState?.openDrawer();
+      },
+    );
+  }
+}
+
+PreferredSizeWidget createAppBar(
+    BuildContext context, String title, Function() showBottomSheet,
     {bool leadingHamburger = true}) {
+  ScaffoldWithNavigationBar? parentNavigationbarHolder =
+      context.findAncestorWidgetOfExactType<ScaffoldWithNavigationBar>();
+  var leadingHamburgerAndNoNavigationRail =
+      parentNavigationbarHolder != null && leadingHamburger;
   return AppBar(
       title: Text(title),
-      leading: leadingHamburger
-          ? IconButton(
-              icon: Icon(Icons.menu),
-              onPressed: () {
-                var currentState = scaffoldKey.currentState;
-                // if (currentState?.isEndDrawerOpen ?? false) {
-                currentState?.openDrawer();
-                // } else {
-                //   currentState?.openEndDrawer();
-                // }
-              },
-            )
+      leading: leadingHamburgerAndNoNavigationRail
+          ? HamburgerMenu(scaffoldKey: scaffoldKey)
           : null,
       actions: [
         _BottomSheetButton(
