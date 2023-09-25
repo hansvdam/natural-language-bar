@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../main.dart';
+
 class _BottomSheetButton extends StatelessWidget {
   const _BottomSheetButton({
     required this.toggleLangbar,
@@ -25,12 +27,28 @@ class _BottomSheetButton extends StatelessWidget {
   }
 }
 
-PreferredSizeWidget createAppBar(String title, Function() showBottomSheet) {
-  return AppBar(title: Text(title), actions: [
-    _BottomSheetButton(
-      toggleLangbar: showBottomSheet,
-    ),
-  ]);
+PreferredSizeWidget createAppBar(String title, Function() showBottomSheet,
+    {bool leadingHamburger = true}) {
+  return AppBar(
+      title: Text(title),
+      leading: leadingHamburger
+          ? IconButton(
+              icon: Icon(Icons.menu),
+              onPressed: () {
+                var currentState = scaffoldKey.currentState;
+                // if (currentState?.isEndDrawerOpen ?? false) {
+                currentState?.openDrawer();
+                // } else {
+                //   currentState?.openEndDrawer();
+                // }
+              },
+            )
+          : null,
+      actions: [
+        _BottomSheetButton(
+          toggleLangbar: showBottomSheet,
+        ),
+      ]);
 }
 
 class ClearButton extends StatelessWidget {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:go_router/go_router.dart';
+import 'package:langbar/ui/screens/default_appbar_scaffold.dart';
 import 'package:langbar/ui/screens/details_screen.dart';
 import 'package:langbar/ui/screens/dummy_screens/CreditCardScreen.dart';
 import 'package:langbar/ui/screens/forecast_screen.dart';
@@ -19,6 +20,8 @@ final _shellNavigator1Key = GlobalKey<NavigatorState>(debugLabel: 'shell1');
 final _shellNavigatorAKey = GlobalKey<NavigatorState>(debugLabel: 'shellA');
 final _shellNavigatorBKey = GlobalKey<NavigatorState>(debugLabel: 'shellB');
 
+var scaffoldKey = GlobalKey<ScaffoldState>();
+
 class GlobalContextService {
   static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 }
@@ -31,6 +34,7 @@ class LlmGoRoute extends GoRoute {
     required this.parameters,
     super.builder,
     super.pageBuilder,
+    super.parentNavigatorKey,
     super.routes = const <RouteBase>[],
   }) : super();
 
@@ -51,11 +55,14 @@ var routes = [
           type: 'integer',
         ),
       ],
-      builder: (context, state) {
-        return LangBarWrapper(
-            body: CreditCardScreen(
-                label: 'Credit Card',
-                queryParameters: state.uri.queryParameters));
+      parentNavigatorKey: _rootNavigatorKey,
+      pageBuilder: (context, state) {
+        return MaterialPage(
+            fullscreenDialog: true,
+            child: LangBarWrapper(
+                body: CreditCardScreen(
+                    label: 'Credit Card',
+                    queryParameters: state.uri.queryParameters)));
       }),
   StatefulShellRoute.indexedStack(
     builder: (context, state, navigationShell) {
@@ -219,7 +226,6 @@ class ScaffoldWithNestedNavigation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
-      // later re-add the navigation rail for larger screen. For now focus on MVP
       if (constraints.maxWidth < 450) {
         return ScaffoldWithNavigationBar(
             body: navigationShell,
@@ -251,6 +257,8 @@ class ScaffoldWithNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        key: scaffoldKey,
+        drawer: DefaultDrawer(),
         body: LangBarWrapper(body: body),
         bottomNavigationBar: NavigationBar(
           selectedIndex: selectedIndex,

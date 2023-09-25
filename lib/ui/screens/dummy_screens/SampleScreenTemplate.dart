@@ -38,7 +38,7 @@ class _SampleScreenTemplateState extends State<SampleScreenTemplate> {
         appBar: createAppBar(widget.label, () {
           var langbar = Provider.of<LangBarState>(context, listen: false);
           langbar.toggleLangbar();
-        }),
+        }, leadingHamburger: false),
         body: Padding(
           padding: const EdgeInsets.only(
               left: defaultPadding, right: defaultPadding),
