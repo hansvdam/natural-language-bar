@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:langbar/ui/main_scaffolds.dart';
 import 'package:langbar/ui/screens/details_screen.dart';
 import 'package:langbar/ui/screens/dummy_screens/CreditCardScreen.dart';
+import 'package:langbar/ui/screens/dummy_screens/DebitCardScreen.dart';
 import 'package:langbar/ui/screens/forecast_screen.dart';
 import 'package:langbar/ui/screens/front_screen.dart';
 import 'package:langbar/ui/screens/root_screen.dart';
@@ -25,18 +26,26 @@ class GlobalContextService {
   static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 }
 
+List<LlmFunctionParameter> cardparams = const [
+  LlmFunctionParameter(
+    name: 'limit',
+    description: 'New limit for the credit card',
+    type: 'integer',
+  ),
+  LlmFunctionParameter(
+    name: 'replace',
+    description: 'should the card be replaced?',
+    type: 'boolean',
+  ),
+];
+
 var routes = [
   LlmGoRoute(
       path: '/${CreditCardScreen.name}',
       name: 'creditcard',
-      description: 'Show your credit card and maybe raise the current limit',
-      parameters: const [
-        LlmFunctionParameter(
-          name: 'limit',
-          description: 'New limit for the credit card',
-          type: 'integer',
-        ),
-      ],
+      description: 'Show your credit card and maybe perform an action on it',
+      parameters: cardparams,
+      modal: true,
       parentNavigatorKey: _rootNavigatorKey,
       pageBuilder: (context, state) {
         return MaterialPage(
@@ -44,6 +53,21 @@ var routes = [
             child: LangBarWrapper(
                 body: CreditCardScreen(
                     label: 'Credit Card',
+                    queryParameters: state.uri.queryParameters)));
+      }),
+  LlmGoRoute(
+      path: '/${DebitCardScreen.name}',
+      name: 'debitcard',
+      description: 'Show your debit card and maybe perform an action on it',
+      parameters: cardparams,
+      modal: true,
+      parentNavigatorKey: _rootNavigatorKey,
+      pageBuilder: (context, state) {
+        return MaterialPage(
+            fullscreenDialog: true,
+            child: LangBarWrapper(
+                body: DebitCardScreen(
+                    label: 'Debit Card',
                     queryParameters: state.uri.queryParameters)));
       }),
   StatefulShellRoute.indexedStack(
@@ -187,6 +211,5 @@ class MyApp extends StatelessWidget {
         }));
   }
 }
-
 
 /// Widget for the root/initial pages in the bottom navigation bar.

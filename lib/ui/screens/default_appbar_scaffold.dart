@@ -66,11 +66,23 @@ class _DefaultDrawerState extends State<DefaultDrawer> {
             child: Text('Drawer Header'),
           ),
           ListTile(
-            title: const Text('Creditcard'),
+            title: const Text('Credit card'),
             selected: _selectedIndex == 0,
             onTap: () {
               // Update the state of the app
               goRouter.push("/creditcard");
+              // context.push("/creditcard");
+              // context.pushReplacement("/creditcard");
+              Navigator.pop(context);
+              // Then close the drawer
+            },
+          ),
+          ListTile(
+            title: const Text('Debit card'),
+            selected: _selectedIndex == 0,
+            onTap: () {
+              // Update the state of the app
+              goRouter.push("/debitcard");
               // context.push("/creditcard");
               // context.pushReplacement("/creditcard");
               Navigator.pop(context);

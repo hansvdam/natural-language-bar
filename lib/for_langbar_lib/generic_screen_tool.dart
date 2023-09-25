@@ -12,13 +12,16 @@ final class GenericScreenTool extends GenericTool {
 
   final String path;
 
-  GenericScreenTool(
-      {required this.goRouter,
-      required super.name,
-      required this.path,
-      required super.description,
-      required super.parameters})
-      : super(returnDirect: true) {}
+  final bool push;
+
+  GenericScreenTool({
+    required this.goRouter,
+    required super.name,
+    required this.path,
+    required super.description,
+    required super.parameters,
+    this.push = false,
+  }) : super(returnDirect: true) {}
 
   @override
   FutureOr<String> runInternal(Map<String, dynamic> toolInput) {
@@ -27,7 +30,10 @@ final class GenericScreenTool extends GenericTool {
         queryParameters:
             toolInput.map((key, value) => MapEntry(key, value.toString())));
     var uriString = uri.toString();
-    goRouter.go(uriString);
+    if (push)
+      goRouter.push(uriString);
+    else
+      goRouter.go(uriString);
     return uriString;
   }
 }

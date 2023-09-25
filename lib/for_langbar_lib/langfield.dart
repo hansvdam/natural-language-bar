@@ -103,6 +103,7 @@ class _LangFieldState extends State<LangField> {
         var tool = GenericScreenTool(
             goRouter: goRouter,
             name: route.name,
+            push: route.modal,
             path: newPath!,
             description: route.description,
             parameters: route.parameters);
