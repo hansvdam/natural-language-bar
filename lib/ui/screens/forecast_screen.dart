@@ -1,12 +1,11 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../data/meteo_fetchers.dart';
-import '../../for_langbar_lib/langbar_stuff.dart';
 import '../models/forecast.dart';
 import '../utils.dart';
+import 'default_appbar_scaffold.dart';
 
 const smallSpacing = 10.0;
 const defaultPadding = 16.0;
@@ -163,11 +162,8 @@ class _ForecastScreenState extends State<ForecastScreen> {
         ),
     ];
     children.addAll(children2);
-    return Scaffold(
-        appBar: createAppBar(widget.label, () {
-          var langbar = Provider.of<LangBarState>(context, listen: false);
-          langbar.toggleLangbar();
-        }),
+    return DefaultAppbarScaffold(
+        label: widget.label,
         body: Padding(
           padding: const EdgeInsets.only(
               left: defaultPadding, right: defaultPadding),

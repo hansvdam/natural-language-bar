@@ -70,11 +70,6 @@ var routes = [
             pageBuilder: (context, state) => NoTransitionPage(
               child: FrontScreen(
                 label: 'Front Screen',
-                toggleLangbarFunction: () {
-                  var langbar =
-                      Provider.of<LangBarState>(context, listen: false);
-                  langbar.toggleLangbar();
-                },
               ),
             ),
             routes: [],
