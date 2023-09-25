@@ -32,7 +32,12 @@ class _SampleScreenTemplateState extends State<SampleScreenTemplate> {
   Widget build(BuildContext context) {
     List<Widget> children = [];
     children.add(
-      Text("recieved parameters: ${widget._queryParameters}"),
+      Text(
+          "The ${widget.label} is not implemented yet, but the structure works."),
+    );
+    children.add(
+      Text(
+          "recieved parameters from llm function calling\n: ${widget._queryParameters}"),
     );
     return Scaffold(
         appBar: createAppBar(context, widget.label, () {

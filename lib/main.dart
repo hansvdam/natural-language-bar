@@ -31,11 +31,13 @@ List<LlmFunctionParameter> cardparams = const [
     name: 'limit',
     description: 'New limit for the credit card',
     type: 'integer',
+    required: false,
   ),
   LlmFunctionParameter(
     name: 'replace',
     description: 'should the card be replaced?',
     type: 'boolean',
+    required: false,
   ),
 ];
 
@@ -148,6 +150,7 @@ var routes = [
                       name: 'limit',
                       description: 'number of animals to show',
                       type: 'integer',
+                      required: false,
                     ),
                   ],
                   builder: (context, state) {
