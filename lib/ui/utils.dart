@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../main.dart';
+import 'main_scaffolds.dart';
 
 class _BottomSheetButton extends StatelessWidget {
   const _BottomSheetButton({
