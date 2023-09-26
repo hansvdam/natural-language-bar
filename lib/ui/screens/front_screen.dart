@@ -12,12 +12,13 @@ This is a fake banking app to illustrate app-'navigation' using natural language
 but just illustrates that:\n
 __You can get to any screen/functionality by typing what you want__\n
 for example:\n
-- 'debitcard limit to 10000'
+- 'debit card limit to 10000'
 - 'nearest ATM'
 - 'transfer 60 euros to John' (it will not execute but just propose)
 - 'show my car insurance'
-- 'save a 1000 euros'
-- 'show all transactions with wallmart'
+- 'save 1000 euros'
+- 'show all transactions with wall mart'
+- payment request 'nice dinner'
 
 After your first request, a **↑** button appears, that opens a clickable interaction history.
 """;
