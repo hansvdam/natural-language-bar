@@ -147,11 +147,20 @@ List<RouteBase> navBarRoutes = [
             name: MapScreen.name,
             description: "Show ATMs or Bank offices on map",
             path: "/${MapScreen.name}",
+            parameters: const [
+              LlmFunctionParameter(
+                name: 'atmOrOffice',
+                description: 'show atms or offices',
+                type: 'string',
+                enumeration: ["atms", "offices"],
+                required: false,
+              ),
+            ],
             pageBuilder: (context, state) {
               return NoTransitionPage(
                   child: MapScreen(
                       label: 'ATMS and Offices',
-                      queryParameters: state.uri.queryParameters));
+                      atmOrOffice: state.uri.queryParameters['atmOrOffice']));
             },
           ),
         ],

@@ -6,20 +6,24 @@ class LlmFunctionParameter {
     required this.description,
     this.type = 'string',
     this.required = true,
+    this.enumeration,
   });
 
   final String name;
   final String description;
   final String type;
   final bool required;
+  final List<String>? enumeration;
 
   Map<String, dynamic> asFunctionParam() {
-    return {
-      name: {
-        'description': description,
-        'type': type,
-      }
+    Map<String, dynamic> map = {
+      'description': description,
+      'type': type,
     };
+    if (enumeration != null) {
+      map['enum'] = enumeration!;
+    }
+    return {name: map};
   }
 }
 

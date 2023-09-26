@@ -8,10 +8,9 @@ const defaultPadding = 16.0;
 class MapScreen extends StatefulWidget {
   final String label;
 
-  MapScreen(
-      {required this.label,
-      Key? key,
-      required Map<String, String> queryParameters})
+  final String? atmOrOffice;
+
+  MapScreen({required this.label, Key? key, this.atmOrOffice})
       : super(key: key) {}
 
   static const name = 'map';
@@ -21,7 +20,21 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
-  String? _selectedLocation = 'ATMs';
+  String _selectedLocation = 'atms';
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedLocation = widget.atmOrOffice ?? 'atms';
+  }
+
+  @override
+  void didUpdateWidget(MapScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.atmOrOffice != widget.atmOrOffice) {
+      _selectedLocation = widget.atmOrOffice ?? 'atms';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,23 +49,23 @@ class _MapScreenState extends State<MapScreen> {
             children: <Widget>[
               Flexible(
                   child: RadioListTile<String>(
-                title: const Text('ATMs'),
-                value: 'ATMs',
+                    title: const Text('ATMs'),
+                value: 'atms',
                 groupValue: _selectedLocation,
                 onChanged: (String? value) {
                   setState(() {
-                    _selectedLocation = value;
+                    _selectedLocation = value!;
                   });
                 },
               )),
               Flexible(
                   child: RadioListTile<String>(
-                title: const Text('Offices'),
-                value: 'Offices',
+                    title: const Text('Offices'),
+                value: 'offices',
                 groupValue: _selectedLocation,
                 onChanged: (String? value) {
                   setState(() {
-                    _selectedLocation = value;
+                    _selectedLocation = value!;
                   });
                 },
               )),
@@ -61,7 +74,7 @@ class _MapScreenState extends State<MapScreen> {
           Expanded(
               child: Image(
                   image: AssetImage("assets/images/" +
-                      (_selectedLocation == "ATMs"
+                      (_selectedLocation == "atms"
                           ? "atms.jpg"
                           : "offices.jpg")))),
         ])));
