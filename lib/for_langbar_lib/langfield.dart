@@ -55,7 +55,7 @@ class _LangFieldState extends State<LangField> {
                         padding: EdgeInsets.all(8.0),
                         child: CircularProgressIndicator()))
                 : widget.showHistoryButton
-                    ? const ShowHistoryButton()
+                    ? ShowHistoryButton(langbarState: langbarState)
                     : null,
             filled: true,
           ),
@@ -118,11 +118,12 @@ class _LangFieldState extends State<LangField> {
 }
 
 class ShowHistoryButton extends StatelessWidget {
-  const ShowHistoryButton({super.key});
+  final LangBarState langbarState;
+
+  const ShowHistoryButton({super.key, required this.langbarState});
 
   @override
   Widget build(BuildContext context) {
-    var langbarState = Provider.of<LangBarState>(context, listen: false);
     bool showHistory = langbarState.historyShowing;
     return IconButton(
         icon: Icon(showHistory ? Icons.arrow_downward : Icons.arrow_upward),
