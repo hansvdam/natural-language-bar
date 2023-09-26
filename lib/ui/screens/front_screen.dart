@@ -1,13 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 
-import '../../for_langbar_lib/langbar_stuff.dart';
 import 'default_appbar_scaffold.dart';
 
 const smallSpacing = 10.0;
 
-class FrontScreen extends StatefulWidget {
+const String _markdownData = """
+# What is the point of this app?
+
+This is a fake banking app to illustrate app-'navigation' using natural language. It is **NOT** a proposal for a banking app design,
+but just illustrates that:\n
+__You can get to any screen/functionality by typing what you want__\n
+for example:\n
+- 'debitcard limit to 10000'
+- 'nearest ATM'
+- 'transfer 60 euros to John' (it will not execute but just propose)
+- 'show my car insurance'
+- 'save a 1000 euros'
+- 'show all transactions with wallmart'
+
+After your first request, a **↑** button appears, that opens a clickable interaction history.
+""";
+
+class FrontScreen extends StatelessWidget {
   /// Creates a RootScreen
   FrontScreen({required this.label, Key? key}) : super(key: key);
 
@@ -15,46 +30,30 @@ class FrontScreen extends StatefulWidget {
   final String label;
 
   @override
-  State<FrontScreen> createState() => _FrontScreenState();
-}
-
-class _FrontScreenState extends State<FrontScreen> {
-  _FrontScreenState();
-
-  @override
   Widget build(BuildContext context) {
     return DefaultAppbarScaffold(
-        label: widget.label,
-        body: Consumer<ChatHistory>(
-          builder: (context, chatHistory, child) {
-            var lastMessage = chatHistory.items.isNotEmpty
-                ? chatHistory.items.last
-                : HistoryMessage("no message yet", false);
-            var children = <Widget>[
-              TextButton(
-                  onPressed: () {
-                    // context.go("/a/:utrecht");
-                    context.go("/a?place=utrecht");
-                  },
-                  child: Text("test")),
-              Text('Screen ${widget.label}',
-                  style: Theme.of(context).textTheme.titleLarge),
-              const Padding(padding: EdgeInsets.all(4)),
-              Padding(
-                padding: const EdgeInsets.all(smallSpacing),
-                child:
-                    Text('This screen displays the last response by the LLM:'),
-              ),
-            ];
-            if (!lastMessage.isHuman) {
-              children.add(Text(lastMessage.text,
-                  style: Theme.of(context).textTheme.titleLarge));
-            }
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: children,
-            );
-          },
-        ));
+        label: label,
+        body: SafeArea(
+            child: Markdown(
+          // controller: controller,
+          selectable: true,
+          data: _markdownData,
+          imageDirectory: 'https://raw.githubusercontent.com',
+        )));
+
+    //   DefaultAppbarScaffold(
+    //     label: label,
+    //     body: PageWithDefaultMargin(child:BulletListWithParagraphWidget(
+    //     title: 'What is the point of this app?',
+    //     paragraph: "This is a fake banking app to illustrate app-'navigation' using natural language. It is NOT a proposal for a banking app, "
+    //         "but just a vehicle to illustrate an interaction principle applicable to many different kinds of apps and applications:\n "
+    //         "you can get to any screen in the app by typing what you want in bottom text field",
+    //     items: [
+    //     'Item 1',
+    //     'Item 2',
+    //     'Item 3',
+    //     'A longer item that might span multiple lines.',
+    //     ],
+    // )));
   }
 }

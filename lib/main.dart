@@ -84,7 +84,7 @@ var routes = [
             path: '/1',
             pageBuilder: (context, state) => NoTransitionPage(
               child: FrontScreen(
-                label: 'Front Screen',
+                label: 'Lang Bank Sample',
               ),
             ),
             routes: [],
