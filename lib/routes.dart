@@ -1,0 +1,176 @@
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+import 'for_langbar_lib/langbar_wrapper.dart';
+import 'for_langbar_lib/llm_go_route.dart';
+import 'for_langchain/for_langchain.dart';
+import 'ui/main_scaffolds.dart';
+import 'ui/screens/details_screen.dart';
+import 'ui/screens/dummy_screens/CreditCardScreen.dart';
+import 'ui/screens/dummy_screens/DebitCardScreen.dart';
+import 'ui/screens/forecast_screen.dart';
+import 'ui/screens/front_screen.dart';
+import 'ui/screens/root_screen.dart';
+
+final _rootNavigatorKey = GlobalKey<NavigatorState>();
+final _shellNavigator1Key = GlobalKey<NavigatorState>(debugLabel: 'shell1');
+final _shellNavigatorAKey = GlobalKey<NavigatorState>(debugLabel: 'shellA');
+final _shellNavigatorBKey = GlobalKey<NavigatorState>(debugLabel: 'shellB');
+
+List<LlmFunctionParameter> cardparams = const [
+  LlmFunctionParameter(
+    name: 'limit',
+    description: 'New limit for the credit card',
+    type: 'integer',
+    required: false,
+  ),
+  LlmFunctionParameter(
+    name: 'replace',
+    description: 'should the card be replaced?',
+    type: 'boolean',
+    required: false,
+  ),
+];
+
+List<RouteBase> hamburgerRoutes = [
+  LlmGoRoute(
+      path: '/${CreditCardScreen.name}',
+      name: 'creditcard',
+      description: 'Show your credit card and maybe perform an action on it',
+      parameters: cardparams,
+      modal: true,
+      parentNavigatorKey: _rootNavigatorKey,
+      pageBuilder: (context, state) {
+        return MaterialPage(
+            fullscreenDialog: true,
+            child: LangBarWrapper(
+                body: CreditCardScreen(
+                    label: 'Credit Card',
+                    queryParameters: state.uri.queryParameters)));
+      }),
+  LlmGoRoute(
+      path: '/${DebitCardScreen.name}',
+      name: 'debitcard',
+      description: 'Show your debit card and maybe perform an action on it',
+      parameters: cardparams,
+      modal: true,
+      parentNavigatorKey: _rootNavigatorKey,
+      pageBuilder: (context, state) {
+        return MaterialPage(
+            fullscreenDialog: true,
+            child: LangBarWrapper(
+                body: DebitCardScreen(
+                    label: 'Debit Card',
+                    queryParameters: state.uri.queryParameters)));
+      })
+];
+
+List<RouteBase> navBarRoutes = [
+  StatefulShellRoute.indexedStack(
+    builder: (context, state, navigationShell) {
+      return ScaffoldWithNestedNavigation(navigationShell: navigationShell);
+    },
+    branches: [
+      StatefulShellBranch(
+        navigatorKey: _shellNavigator1Key,
+        routes: [
+          GoRoute(
+            path: '/1',
+            pageBuilder: (context, state) => NoTransitionPage(
+              child: FrontScreen(
+                label: 'Lang Bank Sample',
+              ),
+            ),
+            routes: [],
+          ),
+        ],
+      ),
+      StatefulShellBranch(
+        navigatorKey: _shellNavigatorAKey,
+        routes: [
+          LlmGoRoute(
+            name: ForecastScreen.name,
+            description:
+                "get weather forecast information for a place on earth",
+            parameters: const [
+              LlmFunctionParameter(
+                name: 'place',
+                description: 'place on earth',
+              ),
+              LlmFunctionParameter(
+                name: 'numDays',
+                description: 'The number of days to forecast',
+                type: 'integer',
+                required: false,
+              ),
+            ],
+            path: "/${ForecastScreen.name}",
+            pageBuilder: (context, state) {
+              return NoTransitionPage(
+                child: ForecastScreen(
+                  label: 'Weather Forecast',
+                  detailsPath: '/forecast/details',
+                  place: state.uri.queryParameters['place'],
+                  numDays: int.tryParse(
+                          state.uri.queryParameters['numDays'] ?? '') ??
+                      1,
+                ),
+              );
+            },
+            routes: [
+              GoRoute(
+                path: 'details',
+                builder: (context, state) => const DetailsScreen(label: 'A'),
+              ),
+            ],
+          ),
+        ],
+      ),
+      StatefulShellBranch(
+        navigatorKey: _shellNavigatorBKey,
+        routes: [
+          GoRoute(
+            path: '/b',
+            pageBuilder: (context, state) => const NoTransitionPage(
+              child: RootScreen(label: 'B', detailsPath: '/b/details'),
+            ),
+            routes: [
+              LlmGoRoute(
+                  path: 'details',
+                  name: 'zoo',
+                  description: 'Show some information about the zoo',
+                  parameters: const [
+                    LlmFunctionParameter(
+                      name: 'limit',
+                      description: 'number of animals to show',
+                      type: 'integer',
+                      required: false,
+                    ),
+                  ],
+                  builder: (context, state) {
+                    return DetailsScreen(label: 'B');
+                  })
+              // GoRoute(
+              //   path: 'details',
+              //   builder: (context, state) => const DetailsScreen(label: 'B'),
+              // ),
+            ],
+          ),
+        ],
+      ),
+    ],
+  ),
+];
+
+List<RouteBase> routes = hamburgerRoutes + navBarRoutes;
+
+final goRouter = GoRouter(
+  initialLocation: '/1',
+  // * Passing a navigatorKey causes an issue on hot reload:
+  // * https://github.com/flutter/flutter/issues/113757#issuecomment-1518421380
+  // * However it's still necessary otherwise the navigator pops back to
+  // * root on hot reload
+  navigatorKey: _rootNavigatorKey,
+  debugLogDiagnostics: true,
+  routes: routes,
+);

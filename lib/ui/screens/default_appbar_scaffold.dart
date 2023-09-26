@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../for_langbar_lib/langbar_stuff.dart';
-import '../../main.dart';
+import '../../routes.dart';
 import '../utils.dart';
 
 class DefaultAppbarScaffold extends StatefulWidget {

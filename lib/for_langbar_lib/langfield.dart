@@ -6,8 +6,8 @@ import 'package:langchain/langchain.dart';
 import 'package:langchain_openai/langchain_openai.dart';
 import 'package:provider/provider.dart';
 
-import '../main.dart';
 import '../openAIKey.dart';
+import '../routes.dart';
 import 'langbar_stuff.dart';
 import 'llm_go_route.dart';
 

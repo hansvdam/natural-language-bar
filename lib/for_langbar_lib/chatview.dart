@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../main.dart';
+import '../routes.dart';
 import 'langbar_stuff.dart';
 import 'llm_go_route.dart';
 
