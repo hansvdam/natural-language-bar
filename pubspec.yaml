@@ -40,6 +40,7 @@ dependencies:
   syncfusion_flutter_charts: ^22.2.12
   langchain: ^0.0.13
   langchain_openai: ^0.0.13
+  flutter_markdown: ^0.6.17+3
 
 dev_dependencies:
   flutter_test:
