@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:photo_view/photo_view.dart';
 
 import '../default_appbar_scaffold.dart';
 
@@ -22,15 +21,49 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
+  String? _selectedLocation = 'ATMs';
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return DefaultAppbarScaffold(
         label: widget.label,
         body: SafeArea(
-            child: Container(
-                child: PhotoView(
-          imageProvider: AssetImage("assets/images/atms.jpg"),
-        ))));
+            child: Column(mainAxisSize: MainAxisSize.max, children: [
+          // Text("hoi")
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Flexible(
+                  child: RadioListTile<String>(
+                title: const Text('ATMs'),
+                value: 'ATMs',
+                groupValue: _selectedLocation,
+                onChanged: (String? value) {
+                  setState(() {
+                    _selectedLocation = value;
+                  });
+                },
+              )),
+              Flexible(
+                  child: RadioListTile<String>(
+                title: const Text('Offices'),
+                value: 'Offices',
+                groupValue: _selectedLocation,
+                onChanged: (String? value) {
+                  setState(() {
+                    _selectedLocation = value;
+                  });
+                },
+              )),
+            ],
+          ),
+          Expanded(
+              child: Image(
+                  image: AssetImage("assets/images/" +
+                      (_selectedLocation == "ATMs"
+                          ? "atms.jpg"
+                          : "offices.jpg")))),
+        ])));
   }
 }

@@ -8,7 +8,7 @@ import '../utils.dart';
 import 'dummy_screens/CreditCardScreen.dart';
 import 'dummy_screens/DebitCardScreen.dart';
 
-class DefaultAppbarScaffold extends StatefulWidget {
+class DefaultAppbarScaffold extends StatelessWidget {
   final Widget body;
 
   DefaultAppbarScaffold({required this.body, required this.label});
@@ -17,20 +17,14 @@ class DefaultAppbarScaffold extends StatefulWidget {
   final String label;
 
   @override
-  State<DefaultAppbarScaffold> createState() => _DefaultAppbarScaffoldState();
-}
-
-class _DefaultAppbarScaffoldState extends State<DefaultAppbarScaffold> {
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: createAppBar(context, widget.label, () {
+        appBar: createAppBar(context, label, () {
           var langbar = Provider.of<LangBarState>(context, listen: false);
           langbar.toggleLangbar();
         }),
         // drawer: DefaultDrawer(),
-        body: this.widget.body);
+        body: this.body);
   }
 }
 

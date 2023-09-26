@@ -11,9 +11,9 @@ app-'navigation' using natural language.
 
 ## What is the point of this app?
 
-This is a fake banking app to illustrate LangBar.
+This is a fake banking app to demonstrate LangBar.
 It is **NOT** a proposal for a banking app design,
-but just illustrates that:\n
+but just shows that:\n
 __You can get to any screen/functionality by typing what you want in the *LangBar* below__\n
 The interaction principle can be built into any app.
 for example type:\n
