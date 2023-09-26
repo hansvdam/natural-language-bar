@@ -43,6 +43,13 @@ class ScaffoldWithNestedNavigation extends StatelessWidget {
   }
 }
 
+const navBarDestinations = [
+  NavigationDestination(label: 'Home', icon: Icon(Icons.home)),
+  NavigationDestination(label: 'Accounts', icon: Icon(Icons.account_balance)),
+  NavigationDestination(label: 'Map', icon: Icon(Icons.map_outlined)),
+  NavigationDestination(label: 'Section B', icon: Icon(Icons.settings)),
+];
+
 class ScaffoldWithNavigationBar extends StatelessWidget {
   const ScaffoldWithNavigationBar({
     super.key,
@@ -63,12 +70,7 @@ class ScaffoldWithNavigationBar extends StatelessWidget {
         body: LangBarWrapper(body: body),
         bottomNavigationBar: NavigationBar(
           selectedIndex: selectedIndex,
-          destinations: const [
-            NavigationDestination(label: 'Home', icon: Icon(Icons.home)),
-            NavigationDestination(label: 'Weather', icon: Icon(Icons.cloud)),
-            NavigationDestination(
-                label: 'Section B', icon: Icon(Icons.settings)),
-          ],
+          destinations: navBarDestinations,
           onDestinationSelected: onDestinationSelected,
         ));
   }
@@ -99,20 +101,12 @@ class ScaffoldWithNavigationRail extends StatelessWidget {
             selectedIndex: selectedIndex,
             onDestinationSelected: onDestinationSelected,
             labelType: NavigationRailLabelType.all,
-            destinations: const <NavigationRailDestination>[
-              NavigationRailDestination(
-                label: Text('Home'),
-                icon: Icon(Icons.home),
-              ),
-              NavigationRailDestination(
-                label: Text('Weather'),
-                icon: Icon(Icons.cloud),
-              ),
-              NavigationRailDestination(
-                label: Text('Section B'),
-                icon: Icon(Icons.settings),
-              ),
-            ],
+            destinations: navBarDestinations
+                .map((destination) => NavigationRailDestination(
+                      icon: destination.icon,
+                      label: Text(destination.label),
+                    ))
+                .toList(),
           ),
           const VerticalDivider(thickness: 1, width: 1),
           // This is the main content.

@@ -9,7 +9,7 @@ class LlmGoRoute extends GoRoute {
     required this.name,
     required this.description,
     required super.path,
-    required this.parameters,
+    this.parameters = const [],
     this.modal = false,
     super.builder,
     super.pageBuilder,

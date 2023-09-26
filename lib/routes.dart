@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:langbar/ui/screens/dummy_screens/AccountsScreen.dart';
 
 import 'for_langbar_lib/langbar_wrapper.dart';
 import 'for_langbar_lib/llm_go_route.dart';
@@ -8,6 +9,7 @@ import 'ui/main_scaffolds.dart';
 import 'ui/screens/details_screen.dart';
 import 'ui/screens/dummy_screens/CreditCardScreen.dart';
 import 'ui/screens/dummy_screens/DebitCardScreen.dart';
+import 'ui/screens/dummy_screens/MapScreen.dart';
 import 'ui/screens/forecast_screen.dart';
 import 'ui/screens/front_screen.dart';
 import 'ui/screens/root_screen.dart';
@@ -16,6 +18,7 @@ final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigator1Key = GlobalKey<NavigatorState>(debugLabel: 'shell1');
 final _shellNavigatorAKey = GlobalKey<NavigatorState>(debugLabel: 'shellA');
 final _shellNavigatorBKey = GlobalKey<NavigatorState>(debugLabel: 'shellB');
+final _shellNavigatorMapKey = GlobalKey<NavigatorState>(debugLabel: 'shellB');
 
 List<LlmFunctionParameter> cardparams = const [
   LlmFunctionParameter(
@@ -62,6 +65,36 @@ List<RouteBase> hamburgerRoutes = [
                 body: DebitCardScreen(
                     label: 'Debit Card',
                     queryParameters: state.uri.queryParameters)));
+      }),
+  LlmGoRoute(
+      name: ForecastScreen.name,
+      modal: true,
+      parentNavigatorKey: _rootNavigatorKey,
+      description: "get weather forecast information for a place on earth",
+      parameters: const [
+        LlmFunctionParameter(
+          name: 'place',
+          description: 'place on earth',
+        ),
+        LlmFunctionParameter(
+          name: 'numDays',
+          description: 'The number of days to forecast',
+          type: 'integer',
+          required: false,
+        ),
+      ],
+      path: "/${ForecastScreen.name}",
+      pageBuilder: (context, state) {
+        return MaterialPage(
+          fullscreenDialog: true,
+          child: ForecastScreen(
+            label: 'Weather Forecast',
+            detailsPath: '/forecast/details',
+            place: state.uri.queryParameters['place'],
+            numDays:
+                int.tryParse(state.uri.queryParameters['numDays'] ?? '') ?? 1,
+          ),
+        );
       })
 ];
 
@@ -89,33 +122,14 @@ List<RouteBase> navBarRoutes = [
         navigatorKey: _shellNavigatorAKey,
         routes: [
           LlmGoRoute(
-            name: ForecastScreen.name,
-            description:
-                "get weather forecast information for a place on earth",
-            parameters: const [
-              LlmFunctionParameter(
-                name: 'place',
-                description: 'place on earth',
-              ),
-              LlmFunctionParameter(
-                name: 'numDays',
-                description: 'The number of days to forecast',
-                type: 'integer',
-                required: false,
-              ),
-            ],
-            path: "/${ForecastScreen.name}",
+            name: AccountsScreen.name,
+            description: "Show all accounts",
+            path: "/${AccountsScreen.name}",
             pageBuilder: (context, state) {
               return NoTransitionPage(
-                child: ForecastScreen(
-                  label: 'Weather Forecast',
-                  detailsPath: '/forecast/details',
-                  place: state.uri.queryParameters['place'],
-                  numDays: int.tryParse(
-                          state.uri.queryParameters['numDays'] ?? '') ??
-                      1,
-                ),
-              );
+                  child: AccountsScreen(
+                      label: 'Accounts',
+                      queryParameters: state.uri.queryParameters));
             },
             routes: [
               GoRoute(
@@ -123,6 +137,22 @@ List<RouteBase> navBarRoutes = [
                 builder: (context, state) => const DetailsScreen(label: 'A'),
               ),
             ],
+          ),
+        ],
+      ),
+      StatefulShellBranch(
+        navigatorKey: _shellNavigatorMapKey,
+        routes: [
+          LlmGoRoute(
+            name: MapScreen.name,
+            description: "Show ATMs or Bank offices on map",
+            path: "/${MapScreen.name}",
+            pageBuilder: (context, state) {
+              return NoTransitionPage(
+                  child: MapScreen(
+                      label: 'ATMS and Offices',
+                      queryParameters: state.uri.queryParameters));
+            },
           ),
         ],
       ),

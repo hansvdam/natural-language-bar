@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:langbar/ui/screens/forecast_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../../for_langbar_lib/langbar_stuff.dart';
 import '../../routes.dart';
 import '../utils.dart';
+import 'dummy_screens/CreditCardScreen.dart';
+import 'dummy_screens/DebitCardScreen.dart';
 
 class DefaultAppbarScaffold extends StatefulWidget {
   final Widget body;
@@ -43,12 +46,6 @@ class DefaultDrawer extends StatefulWidget {
 class _DefaultDrawerState extends State<DefaultDrawer> {
   int _selectedIndex = 0;
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -65,52 +62,46 @@ class _DefaultDrawerState extends State<DefaultDrawer> {
             ),
             child: Text('Drawer Header'),
           ),
-          ListTile(
-            title: const Text('Credit card'),
-            selected: _selectedIndex == 0,
-            onTap: () {
-              // Update the state of the app
-              goRouter.push("/creditcard");
-              // context.push("/creditcard");
-              // context.pushReplacement("/creditcard");
-              Navigator.pop(context);
-              // Then close the drawer
-            },
-          ),
-          ListTile(
-            title: const Text('Debit card'),
-            selected: _selectedIndex == 0,
-            onTap: () {
-              // Update the state of the app
-              goRouter.push("/debitcard");
-              // context.push("/creditcard");
-              // context.pushReplacement("/creditcard");
-              Navigator.pop(context);
-              // Then close the drawer
-            },
-          ),
-          ListTile(
-            title: const Text('Business'),
-            selected: _selectedIndex == 1,
-            onTap: () {
-              // Update the state of the app
-              // _onItemTapped(1);
-              // Then close the drawer
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            title: const Text('School'),
-            selected: _selectedIndex == 2,
-            onTap: () {
-              // Update the state of the app
-              // _onItemTapped(2);
-              // Then close the drawer
-              Navigator.pop(context);
-            },
-          ),
+          DrawerItem(
+              selectedIndex: _selectedIndex,
+              label: "Credit Card",
+              path: '/${CreditCardScreen.name}'),
+          DrawerItem(
+              selectedIndex: _selectedIndex,
+              label: "Debit Card",
+              path: '/${DebitCardScreen.name}'),
+          DrawerItem(
+              selectedIndex: _selectedIndex,
+              label: "Weather",
+              path: '/${ForecastScreen.name}'),
         ],
       ),
+    );
+  }
+}
+
+class DrawerItem extends StatelessWidget {
+  const DrawerItem({
+    super.key,
+    required int selectedIndex,
+    required this.label,
+    required this.path,
+  }) : _selectedIndex = selectedIndex;
+
+  final int _selectedIndex;
+
+  final String label;
+  final String path;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(label),
+      selected: _selectedIndex == 0,
+      onTap: () {
+        goRouter.push(path);
+        Navigator.pop(context);
+      },
     );
   }
 }
