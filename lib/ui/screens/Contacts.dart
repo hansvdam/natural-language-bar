@@ -65,8 +65,15 @@ class _ContactListState extends State<ContactList> {
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       child: ListTile(
-                        title: Text(contact?.name ?? ''),
-                        subtitle: Text(contact?.iban ?? ''),
+                        title: Text(contact?.name ?? '',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyLarge
+                                ?.copyWith(fontWeight: FontWeight.bold)),
+                        subtitle: Text(
+                          contact?.iban ?? '',
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
                       ),
                     );
                   },
