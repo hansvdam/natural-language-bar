@@ -8,6 +8,21 @@ import '../utils.dart';
 import 'dummy_screens/CreditCardScreen.dart';
 import 'dummy_screens/DebitCardScreen.dart';
 
+class DefaultAppbarScreen extends StatelessWidget {
+  final String label;
+
+  final Widget body;
+
+  DefaultAppbarScreen({required this.label, required this.body, Key? key})
+      : super(key: key) {}
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return DefaultAppbarScaffold(label: label, body: SafeArea(child: body));
+  }
+}
+
 class DefaultAppbarScaffold extends StatelessWidget {
   final Widget body;
 

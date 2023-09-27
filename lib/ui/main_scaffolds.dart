@@ -47,6 +47,7 @@ const navBarDestinations = [
   NavigationDestination(label: 'Home', icon: Icon(Icons.home)),
   NavigationDestination(label: 'Accounts', icon: Icon(Icons.account_balance)),
   NavigationDestination(label: 'Map', icon: Icon(Icons.map_outlined)),
+  NavigationDestination(label: 'Contacts', icon: Icon(Icons.contacts)),
   NavigationDestination(label: 'Section B', icon: Icon(Icons.settings)),
 ];
 

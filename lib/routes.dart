@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:langbar/ui/screens/Contacts.dart';
 import 'package:langbar/ui/screens/dummy_screens/AccountsScreen.dart';
 
 import 'for_langbar_lib/langbar_wrapper.dart';
@@ -19,6 +20,8 @@ final _shellNavigator1Key = GlobalKey<NavigatorState>(debugLabel: 'shell1');
 final _shellNavigatorAKey = GlobalKey<NavigatorState>(debugLabel: 'shellA');
 final _shellNavigatorBKey = GlobalKey<NavigatorState>(debugLabel: 'shellB');
 final _shellNavigatorMapKey = GlobalKey<NavigatorState>(debugLabel: 'shellB');
+final _shellNavigatorContactsKey =
+    GlobalKey<NavigatorState>(debugLabel: 'shellB');
 
 List<LlmFunctionParameter> cardparams = const [
   LlmFunctionParameter(
@@ -86,15 +89,17 @@ List<RouteBase> hamburgerRoutes = [
       path: "/${ForecastScreen.name}",
       pageBuilder: (context, state) {
         return MaterialPage(
-          fullscreenDialog: true,
-          child: ForecastScreen(
-            label: 'Weather Forecast',
-            detailsPath: '/forecast/details',
-            place: state.uri.queryParameters['place'],
-            numDays:
-                int.tryParse(state.uri.queryParameters['numDays'] ?? '') ?? 1,
-          ),
-        );
+            fullscreenDialog: true,
+            child: LangBarWrapper(
+              body: ForecastScreen(
+                label: 'Weather Forecast',
+                detailsPath: '/forecast/details',
+                place: state.uri.queryParameters['place'],
+                numDays:
+                    int.tryParse(state.uri.queryParameters['numDays'] ?? '') ??
+                        1,
+              ),
+            ));
       })
 ];
 
@@ -161,6 +166,30 @@ List<RouteBase> navBarRoutes = [
                   child: MapScreen(
                       label: 'ATMS and Offices',
                       atmOrOffice: state.uri.queryParameters['atmOrOffice']));
+            },
+          ),
+        ],
+      ),
+      StatefulShellBranch(
+        navigatorKey: _shellNavigatorContactsKey,
+        routes: [
+          LlmGoRoute(
+            name: ContactsScreen.name,
+            description: "Show contacts and maybe search in them",
+            path: "/${ContactsScreen.name}",
+            parameters: const [
+              LlmFunctionParameter(
+                name: 'searchString',
+                description: 'search string for searching in the contacts list',
+                type: 'string',
+                required: false,
+              ),
+            ],
+            pageBuilder: (context, state) {
+              return NoTransitionPage(
+                  child: ContactsScreen(
+                      label: 'Contacs',
+                      searchString: state.uri.queryParameters['searchString']));
             },
           ),
         ],
