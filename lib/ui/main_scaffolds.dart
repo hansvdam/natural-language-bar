@@ -7,6 +7,9 @@ import 'package:langbar/ui/utils.dart';
 
 import '../for_langbar_lib/langbar_wrapper.dart';
 
+const smallSpacing = 10.0;
+const defaultPadding = 16.0;
+
 var scaffoldKey = GlobalKey<ScaffoldState>();
 
 class ScaffoldWithNestedNavigation extends StatelessWidget {

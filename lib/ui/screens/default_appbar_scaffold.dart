@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../for_langbar_lib/langbar_stuff.dart';
 import '../../routes.dart';
+import '../main_scaffolds.dart';
 import '../utils.dart';
 import 'dummy_screens/CreditCardScreen.dart';
 import 'dummy_screens/DebitCardScreen.dart';
@@ -19,7 +20,13 @@ class DefaultAppbarScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return DefaultAppbarScaffold(label: label, body: SafeArea(child: body));
+    return DefaultAppbarScaffold(
+        label: label,
+        body: SafeArea(
+            child: Padding(
+                padding: const EdgeInsets.only(
+                    top: smallSpacing, left: smallSpacing, right: smallSpacing),
+                child: body)));
   }
 }
 

@@ -3,12 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../data/meteo_fetchers.dart';
+import '../main_scaffolds.dart';
 import '../models/forecast.dart';
 import '../utils.dart';
 import 'default_appbar_scaffold.dart';
 
-const smallSpacing = 10.0;
-const defaultPadding = 16.0;
 
 class ForecastScreen extends StatefulWidget {
   late final String? place;
