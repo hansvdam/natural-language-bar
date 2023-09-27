@@ -28,7 +28,7 @@ class Contact {
   Contact(this.name, this.iban);
 }
 
-Future<List<Contact>> readContactsFromCsv(String path) async {
+Future<List<Contact>> readContactsFromCsv() async {
   final fileContent = await rootBundle.loadString('assets/data/contacts.csv');
 
   final csvRows = const CsvToListConverter().convert(fileContent, eol: "\n");
@@ -36,6 +36,20 @@ Future<List<Contact>> readContactsFromCsv(String path) async {
   // Skip the header row and map each row to a Contact object
   var list = csvRows.skip(1).map((row) {
     return Contact(row[0] as String, row[1] as String);
+  }).toList();
+  return list;
+}
+
+Future<List<BankTransaction>> readTransactionsFromCsv() async {
+  final fileContent =
+      await rootBundle.loadString('assets/data/transactions.csv');
+
+  final csvRows = const CsvToListConverter().convert(fileContent, eol: "\n");
+
+  // Skip the header row and map each row to a Contact object
+  var list = csvRows.skip(1).map((row) {
+    return BankTransaction(row[0] as String, row[1] as String, row[2] as String,
+        row[3] as String, row[4] as String, row[5], DateTime.parse(row[6]));
   }).toList();
   return list;
 }

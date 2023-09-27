@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:langbar/ui/screens/AccountsScreen.dart';
 import 'package:langbar/ui/screens/Contacts.dart';
-import 'package:langbar/ui/screens/dummy_screens/AccountsScreen.dart';
+import 'package:langbar/ui/screens/TransactionsScreen.dart';
 
 import 'for_langbar_lib/langbar_wrapper.dart';
 import 'for_langbar_lib/llm_go_route.dart';
@@ -134,12 +135,14 @@ List<RouteBase> navBarRoutes = [
               return NoTransitionPage(
                   child: AccountsScreen(
                       label: 'Accounts',
+                      detailsPath: '/${AccountsScreen.name}/details',
                       queryParameters: state.uri.queryParameters));
             },
             routes: [
               GoRoute(
                 path: 'details',
-                builder: (context, state) => const DetailsScreen(label: 'A'),
+                builder: (context, state) =>
+                    TransactionsScreen(label: 'Transactions'),
               ),
             ],
           ),

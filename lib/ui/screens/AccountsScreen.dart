@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
-import '../default_appbar_scaffold.dart';
+import 'default_appbar_scaffold.dart';
 
 const smallSpacing = 10.0;
 const defaultPadding = 16.0;
@@ -9,13 +10,18 @@ class AccountsScreen extends DefaultAppbarScreen {
   AccountsScreen(
       {required super.label,
       Key? key,
-      required Map<String, String> queryParameters})
-      : super(body: AccountsList(), key: key) {}
+      required Map<String, String> queryParameters,
+      required detailsPath})
+      : super(body: AccountsList(detailsPath), key: key) {}
 
   static const name = 'accounts';
 }
 
 class AccountsList extends StatelessWidget {
+  final String detailsPath;
+
+  AccountsList(this.detailsPath);
+
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -24,8 +30,13 @@ class AccountsList extends StatelessWidget {
             title: Text(
           'Checking Accounts',
         )),
-        Card(
-          child: AccountTile(name: "title", iban: "iban", balance: "balance"),
+        GestureDetector(
+          onTap: () {
+            context.go(detailsPath);
+          },
+          child: Card(
+            child: AccountTile(name: "title", iban: "iban", balance: "balance"),
+          ),
         ),
         ListTile(
             title: Text(

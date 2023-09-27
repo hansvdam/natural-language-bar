@@ -3,37 +3,37 @@ import 'package:flutter/material.dart';
 import '../models/account.dart';
 import 'default_appbar_scaffold.dart';
 
-class ContactsScreen extends DefaultAppbarScreen {
-  ContactsScreen({required super.label, Key? key, searchString})
-      : super(body: ContactList(searchString: searchString), key: key) {}
+class TransactionsScreen extends DefaultAppbarScreen {
+  TransactionsScreen({required super.label, Key? key, searchString})
+      : super(body: TransactionsList(searchString: searchString), key: key) {}
 
   static const name = 'contacts';
 }
 
-class ContactList extends StatefulWidget {
-  ContactList({Key? key, this.searchString}) : super(key: key) {}
+class TransactionsList extends StatefulWidget {
+  TransactionsList({Key? key, this.searchString}) : super(key: key) {}
 
   final String? searchString;
 
   @override
-  _ContactListState createState() => _ContactListState();
+  _TransactionsListState createState() => _TransactionsListState();
 }
 
-class _ContactListState extends State<ContactList> {
+class _TransactionsListState extends State<TransactionsList> {
   TextEditingController _searchController = TextEditingController();
-  late Future<List<Contact>> _contacts;
+  late Future<List<BankTransaction>> _transactions;
 
   @override
   void initState() {
     super.initState();
-    _contacts = readContactsFromCsv();
+    _transactions = readTransactionsFromCsv();
     _searchController.text = widget.searchString ?? '';
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Contact>>(
-      future: _contacts,
+    return FutureBuilder<List<BankTransaction>>(
+      future: _transactions,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return CircularProgressIndicator();
@@ -41,7 +41,7 @@ class _ContactListState extends State<ContactList> {
           return Text('Error: ${snapshot.error}');
         } else {
           var filteredContacts = snapshot.data
-              ?.where((contact) => contact.name
+              ?.where((transaction) => transaction.description
                   .toLowerCase()
                   .contains(_searchController.text.toLowerCase()))
               .toList();
@@ -65,13 +65,13 @@ class _ContactListState extends State<ContactList> {
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       child: ListTile(
-                        title: Text(contact?.name ?? '',
+                        title: Text(contact?.description ?? '',
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyLarge
                                 ?.copyWith(fontWeight: FontWeight.bold)),
                         subtitle: Text(
-                          contact?.iban ?? '',
+                          contact?.destinationName ?? '',
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                       ),
