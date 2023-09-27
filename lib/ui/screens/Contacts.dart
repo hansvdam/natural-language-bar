@@ -3,49 +3,17 @@ import 'package:flutter/material.dart';
 import '../models/account.dart';
 import 'default_appbar_scaffold.dart';
 
-class ContactsScreen extends StatefulWidget {
-  final String? searchString;
-
-  final String label;
-
-  ContactsScreen({required this.label, Key? key, this.searchString})
-      : super(key: key) {}
+class ContactsScreen extends DefaultAppbarScreen {
+  ContactsScreen({required super.label, Key? key, searchString})
+      : super(body: ContactList(searchString: searchString), key: key) {}
 
   static const name = 'contacts';
-
-  @override
-  State<ContactsScreen> createState() => _ContactsScreenState();
-}
-
-class _ContactsScreenState extends State<ContactsScreen> {
-  String _selectedLocation = 'atms';
-
-  @override
-  void initState() {
-    super.initState();
-    _selectedLocation = widget.searchString ?? 'atms';
-  }
-
-  @override
-  void didUpdateWidget(ContactsScreen oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.searchString != widget.searchString) {
-      _selectedLocation = widget.searchString ?? 'atms';
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return DefaultAppbarScreen(
-        label: widget.label,
-        body: ContactList(searchString: widget.searchString));
-  } // Text("hoi")
 }
 
 class ContactList extends StatefulWidget {
   ContactList({Key? key, this.searchString}) : super(key: key) {}
 
-  String? searchString;
+  final String? searchString;
 
   @override
   _ContactListState createState() => _ContactListState();
