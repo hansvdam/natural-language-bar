@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../models/account.dart';
 import 'default_appbar_scaffold.dart';
 
 const smallSpacing = 10.0;
@@ -17,6 +18,13 @@ class AccountsScreen extends DefaultAppbarScreen {
   static const name = 'accounts';
 }
 
+var checkingAccounts = accounts.values
+    .where((account) => account.type == AccountType.checking)
+    .toList();
+var savingAccounts = accounts.values
+    .where((account) => account.type == AccountType.saving)
+    .toList();
+
 class AccountsList extends StatelessWidget {
   final String detailsPath;
 
@@ -30,13 +38,21 @@ class AccountsList extends StatelessWidget {
             title: Text(
           'Checking Accounts',
         )),
-        GestureDetector(
-          onTap: () {
-            context.go(detailsPath);
+        ListView.builder(
+          shrinkWrap: true,
+          itemCount: checkingAccounts.length,
+          itemBuilder: (context, index) {
+            var account = checkingAccounts[index];
+            return GestureDetector(
+                onTap: () {
+                  context.go(detailsPath + "?accountid=${account.id}");
+                },
+                child: Card(
+                    child: AccountTile(
+                        name: account.name,
+                        iban: account.number,
+                        balance: account.balance.toString())));
           },
-          child: Card(
-            child: AccountTile(name: "title", iban: "iban", balance: "balance"),
-          ),
         ),
         ListTile(
             title: Text(
@@ -68,7 +84,7 @@ class AccountTile extends StatelessWidget {
     return ListTile(
       title: Text(name, style: Theme.of(context).textTheme.titleMedium),
       subtitle: Text(iban),
-      trailing: Text(balance),
+      trailing: Text("€ $balance"),
     );
   }
 }

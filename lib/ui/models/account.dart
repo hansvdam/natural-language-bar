@@ -2,11 +2,26 @@ import 'package:csv/csv.dart';
 import 'package:flutter/services.dart';
 
 class BankAccount {
+  String id;
   String name;
-  String iban;
+  String number;
+  double balance;
+  AccountType type;
 
-  BankAccount(this.name, this.iban);
+  BankAccount(this.id, this.type, this.name, this.number, this.balance);
 }
+
+enum AccountType {
+  checking,
+  saving,
+}
+
+var accounts = {
+  "1": BankAccount(
+      "1", AccountType.checking, "Checking Account", "DE1234567890", 5000.0),
+  "2": BankAccount(
+      "2", AccountType.saving, "Saving Account", "DE0987654321", 10000.0),
+};
 
 class BankTransaction {
   String sourceName;

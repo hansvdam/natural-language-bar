@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:langbar/ui/screens/AccountsScreen.dart';
 import 'package:langbar/ui/screens/Contacts.dart';
-import 'package:langbar/ui/screens/TranferScreen.dart';
 import 'package:langbar/ui/screens/TransactionsScreen.dart';
+import 'package:langbar/ui/screens/TransferScreen.dart';
 
 import 'for_langbar_lib/langbar_wrapper.dart';
 import 'for_langbar_lib/llm_go_route.dart';
@@ -114,7 +114,7 @@ List<RouteBase> navBarRoutes = [
         navigatorKey: _shellNavigator1Key,
         routes: [
           GoRoute(
-            path: '/1',
+            path: '/home',
             pageBuilder: (context, state) => NoTransitionPage(
               child: FrontScreen(
                 label: 'Lang Bank Sample',
@@ -154,6 +154,7 @@ List<RouteBase> navBarRoutes = [
                 ],
                 builder: (context, state) => TransactionsScreen(
                     label: 'Transactions',
+                    accountId: state.uri.queryParameters['accountid'],
                     filterString:
                         state.uri.queryParameters['filterString'] ?? ''),
               ),
@@ -247,7 +248,7 @@ List<RouteBase> navBarRoutes = [
 List<RouteBase> routes = hamburgerRoutes + navBarRoutes;
 
 final goRouter = GoRouter(
-  initialLocation: '/1',
+  initialLocation: '/home',
   // * Passing a navigatorKey causes an issue on hot reload:
   // * https://github.com/flutter/flutter/issues/113757#issuecomment-1518421380
   // * However it's still necessary otherwise the navigator pops back to

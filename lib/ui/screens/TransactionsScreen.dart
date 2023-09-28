@@ -5,14 +5,18 @@ import '../models/account.dart';
 import 'default_appbar_scaffold.dart';
 
 class TransactionsScreen extends DefaultAppbarScreen {
-  TransactionsScreen({required super.label, Key? key, filterString})
-      : super(body: TransactionsList(filterString: filterString), key: key) {}
+  TransactionsScreen({required super.label, Key? key, filterString, accountId})
+      : super(
+            body: TransactionsList(
+                filterString: filterString, accountId: accountId = 1),
+            key: key) {}
 
   static const name = 'transactions';
 }
 
 class TransactionsList extends ChangeDetectingStatefulWidget {
-  TransactionsList({Key? key, this.filterString}) : super(key: key) {}
+  TransactionsList({Key? key, this.filterString, required accountId})
+      : super(key: key) {}
 
   final String? filterString;
 
