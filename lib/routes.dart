@@ -135,14 +135,26 @@ List<RouteBase> navBarRoutes = [
               return NoTransitionPage(
                   child: AccountsScreen(
                       label: 'Accounts',
-                      detailsPath: '/${AccountsScreen.name}/details',
+                      detailsPath:
+                          '/${AccountsScreen.name}/${TransactionsScreen.name}',
                       queryParameters: state.uri.queryParameters));
             },
             routes: [
-              GoRoute(
-                path: 'details',
-                builder: (context, state) =>
-                    TransactionsScreen(label: 'Transactions'),
+              LlmGoRoute(
+                name: TransactionsScreen.name,
+                description: "Show transactions of an account",
+                path: "${TransactionsScreen.name}",
+                parameters: const [
+                  LlmFunctionParameter(
+                    name: 'searchString',
+                    description: 'search string for searching in the list',
+                    required: false,
+                  ),
+                ],
+                builder: (context, state) => TransactionsScreen(
+                    label: 'Transactions',
+                    searchString:
+                        state.uri.queryParameters['searchString'] ?? ''),
               ),
             ],
           ),
@@ -159,7 +171,6 @@ List<RouteBase> navBarRoutes = [
               LlmFunctionParameter(
                 name: 'atmOrOffice',
                 description: 'show atms or offices',
-                type: 'string',
                 enumeration: ["atms", "offices"],
                 required: false,
               ),
@@ -183,8 +194,7 @@ List<RouteBase> navBarRoutes = [
             parameters: const [
               LlmFunctionParameter(
                 name: 'searchString',
-                description: 'search string for searching in the contacts list',
-                type: 'string',
+                description: 'search string for searching in the list',
                 required: false,
               ),
             ],

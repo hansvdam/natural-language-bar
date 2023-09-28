@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:langbar/ui/param_change_detecting_screens.dart';
 
 import '../models/account.dart';
 import 'default_appbar_scaffold.dart';
@@ -7,19 +8,22 @@ class TransactionsScreen extends DefaultAppbarScreen {
   TransactionsScreen({required super.label, Key? key, searchString})
       : super(body: TransactionsList(searchString: searchString), key: key) {}
 
-  static const name = 'contacts';
+  static const name = 'transactions';
 }
 
-class TransactionsList extends StatefulWidget {
+class TransactionsList extends ChangeDetectingStatefulWidget {
   TransactionsList({Key? key, this.searchString}) : super(key: key) {}
 
   final String? searchString;
 
   @override
   _TransactionsListState createState() => _TransactionsListState();
+
+  @override
+  String value() => searchString ?? '';
 }
 
-class _TransactionsListState extends State<TransactionsList> {
+class _TransactionsListState extends UpdatingScreenState<TransactionsList> {
   TextEditingController _searchController = TextEditingController();
   late Future<List<BankTransaction>> _transactions;
 
@@ -27,6 +31,11 @@ class _TransactionsListState extends State<TransactionsList> {
   void initState() {
     super.initState();
     _transactions = readTransactionsFromCsv();
+    initOrUpdateWidgetParams();
+  }
+
+  @override
+  void initOrUpdateWidgetParams() {
     _searchController.text = widget.searchString ?? '';
   }
 

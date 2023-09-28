@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../../param_change_detecting_screens.dart';
 import '../default_appbar_scaffold.dart';
 
-const smallSpacing = 10.0;
-const defaultPadding = 16.0;
-
-class MapScreen extends StatefulWidget {
+class MapScreen extends ChangeDetectingStatefulWidget {
   final String label;
 
   final String? atmOrOffice;
@@ -17,23 +15,19 @@ class MapScreen extends StatefulWidget {
 
   @override
   State<MapScreen> createState() => _MapScreenState();
+
+  @override
+  String value() {
+    return atmOrOffice ?? "";
+  }
 }
 
-class _MapScreenState extends State<MapScreen> {
+class _MapScreenState extends UpdatingScreenState<MapScreen> {
   String _selectedLocation = 'atms';
 
   @override
-  void initState() {
-    super.initState();
+  void initOrUpdateWidgetParams() {
     _selectedLocation = widget.atmOrOffice ?? 'atms';
-  }
-
-  @override
-  void didUpdateWidget(MapScreen oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.atmOrOffice != widget.atmOrOffice) {
-      _selectedLocation = widget.atmOrOffice ?? 'atms';
-    }
   }
 
   @override
@@ -43,40 +37,40 @@ class _MapScreenState extends State<MapScreen> {
         label: widget.label,
         body: SafeArea(
             child: Column(mainAxisSize: MainAxisSize.max, children: [
-          // Text("hoi")
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Flexible(
-                  child: RadioListTile<String>(
-                    title: const Text('ATMs'),
-                value: 'atms',
-                groupValue: _selectedLocation,
-                onChanged: (String? value) {
-                  setState(() {
-                    _selectedLocation = value!;
-                  });
-                },
-              )),
-              Flexible(
-                  child: RadioListTile<String>(
-                    title: const Text('Offices'),
-                value: 'offices',
-                groupValue: _selectedLocation,
-                onChanged: (String? value) {
-                  setState(() {
-                    _selectedLocation = value!;
-                  });
-                },
-              )),
-            ],
-          ),
-          Expanded(
-              child: Image(
-                  image: AssetImage("assets/images/" +
-                      (_selectedLocation == "atms"
-                          ? "atms.jpg"
-                          : "offices.jpg")))),
-        ])));
+              // Text("hoi")
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Flexible(
+                      child: RadioListTile<String>(
+                        title: const Text('ATMs'),
+                        value: 'atms',
+                        groupValue: _selectedLocation,
+                        onChanged: (String? value) {
+                          setState(() {
+                            _selectedLocation = value!;
+                          });
+                        },
+                      )),
+                  Flexible(
+                      child: RadioListTile<String>(
+                        title: const Text('Offices'),
+                        value: 'offices',
+                        groupValue: _selectedLocation,
+                        onChanged: (String? value) {
+                          setState(() {
+                            _selectedLocation = value!;
+                          });
+                        },
+                      )),
+                ],
+              ),
+              Expanded(
+                  child: Image(
+                      image: AssetImage("assets/images/" +
+                          (_selectedLocation == "atms"
+                              ? "atms.jpg"
+                              : "offices.jpg")))),
+            ])));
   }
 }
