@@ -2,24 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:langbar/ui/screens/AccountsScreen.dart';
 import 'package:langbar/ui/screens/Contacts.dart';
+import 'package:langbar/ui/screens/TranferScreen.dart';
 import 'package:langbar/ui/screens/TransactionsScreen.dart';
 
 import 'for_langbar_lib/langbar_wrapper.dart';
 import 'for_langbar_lib/llm_go_route.dart';
 import 'for_langchain/for_langchain.dart';
 import 'ui/main_scaffolds.dart';
-import 'ui/screens/details_screen.dart';
 import 'ui/screens/dummy_screens/CreditCardScreen.dart';
 import 'ui/screens/dummy_screens/DebitCardScreen.dart';
 import 'ui/screens/dummy_screens/MapScreen.dart';
 import 'ui/screens/forecast_screen.dart';
 import 'ui/screens/front_screen.dart';
-import 'ui/screens/root_screen.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigator1Key = GlobalKey<NavigatorState>(debugLabel: 'shell1');
 final _shellNavigatorAKey = GlobalKey<NavigatorState>(debugLabel: 'shellA');
-final _shellNavigatorBKey = GlobalKey<NavigatorState>(debugLabel: 'shellB');
+final _shellNavigatorTransfersKey =
+    GlobalKey<NavigatorState>(debugLabel: 'shellB');
 final _shellNavigatorMapKey = GlobalKey<NavigatorState>(debugLabel: 'shellB');
 final _shellNavigatorContactsKey =
     GlobalKey<NavigatorState>(debugLabel: 'shellB');
@@ -186,6 +186,29 @@ List<RouteBase> navBarRoutes = [
         ],
       ),
       StatefulShellBranch(
+        navigatorKey: _shellNavigatorTransfersKey,
+        routes: [
+          LlmGoRoute(
+            name: TransferScreen.name,
+            description: "Make a bank transfer",
+            path: "/${TransferScreen.name}",
+            parameters: const [
+              LlmFunctionParameter(
+                name: 'amount',
+                description: 'amount to transfer',
+                required: false,
+              ),
+            ],
+            pageBuilder: (context, state) {
+              return NoTransitionPage(
+                  child: TransferScreen(
+                      label: 'Bank Transfer',
+                      searchString: state.uri.queryParameters['amount']));
+            },
+          ),
+        ],
+      ),
+      StatefulShellBranch(
         navigatorKey: _shellNavigatorContactsKey,
         routes: [
           LlmGoRoute(
@@ -205,38 +228,6 @@ List<RouteBase> navBarRoutes = [
                       label: 'Contacs',
                       searchString: state.uri.queryParameters['filterString']));
             },
-          ),
-        ],
-      ),
-      StatefulShellBranch(
-        navigatorKey: _shellNavigatorBKey,
-        routes: [
-          GoRoute(
-            path: '/b',
-            pageBuilder: (context, state) => const NoTransitionPage(
-              child: RootScreen(label: 'B', detailsPath: '/b/details'),
-            ),
-            routes: [
-              LlmGoRoute(
-                  path: 'details',
-                  name: 'zoo',
-                  description: 'Show some information about the zoo',
-                  parameters: const [
-                    LlmFunctionParameter(
-                      name: 'limit',
-                      description: 'number of animals to show',
-                      type: 'integer',
-                      required: false,
-                    ),
-                  ],
-                  builder: (context, state) {
-                    return DetailsScreen(label: 'B');
-                  })
-              // GoRoute(
-              //   path: 'details',
-              //   builder: (context, state) => const DetailsScreen(label: 'B'),
-              // ),
-            ],
           ),
         ],
       ),

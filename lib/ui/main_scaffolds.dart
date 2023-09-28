@@ -50,8 +50,8 @@ const navBarDestinations = [
   NavigationDestination(label: 'Home', icon: Icon(Icons.home)),
   NavigationDestination(label: 'Accounts', icon: Icon(Icons.account_balance)),
   NavigationDestination(label: 'Map', icon: Icon(Icons.map_outlined)),
+  NavigationDestination(label: 'Transfer', icon: Icon(Icons.monetization_on)),
   NavigationDestination(label: 'Contacts', icon: Icon(Icons.contacts)),
-  NavigationDestination(label: 'Section B', icon: Icon(Icons.settings)),
 ];
 
 class ScaffoldWithNavigationBar extends StatelessWidget {
