@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/account.dart';
+import '../param_change_detecting_screens.dart';
 import 'default_appbar_scaffold.dart';
 
 class ContactsScreen extends DefaultAppbarScreen {
@@ -10,16 +11,19 @@ class ContactsScreen extends DefaultAppbarScreen {
   static const name = 'contacts';
 }
 
-class ContactList extends StatefulWidget {
+class ContactList extends ChangeDetectingStatefulWidget {
   ContactList({Key? key, this.searchString}) : super(key: key) {}
 
   final String? searchString;
 
   @override
   _ContactListState createState() => _ContactListState();
+
+  @override
+  String value() => searchString ?? '';
 }
 
-class _ContactListState extends State<ContactList> {
+class _ContactListState extends UpdatingScreenState<ContactList> {
   TextEditingController _searchController = TextEditingController();
   late Future<List<Contact>> _contacts;
 
@@ -27,6 +31,11 @@ class _ContactListState extends State<ContactList> {
   void initState() {
     super.initState();
     _contacts = readContactsFromCsv();
+    initOrUpdateWidgetParams();
+  }
+
+  @override
+  void initOrUpdateWidgetParams() {
     _searchController.text = widget.searchString ?? '';
   }
 
