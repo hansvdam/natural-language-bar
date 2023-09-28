@@ -49,11 +49,13 @@ class _TransactionsListState extends UpdatingScreenState<TransactionsList> {
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else {
-          var filteredContacts = snapshot.data
-              ?.where((transaction) => transaction.description
-                  .toLowerCase()
-                  .contains(_searchController.text.toLowerCase()))
-              .toList();
+          var filteredContacts = snapshot.data?.where((transaction) {
+            var searchText = _searchController.text.toLowerCase();
+            var description = transaction.description.toLowerCase();
+            var destination = transaction.destinationName.toLowerCase();
+            return description.contains(searchText) ||
+                destination.contains(searchText);
+          }).toList();
 
           return Column(
             children: <Widget>[
