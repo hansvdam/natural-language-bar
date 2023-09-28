@@ -142,19 +142,20 @@ List<RouteBase> navBarRoutes = [
             routes: [
               LlmGoRoute(
                 name: TransactionsScreen.name,
-                description: "Show transactions of an account",
+                description:
+                    "Show transactions of an account, and maybe filter them",
                 path: "${TransactionsScreen.name}",
                 parameters: const [
                   LlmFunctionParameter(
-                    name: 'searchString',
-                    description: 'search string for searching in the list',
+                    name: 'filterString',
+                    description: 'filter string for the list',
                     required: false,
                   ),
                 ],
                 builder: (context, state) => TransactionsScreen(
                     label: 'Transactions',
-                    searchString:
-                        state.uri.queryParameters['searchString'] ?? ''),
+                    filterString:
+                        state.uri.queryParameters['filterString'] ?? ''),
               ),
             ],
           ),
@@ -189,12 +190,12 @@ List<RouteBase> navBarRoutes = [
         routes: [
           LlmGoRoute(
             name: ContactsScreen.name,
-            description: "Show contacts and maybe search in them",
+            description: "Show address book of contacts and maybe filter them",
             path: "/${ContactsScreen.name}",
             parameters: const [
               LlmFunctionParameter(
-                name: 'searchString',
-                description: 'search string for searching in the list',
+                name: 'filterString',
+                description: 'string for filtering the list',
                 required: false,
               ),
             ],
@@ -202,7 +203,7 @@ List<RouteBase> navBarRoutes = [
               return NoTransitionPage(
                   child: ContactsScreen(
                       label: 'Contacs',
-                      searchString: state.uri.queryParameters['searchString']));
+                      searchString: state.uri.queryParameters['filterString']));
             },
           ),
         ],

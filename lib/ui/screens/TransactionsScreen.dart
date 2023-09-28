@@ -5,26 +5,26 @@ import '../models/account.dart';
 import 'default_appbar_scaffold.dart';
 
 class TransactionsScreen extends DefaultAppbarScreen {
-  TransactionsScreen({required super.label, Key? key, searchString})
-      : super(body: TransactionsList(searchString: searchString), key: key) {}
+  TransactionsScreen({required super.label, Key? key, filterString})
+      : super(body: TransactionsList(filterString: filterString), key: key) {}
 
   static const name = 'transactions';
 }
 
 class TransactionsList extends ChangeDetectingStatefulWidget {
-  TransactionsList({Key? key, this.searchString}) : super(key: key) {}
+  TransactionsList({Key? key, this.filterString}) : super(key: key) {}
 
-  final String? searchString;
+  final String? filterString;
 
   @override
   _TransactionsListState createState() => _TransactionsListState();
 
   @override
-  String value() => searchString ?? '';
+  String value() => filterString ?? '';
 }
 
 class _TransactionsListState extends UpdatingScreenState<TransactionsList> {
-  TextEditingController _searchController = TextEditingController();
+  TextEditingController _filterController = TextEditingController();
   late Future<List<BankTransaction>> _transactions;
 
   @override
@@ -36,7 +36,7 @@ class _TransactionsListState extends UpdatingScreenState<TransactionsList> {
 
   @override
   void initOrUpdateWidgetParams() {
-    _searchController.text = widget.searchString ?? '';
+    _filterController.text = widget.filterString ?? '';
   }
 
   @override
@@ -50,7 +50,7 @@ class _TransactionsListState extends UpdatingScreenState<TransactionsList> {
           return Text('Error: ${snapshot.error}');
         } else {
           var filteredContacts = snapshot.data?.where((transaction) {
-            var searchText = _searchController.text.toLowerCase();
+            var searchText = _filterController.text.toLowerCase();
             var description = transaction.description.toLowerCase();
             var destination = transaction.destinationName.toLowerCase();
             return description.contains(searchText) ||
@@ -60,7 +60,7 @@ class _TransactionsListState extends UpdatingScreenState<TransactionsList> {
           return Column(
             children: <Widget>[
               TextField(
-                controller: _searchController,
+                controller: _filterController,
                 decoration: InputDecoration(labelText: 'Search'),
                 onChanged: (value) {
                   setState(() {});
