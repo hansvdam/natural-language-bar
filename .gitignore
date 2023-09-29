@@ -43,3 +43,6 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 /firebaseHosting/
+/firebase.json
+/.firebaserc
+/.firebase/hosting.YnVpbGQvd2Vi.cache
