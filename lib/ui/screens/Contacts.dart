@@ -30,7 +30,7 @@ class _ContactListState extends UpdatingScreenState<ContactList> {
   @override
   void initState() {
     super.initState();
-    _contacts = readContactsFromCsv();
+    _contacts = readContactsFromCsv(context);
     initOrUpdateWidgetParams();
   }
 

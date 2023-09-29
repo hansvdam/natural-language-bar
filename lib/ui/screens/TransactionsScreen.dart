@@ -34,7 +34,7 @@ class _TransactionsListState extends UpdatingScreenState<TransactionsList> {
   @override
   void initState() {
     super.initState();
-    _transactions = readTransactionsFromCsv();
+    _transactions = readTransactionsFromCsv(context);
     initOrUpdateWidgetParams();
   }
 
