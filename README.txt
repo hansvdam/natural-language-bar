@@ -1,5 +1,4 @@
 Firebase hosting:
-create directory firebaseHosting
 open terminal and run command
 firebase init
 select existing project, pick firebase project
@@ -20,5 +19,11 @@ configure rewrites as follows:
     ]
 
 copy the build.web from the flutter project to the firebaseHosting build/web directory (replacing all)
-when issue in the firebaseHosting-directory:
+before building update the version number in index.html: entrypointUrl: "main.dart.js?v=1",
+otherwise the browser will cache the old version and not update.
+build the build/web version:
+flutter build web
+to build a web version of the flutter project
+
+when issue to deploy:
 firebase deploy
