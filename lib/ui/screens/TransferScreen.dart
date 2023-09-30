@@ -134,53 +134,49 @@ class TransferContentState extends UpdatingScreenState<TransferContentWidget> {
   /// ******* look for flutter material autocomplete***********
   @override
   Widget build(BuildContext context) {
-    try {
-      return Column(
-        children: [
-          Text("from:"),
-          ListTile(
-            title: Text(
-              fromAccount.name,
-            ),
-            subtitle: Text(
-              fromAccount.number,
-            ),
-            trailing: Text(
-              "€ ${fromAccount.balance.toString()}",
-            ),
+    return Column(
+      children: [
+        Text("from:"),
+        ListTile(
+          title: Text(
+            fromAccount.name,
           ),
-          TextField(
-            controller: _amountController,
-            decoration: const InputDecoration(labelText: 'Amount'),
+          subtitle: Text(
+            fromAccount.number,
           ),
-          TextField(
-            controller: _destinationAccountNameController,
-            decoration: const InputDecoration(labelText: 'To'),
+          trailing: Text(
+            "€ ${fromAccount.balance.toString()}",
           ),
-          TextField(
-            controller: _destinationaccountNumberController,
-            decoration: const InputDecoration(labelText: 'Account Number'),
-          ),
-          TextField(
-            controller: _descriptionController,
-            decoration: const InputDecoration(labelText: 'Description'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              context.go("/transfer");
-              var goRouter = GoRouter.of(context);
-              // ugly trick, but we need to clear the Transfer screen first.
-              // I've tried many things, but this is the only thing that seems to work.
-              Future.delayed(Duration(milliseconds: 50), () {
-                goRouter.go("/home");
-              });
-            },
-            child: const Text('Transfer'),
-          ),
-        ],
-    } catch (e, s) {
-      print(s);
-    }
+        ),
+        TextField(
+          controller: _amountController,
+          decoration: const InputDecoration(labelText: 'Amount'),
+        ),
+        TextField(
+          controller: _destinationAccountNameController,
+          decoration: const InputDecoration(labelText: 'To'),
+        ),
+        TextField(
+          controller: _destinationaccountNumberController,
+          decoration: const InputDecoration(labelText: 'Account Number'),
+        ),
+        TextField(
+          controller: _descriptionController,
+          decoration: const InputDecoration(labelText: 'Description'),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            context.go("/transfer");
+            var goRouter = GoRouter.of(context);
+            // ugly trick, but we need to clear the Transfer screen first.
+            // tried many things, but this is the only thing that works.
+            Future.delayed(Duration(milliseconds: 50), () {
+              goRouter.go("/home");
+            });
+          },
+          child: const Text('Transfer'),
+        ),
+      ],
     );
   }
 }
