@@ -205,6 +205,11 @@ List<RouteBase> navBarRoutes = [
                 description: 'destination account name to transfer money to',
                 required: false,
               ),
+              LlmFunctionParameter(
+                name: 'description',
+                description: 'description of the transfer',
+                required: false,
+              ),
             ],
             pageBuilder: (context, state) {
               return NoTransitionPage(
@@ -213,7 +218,9 @@ List<RouteBase> navBarRoutes = [
                       amount: double.tryParse(
                           state.uri.queryParameters['amount'] ?? ''),
                       destinationName:
-                          state.uri.queryParameters['destinationName']));
+                          state.uri.queryParameters['destinationName'],
+                    description: state.uri.queryParameters['description'],
+                  ));
             },
           ),
         ],
