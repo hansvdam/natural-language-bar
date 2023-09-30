@@ -77,7 +77,7 @@ class _TheFutureState extends UpdatingScreenState<TransferMoneyScreen> {
 
   Future<Contact?> findMostlikelyDestinationContact(String s) async {
     var contacts = await readContactsFromCsv(context);
-    return findMatchingContact(contacts, s);
+    return findMatchingContact(contacts, s) ?? Contact(s, null);
   }
 }
 

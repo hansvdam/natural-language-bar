@@ -38,7 +38,7 @@ class BankTransaction {
 
 class Contact {
   String name;
-  String iban;
+  String? iban;
 
   Contact(this.name, this.iban);
 }
