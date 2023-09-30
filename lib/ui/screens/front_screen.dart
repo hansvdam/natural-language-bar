@@ -15,7 +15,7 @@ This is a fake banking app to demonstrate LangBar.
 It is **NOT** a proposal for a banking app design,
 but just shows that:\n
 __You can get to any screen/functionality by typing what you want in the *LangBar* below__\n
-The interaction principle can be built into any app.
+(Although for the shear purposes of demo-ing it was not feasible to give it very wide coverage of things it can handle). The interaction principle can be built into any app.
 for example type:\n
 - 'debit card limit to 10000'
 - 'nearest ATM'
@@ -39,27 +39,12 @@ class FrontScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultAppbarScaffold(
         label: label,
-        body: SafeArea(
+        body: const SafeArea(
             child: Markdown(
           // controller: controller,
           selectable: true,
           data: _markdownData,
           imageDirectory: 'https://raw.githubusercontent.com',
         )));
-
-    //   DefaultAppbarScaffold(
-    //     label: label,
-    //     body: PageWithDefaultMargin(child:BulletListWithParagraphWidget(
-    //     title: 'What is the point of this app?',
-    //     paragraph: "This is a fake banking app to illustrate app-'navigation' using natural language. It is NOT a proposal for a banking app, "
-    //         "but just a vehicle to illustrate an interaction principle applicable to many different kinds of apps and applications:\n "
-    //         "you can get to any screen in the app by typing what you want in bottom text field",
-    //     items: [
-    //     'Item 1',
-    //     'Item 2',
-    //     'Item 3',
-    //     'A longer item that might span multiple lines.',
-    //     ],
-    // )));
   }
 }

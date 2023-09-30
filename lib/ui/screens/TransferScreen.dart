@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../utils/name_matcher.dart';
 import '../models/account.dart';
 import '../param_change_detecting_screens.dart';
 import 'default_appbar_scaffold.dart';
@@ -31,14 +32,70 @@ class TransferMoneyScreen extends ChangeDetectingStatefulWidget {
       {super.key});
 
   @override
-  _TransferMoneyScreenState createState() => _TransferMoneyScreenState();
+  _TheFutureState createState() => _TheFutureState();
 
   @override
   String value() => (amount.toString() ?? '') + (destinationName ?? '');
 }
 
-class _TransferMoneyScreenState
-    extends UpdatingScreenState<TransferMoneyScreen> {
+class _TheFutureState extends UpdatingScreenState<TransferMoneyScreen> {
+  late Future<Contact?> mostLikelyDestinationAccountFuture;
+  late BankAccount fromAccount;
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<Contact?>(
+        future: mostLikelyDestinationAccountFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          } else {
+            var mostLikelyDestinationAccount = snapshot.data;
+            return TransferContentWidget(widget.amount,
+                mostLikelyDestinationAccount, widget.fromAccountId);
+          }
+        });
+  }
+
+  @override
+  void initOrUpdateWidgetParams() {
+    if (widget.destinationName != null) {
+      mostLikelyDestinationAccountFuture =
+          findMostlikelyDestinationContact(widget.destinationName!);
+    } else {
+      mostLikelyDestinationAccountFuture = Future(() => null);
+    }
+    fromAccount = accounts[widget.fromAccountId]!;
+  }
+
+  Future<Contact?> findMostlikelyDestinationContact(String s) async {
+    var contacts = await readContactsFromCsv(context);
+    return findMatchingContact(contacts, s);
+  }
+}
+
+class TransferContentWidget extends ChangeDetectingStatefulWidget {
+  final double? amount;
+
+  final Contact? destinationContact;
+
+  final String fromAccountId;
+
+  const TransferContentWidget(
+      this.amount, this.destinationContact, this.fromAccountId,
+      {super.key});
+
+  @override
+  TransferContentState createState() => TransferContentState();
+
+  @override
+  String value() =>
+      (amount.toString() ?? '') + (destinationContact?.name ?? '');
+}
+
+class TransferContentState extends UpdatingScreenState<TransferContentWidget> {
   final TextEditingController _destinationaccountNumberController =
       TextEditingController();
   final TextEditingController _destinationAccountNameController =
@@ -49,12 +106,19 @@ class _TransferMoneyScreenState
   late BankAccount fromAccount;
 
   @override
+  void initState() {
+    super.initState();
+    initOrUpdateWidgetParams();
+  }
+
+  @override
   void initOrUpdateWidgetParams() {
     _amountController.text = widget.amount?.toString() ?? '';
     _destinationAccountNameController.text =
-        widget.destinationName?.toString() ?? '';
+        widget.destinationContact?.name.toString() ?? '';
+    _destinationaccountNumberController.text =
+        widget.destinationContact?.iban ?? '';
     fromAccount = accounts[widget.fromAccountId]!;
-    // TODO: implement initOrUpdateWidgetParams
   }
 
   void clear() {
@@ -64,6 +128,8 @@ class _TransferMoneyScreenState
     _descriptionController.clear();
   }
 
+  ///
+  /// ******* look for flutter material autocomplete***********
   @override
   Widget build(BuildContext context) {
     return Column(
