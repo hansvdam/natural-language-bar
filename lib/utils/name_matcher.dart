@@ -60,7 +60,7 @@ Contact? findMatchingContact(List<Contact> contacts, String searchString) {
     }
   }
   print("smallest distance: $smallestDistance");
-  if(smallestDistance > 2) {
+  if(smallestDistance >= 2) {
     matchingContacts.clear();
   }
   return matchingContacts.firstOrNull;
