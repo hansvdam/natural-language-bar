@@ -18,11 +18,11 @@ import 'ui/screens/front_screen.dart';
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigator1Key = GlobalKey<NavigatorState>(debugLabel: 'shell1');
 final _shellNavigatorAKey = GlobalKey<NavigatorState>(debugLabel: 'shellA');
-final _shellNavigatorTransfersKey =
-    GlobalKey<NavigatorState>(debugLabel: 'shellB');
+final shellNavigatorTransfersKey =
+    GlobalKey<NavigatorState>(debugLabel: 'shellTransfer');
 final _shellNavigatorMapKey = GlobalKey<NavigatorState>(debugLabel: 'shellB');
 final _shellNavigatorContactsKey =
-    GlobalKey<NavigatorState>(debugLabel: 'shellB');
+    GlobalKey<NavigatorState>(debugLabel: 'shellContacts');
 
 List<LlmFunctionParameter> cardparams = const [
   LlmFunctionParameter(
@@ -187,7 +187,7 @@ List<RouteBase> navBarRoutes = [
         ],
       ),
       StatefulShellBranch(
-        navigatorKey: _shellNavigatorTransfersKey,
+        navigatorKey: shellNavigatorTransfersKey,
         routes: [
           LlmGoRoute(
             name: TransferScreen.name,

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
+import '../../routes.dart';
 import '../../utils/name_matcher.dart';
 import '../models/account.dart';
 import '../param_change_detecting_screens.dart';
@@ -132,44 +134,53 @@ class TransferContentState extends UpdatingScreenState<TransferContentWidget> {
   /// ******* look for flutter material autocomplete***********
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text("from:"),
-        ListTile(
-          title: Text(
-            fromAccount.name,
+    try {
+      return Column(
+        children: [
+          Text("from:"),
+          ListTile(
+            title: Text(
+              fromAccount.name,
+            ),
+            subtitle: Text(
+              fromAccount.number,
+            ),
+            trailing: Text(
+              "€ ${fromAccount.balance.toString()}",
+            ),
           ),
-          subtitle: Text(
-            fromAccount.number,
+          TextField(
+            controller: _amountController,
+            decoration: const InputDecoration(labelText: 'Amount'),
           ),
-          trailing: Text(
-            "€ ${fromAccount.balance.toString()}",
+          TextField(
+            controller: _destinationAccountNameController,
+            decoration: const InputDecoration(labelText: 'To'),
           ),
-        ),
-        TextField(
-          controller: _amountController,
-          decoration: const InputDecoration(labelText: 'Amount'),
-        ),
-        TextField(
-          controller: _destinationAccountNameController,
-          decoration: const InputDecoration(labelText: 'To'),
-        ),
-        TextField(
-          controller: _destinationaccountNumberController,
-          decoration: const InputDecoration(labelText: 'Account Number'),
-        ),
-        TextField(
-          controller: _descriptionController,
-          decoration: const InputDecoration(labelText: 'Description'),
-        ),
-        ElevatedButton(
-          onPressed: () {
-            clear();
-            context.go("/home");
-          },
-          child: const Text('Transfer'),
-        ),
-      ],
+          TextField(
+            controller: _destinationaccountNumberController,
+            decoration: const InputDecoration(labelText: 'Account Number'),
+          ),
+          TextField(
+            controller: _descriptionController,
+            decoration: const InputDecoration(labelText: 'Description'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              context.go("/transfer");
+              var goRouter = GoRouter.of(context);
+              // ugly trick, but we need to clear the Transfer screen first.
+              // I've tried many things, but this is the only thing that seems to work.
+              Future.delayed(Duration(milliseconds: 50), () {
+                goRouter.go("/home");
+              });
+            },
+            child: const Text('Transfer'),
+          ),
+        ],
+    } catch (e, s) {
+      print(s);
+    }
     );
   }
 }
