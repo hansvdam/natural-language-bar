@@ -4,6 +4,7 @@ import 'package:langbar/ui/screens/AccountsScreen.dart';
 import 'package:langbar/ui/screens/Contacts.dart';
 import 'package:langbar/ui/screens/TransactionsScreen.dart';
 import 'package:langbar/ui/screens/TransferScreen.dart';
+import 'package:provider/provider.dart';
 
 import 'for_langbar_lib/langbar_wrapper.dart';
 import 'for_langbar_lib/llm_go_route.dart';
@@ -32,9 +33,10 @@ List<LlmFunctionParameter> cardparams = const [
     required: false,
   ),
   LlmFunctionParameter(
-    name: 'replace',
-    description: 'should the card be replaced?',
-    type: 'boolean',
+    name: 'action',
+    description: 'action to perform on the card',
+    type: 'string',
+    enumeration: ['replace','cancel'],
     required: false,
   ),
 ];
@@ -53,6 +55,8 @@ List<RouteBase> hamburgerRoutes = [
             child: LangBarWrapper(
                 body: CreditCardScreen(
                     label: 'Credit Card',
+                    action: state.uri.queryParameters['action'],
+                    limit: int.tryParse(state.uri.queryParameters['limit'] ?? ''),
                     queryParameters: state.uri.queryParameters)));
       }),
   LlmGoRoute(
