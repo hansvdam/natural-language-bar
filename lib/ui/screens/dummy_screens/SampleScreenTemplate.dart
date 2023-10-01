@@ -33,12 +33,11 @@ class _SampleScreenTemplateState extends State<SampleScreenTemplate> {
     List<Widget> children = [];
     children.add(
       Text(
-          "The ${widget.label} is not implemented yet, but the structure works."),
+          "The ${widget.label} is not implemented yet, but the navigation structure works."),
     );
-    children.add(
-      Text(
-          "recieved parameters from llm function calling\n: ${widget._queryParameters}"),
-    );
+    for(var key in widget._queryParameters.keys) {
+      children.add(Text("$key: ${widget._queryParameters[key]}"));
+    }
     return Scaffold(
         appBar: createAppBar(context, widget.label, () {
           var langbar = Provider.of<LangBarState>(context, listen: false);
@@ -49,6 +48,7 @@ class _SampleScreenTemplateState extends State<SampleScreenTemplate> {
               left: defaultPadding, right: defaultPadding),
           child: Column(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: children,
           ),
         ));
