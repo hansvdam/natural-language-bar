@@ -7,25 +7,17 @@ import '../../utils.dart';
 const smallSpacing = 10.0;
 const defaultPadding = 16.0;
 
-class SampleScreenTemplate extends StatefulWidget {
-  final Map<String, String> _queryParameters;
+class SampleScreenTemplate extends StatelessWidget {
+  final Map<String, String> queryParameters;
 
   SampleScreenTemplate(
       {required this.label,
       Key? key,
       required Map<String, String> queryParameters})
-      : _queryParameters = queryParameters,
+      : queryParameters = queryParameters,
         super(key: key) {}
 
   final String label;
-
-
-  @override
-  State<SampleScreenTemplate> createState() => _SampleScreenTemplateState();
-}
-
-class _SampleScreenTemplateState extends State<SampleScreenTemplate> {
-  _SampleScreenTemplateState();
 
 
   @override
@@ -33,13 +25,13 @@ class _SampleScreenTemplateState extends State<SampleScreenTemplate> {
     List<Widget> children = [];
     children.add(
       Text(
-          "The ${widget.label} is not implemented yet, but the navigation structure works."),
+          "The $label is not implemented yet, but the navigation structure works."),
     );
-    for(var key in widget._queryParameters.keys) {
-      children.add(Text("$key: ${widget._queryParameters[key]}"));
+    for(var key in queryParameters.keys) {
+      children.add(Text("$key: ${queryParameters[key]}"));
     }
     return Scaffold(
-        appBar: createAppBar(context, widget.label, () {
+        appBar: createAppBar(context, label, () {
           var langbar = Provider.of<LangBarState>(context, listen: false);
           langbar.toggleLangbar();
         }, leadingHamburger: false),

@@ -120,16 +120,16 @@ List<RouteBase> hamburgerRoutes = [
       path: '/routeplanner',
       name: 'routeplanner',
       description:
-          'Plan a public transport trip from train station A to station B in the Netherlands.',
+          'Plan a public transport trip from A to B in the Netherlands.',
       parameters: const [
         LlmFunctionParameter(
           name: 'origin',
-          description: 'origin station name in the Netherlands for the trip. Be presumptive and accept very short shorthands.',
+          description: 'origin address, station station or postal code.',
           required: true,
         ),
         LlmFunctionParameter(
           name: 'destination',
-          description: 'destination station name in the Netherlands for the trip. Be presumptive and accept very short shorthands.',
+          description: 'destination origin address, station station or postal code.',
           required: true,
         ),
         LlmFunctionParameter(
