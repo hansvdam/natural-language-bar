@@ -6,13 +6,29 @@ import 'package:provider/provider.dart';
 import '../../../for_langbar_lib/langbar_stuff.dart';
 import '../../utils.dart';
 
+enum ActionOnCard {
+  cancel,
+  renew,
+  none;
+  static ActionOnCard? fromString(String? title) {
+    return ActionOnCard.values.firstWhere((element) => element.name == title,
+        orElse: () => ActionOnCard.none);
+  }
+}
+
 class CardScreenSate extends ChangeNotifier {
-  String? action;
+  ActionOnCard action = ActionOnCard.none;
   int? limit;
 
-  CardScreenSate({this.action, this.limit});
+  CardScreenSate({action, this.limit}) {
+    if (action != null) {
+      this.action = action;
+    } else {
+      this.action = ActionOnCard.none;
+    }
+  }
 
-  void setAction(String action) {
+  void setAction(ActionOnCard action) {
     this.action = action;
     notifyListeners();
   }
@@ -24,7 +40,7 @@ class CardScreenSate extends ChangeNotifier {
 }
 
 class CreditCardScreen extends StatelessWidget {
-  final String? action;
+  final ActionOnCard? action;
   final String label;
   final int? limit;
 
@@ -53,26 +69,59 @@ class CreditCardScreenBody extends StatelessWidget {
   CreditCardScreenBody(this.label, {super.key});
 
   final TextEditingController textEditingController = TextEditingController();
+  final TextEditingController actionController = TextEditingController();
+
+  ActionOnCard? selectedIcon = ActionOnCard.none;
 
   @override
   Widget build(BuildContext context) {
     return Consumer<CardScreenSate>(
         builder: (BuildContext context, CardScreenSate state, Widget? child) {
-      textEditingController.text = state.limit.toString();
+      textEditingController.text = (state.limit ?? '').toString();
+      actionController.text = state.action.name;
+      final List<DropdownMenuEntry<ActionOnCard>> actionEntries =
+          <DropdownMenuEntry<ActionOnCard>>[];
+      for (final ActionOnCard action in ActionOnCard.values) {
+        actionEntries.add(
+            DropdownMenuEntry<ActionOnCard>(value: action, label: action.name));
+      }
       List<Widget> children = [];
-      children.add(TextField(
-        controller: textEditingController,
-        decoration: const InputDecoration(labelText: 'Limit'),
-        keyboardType: TextInputType.number,
-        inputFormatters: <TextInputFormatter>[
-          FilteringTextInputFormatter.digitsOnly
-        ],
-        onChanged: (value) {
-          state.setLimit(int.parse(value));
-        },
-      ));
       children.add(Image.network(
           "https://www.visa.com.ag/dam/VCOM/regional/lac/ENG/Default/Pay%20With%20Visa/Find%20a%20Card/Credit%20Cards/Classic/visaclassiccredit-400x225.jpg"));
+      var actionRow = Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          SizedBox(
+              width: 100,
+              child: TextField(
+                controller: textEditingController,
+                decoration: const InputDecoration(labelText: 'Limit'),
+                keyboardType: TextInputType.number,
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly
+                ],
+                onChanged: (value) {
+                  state.setLimit(int.parse(value));
+                },
+              )),
+          DropdownMenu<ActionOnCard>(
+              controller: actionController,
+              leadingIcon: const Icon(Icons.search),
+              label: const Text('Action'),
+              dropdownMenuEntries: actionEntries,
+              onSelected: (icon) {
+                state.setAction(icon!);
+              }),
+        ],
+      );
+      children.add(const SizedBox(height: 20));
+      children.add(actionRow);
+      children.add(const SizedBox(height: 20));
+      children.add(FilledButton(
+          onPressed: () {
+            Navigator.pop(context, state.action);
+          },
+          child: const Text('Submit')));
       return Scaffold(
           appBar: createAppBar(context, label, () {
             var langbar = Provider.of<LangBarState>(context, listen: false);

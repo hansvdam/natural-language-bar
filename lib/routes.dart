@@ -55,7 +55,7 @@ List<RouteBase> hamburgerRoutes = [
             child: LangBarWrapper(
                 body: CreditCardScreen(
                     label: 'Credit Card',
-                    action: state.uri.queryParameters['action'],
+                    action: ActionOnCard.fromString(state.uri.queryParameters['action']),
                     limit: int.tryParse(state.uri.queryParameters['limit'] ?? ''),
                     queryParameters: state.uri.queryParameters)));
       }),
