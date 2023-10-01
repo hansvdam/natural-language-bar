@@ -15,10 +15,10 @@ class TransferScreen extends DefaultAppbarScreen {
       fromAccountId = "1",
       amount,
       destinationName,
-        description
-      })
+      description})
       : super(
-            body: TransferMoneyScreen(amount, destinationName, description, fromAccountId),
+            body: TransferMoneyScreen(
+                amount, destinationName, description, fromAccountId),
             key: key) {}
 
   static const name = 'transfer';
@@ -40,7 +40,8 @@ class TransferMoneyScreen extends ChangeDetectingStatefulWidget {
   _TheFutureState createState() => _TheFutureState();
 
   @override
-  String value() => (amount.toString() ?? '') + (destinationName ?? '') + (description ?? '');
+  String value() =>
+      (amount.toString() ?? '') + (destinationName ?? '') + (description ?? '');
 }
 
 class _TheFutureState extends UpdatingScreenState<TransferMoneyScreen> {
@@ -58,8 +59,11 @@ class _TheFutureState extends UpdatingScreenState<TransferMoneyScreen> {
             return Text('Error: ${snapshot.error}');
           } else {
             var mostLikelyDestinationAccount = snapshot.data;
-            return TransferContentWidget(widget.amount,
-                mostLikelyDestinationAccount, widget.description, widget.fromAccountId);
+            return TransferContentWidget(
+                widget.amount,
+                mostLikelyDestinationAccount,
+                widget.description,
+                widget.fromAccountId);
           }
         });
   }
@@ -90,8 +94,8 @@ class TransferContentWidget extends ChangeDetectingStatefulWidget {
 
   final String fromAccountId;
 
-  const TransferContentWidget(
-      this.amount, this.destinationContact, this.description, this.fromAccountId,
+  const TransferContentWidget(this.amount, this.destinationContact,
+      this.description, this.fromAccountId,
       {super.key});
 
   @override
@@ -99,7 +103,9 @@ class TransferContentWidget extends ChangeDetectingStatefulWidget {
 
   @override
   String value() =>
-      (amount.toString() ?? '') + (destinationContact?.name ?? '') + (description ?? '');
+      (amount.toString() ?? '') +
+      (destinationContact?.name ?? '') +
+      (description ?? '');
 }
 
 class TransferContentState extends UpdatingScreenState<TransferContentWidget> {
@@ -125,8 +131,7 @@ class TransferContentState extends UpdatingScreenState<TransferContentWidget> {
         widget.destinationContact?.name.toString() ?? '';
     _destinationaccountNumberController.text =
         widget.destinationContact?.iban ?? '';
-    _descriptionController.text =
-        widget.description ?? '';
+    _descriptionController.text = widget.description ?? '';
     fromAccount = accounts[widget.fromAccountId]!;
   }
 
@@ -171,8 +176,10 @@ class TransferContentState extends UpdatingScreenState<TransferContentWidget> {
           controller: _descriptionController,
           decoration: const InputDecoration(labelText: 'Description'),
         ),
-        ElevatedButton(
+        SizedBox(height: 20),
+        FilledButton(
           onPressed: () {
+            // need to clear the transfer screen somehow:
             context.go("/transfer");
             var goRouter = GoRouter.of(context);
             // ugly trick, but we need to clear the Transfer screen first.

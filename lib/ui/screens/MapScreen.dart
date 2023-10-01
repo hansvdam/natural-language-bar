@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../param_change_detecting_screens.dart';
-import '../default_appbar_scaffold.dart';
+import '../param_change_detecting_screens.dart';
+import 'default_appbar_scaffold.dart';
 
 class MapScreen extends ChangeDetectingStatefulWidget {
   final String label;

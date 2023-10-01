@@ -3,13 +3,14 @@ import 'package:flutter/services.dart';
 import 'package:langbar/ui/screens/dummy_screens/SampleScreenTemplate.dart';
 import 'package:provider/provider.dart';
 
-import '../../../for_langbar_lib/langbar_stuff.dart';
-import '../../utils.dart';
+import '../../for_langbar_lib/langbar_stuff.dart';
+import '../utils.dart';
 
 enum ActionOnCard {
   cancel,
   renew,
   none;
+
   static ActionOnCard? fromString(String? title) {
     return ActionOnCard.values.firstWhere((element) => element.name == title,
         orElse: () => ActionOnCard.none);
@@ -43,9 +44,11 @@ class CreditCardScreen extends StatelessWidget {
   final ActionOnCard? action;
   final String label;
   final int? limit;
+  final String imageSrc;
 
   CreditCardScreen(
       {required this.label,
+      required this.imageSrc,
       Key? key,
       required Map<String, String> queryParameters,
       this.action,
@@ -58,15 +61,16 @@ class CreditCardScreen extends StatelessWidget {
   Widget build(final BuildContext context) {
     return ChangeNotifierProvider(
       create: (final _) => CardScreenSate(action: action, limit: limit),
-      child: CreditCardScreenBody(label),
+      child: CreditCardScreenBody(label, imageSrc),
     );
   }
 }
 
 class CreditCardScreenBody extends StatelessWidget {
   final String label;
+  final String imageSrc;
 
-  CreditCardScreenBody(this.label, {super.key});
+  CreditCardScreenBody(this.label, this.imageSrc, {super.key});
 
   final TextEditingController textEditingController = TextEditingController();
   final TextEditingController actionController = TextEditingController();
@@ -86,8 +90,7 @@ class CreditCardScreenBody extends StatelessWidget {
             DropdownMenuEntry<ActionOnCard>(value: action, label: action.name));
       }
       List<Widget> children = [];
-      children.add(Image.network(
-          "https://www.visa.com.ag/dam/VCOM/regional/lac/ENG/Default/Pay%20With%20Visa/Find%20a%20Card/Credit%20Cards/Classic/visaclassiccredit-400x225.jpg"));
+      children.add(Image.network(imageSrc));
       var actionRow = Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [

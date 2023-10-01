@@ -6,8 +6,7 @@ import '../../for_langbar_lib/langbar_stuff.dart';
 import '../../routes.dart';
 import '../main_scaffolds.dart';
 import '../utils.dart';
-import 'dummy_screens/CreditCardScreen.dart';
-import 'dummy_screens/DebitCardScreen.dart';
+import 'CreditCardScreen.dart';
 
 class DefaultAppbarScreen extends StatelessWidget {
   final String label;
@@ -81,11 +80,11 @@ class _DefaultDrawerState extends State<DefaultDrawer> {
           DrawerItem(
               selectedIndex: _selectedIndex,
               label: "Credit Card",
-              path: '/${CreditCardScreen.name}'),
+              path: '/creditcard'),
           DrawerItem(
               selectedIndex: _selectedIndex,
               label: "Debit Card",
-              path: '/${DebitCardScreen.name}'),
+              path: '/debitcard'),
           DrawerItem(
               selectedIndex: _selectedIndex,
               label: "Weather",

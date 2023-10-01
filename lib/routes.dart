@@ -10,9 +10,8 @@ import 'for_langbar_lib/langbar_wrapper.dart';
 import 'for_langbar_lib/llm_go_route.dart';
 import 'for_langchain/for_langchain.dart';
 import 'ui/main_scaffolds.dart';
-import 'ui/screens/dummy_screens/CreditCardScreen.dart';
-import 'ui/screens/dummy_screens/DebitCardScreen.dart';
-import 'ui/screens/dummy_screens/MapScreen.dart';
+import 'ui/screens/CreditCardScreen.dart';
+import 'ui/screens/MapScreen.dart';
 import 'ui/screens/forecast_screen.dart';
 import 'ui/screens/front_screen.dart';
 
@@ -43,7 +42,7 @@ List<LlmFunctionParameter> cardparams = const [
 
 List<RouteBase> hamburgerRoutes = [
   LlmGoRoute(
-      path: '/${CreditCardScreen.name}',
+      path: '/creditcard',
       name: 'creditcard',
       description: 'Show your credit card and maybe perform an action on it',
       parameters: cardparams,
@@ -55,12 +54,13 @@ List<RouteBase> hamburgerRoutes = [
             child: LangBarWrapper(
                 body: CreditCardScreen(
                     label: 'Credit Card',
+                    imageSrc: "https://www.visa.com.ag/dam/VCOM/regional/lac/ENG/Default/Pay%20With%20Visa/Find%20a%20Card/Credit%20Cards/Classic/visaclassiccredit-400x225.jpg",
                     action: ActionOnCard.fromString(state.uri.queryParameters['action']),
                     limit: int.tryParse(state.uri.queryParameters['limit'] ?? ''),
                     queryParameters: state.uri.queryParameters)));
       }),
   LlmGoRoute(
-      path: '/${DebitCardScreen.name}',
+      path: '/debitcard',
       name: 'debitcard',
       description: 'Show your debit card and maybe perform an action on it',
       parameters: cardparams,
@@ -70,8 +70,11 @@ List<RouteBase> hamburgerRoutes = [
         return MaterialPage(
             fullscreenDialog: true,
             child: LangBarWrapper(
-                body: DebitCardScreen(
+                body: CreditCardScreen(
                     label: 'Debit Card',
+                    imageSrc: "https://www.trustcobank.com/wp-content/uploads/2023/01/Trustco-Debit-Card-450.png",
+                    action: ActionOnCard.fromString(state.uri.queryParameters['action']),
+                    limit: int.tryParse(state.uri.queryParameters['limit'] ?? ''),
                     queryParameters: state.uri.queryParameters)));
       }),
   LlmGoRoute(
