@@ -10,6 +10,7 @@ import '../openAIKey.dart';
 import '../routes.dart';
 import 'langbar_stuff.dart';
 import 'llm_go_route.dart';
+import 'package:intl/intl.dart';
 
 class LangField extends StatefulWidget {
   final bool showHistoryButton;
@@ -69,7 +70,16 @@ class _LangFieldState extends State<LangField> {
     // final forecastTool = ForecastScreen.getTool(GoRouter.of(context));
     // final creditCardTool = CreditCardScreen.getTool(GoRouter.of(context));
     var tools = parseRouters(GoRouter.of(context), routes);
+
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('yyyy-MM-ddTHH:mm:ssZ').format(now);
     final agent = OpenAIFunctionsAgent.fromLLMAndTools(
+      systemChatMessage: SystemChatMessagePromptTemplate(
+        prompt: PromptTemplate(
+          inputVariables: {},
+          template: 'The current date and time is ${formattedDate}.',
+        ),
+      ),
         llm: llm, tools: tools, memory: memory);
     final executor = AgentExecutor(agent: agent);
     // final res = await executor.run('What is 40 raised to the 0.43 power?');

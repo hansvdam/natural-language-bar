@@ -4,6 +4,7 @@ import 'package:langbar/ui/screens/AccountsScreen.dart';
 import 'package:langbar/ui/screens/Contacts.dart';
 import 'package:langbar/ui/screens/TransactionsScreen.dart';
 import 'package:langbar/ui/screens/TransferScreen.dart';
+import 'package:langbar/ui/screens/dummy_screens/RoutePlanner.dart';
 import 'package:provider/provider.dart';
 
 import 'for_langbar_lib/langbar_wrapper.dart';
@@ -35,7 +36,7 @@ List<LlmFunctionParameter> cardparams = const [
     name: 'action',
     description: 'action to perform on the card',
     type: 'string',
-    enumeration: ['replace','cancel'],
+    enumeration: ['replace', 'cancel'],
     required: false,
   ),
 ];
@@ -54,9 +55,12 @@ List<RouteBase> hamburgerRoutes = [
             child: LangBarWrapper(
                 body: CreditCardScreen(
                     label: 'Credit Card',
-                    imageSrc: "https://www.visa.com.ag/dam/VCOM/regional/lac/ENG/Default/Pay%20With%20Visa/Find%20a%20Card/Credit%20Cards/Classic/visaclassiccredit-400x225.jpg",
-                    action: ActionOnCard.fromString(state.uri.queryParameters['action']),
-                    limit: int.tryParse(state.uri.queryParameters['limit'] ?? ''),
+                    imageSrc:
+                        "https://www.visa.com.ag/dam/VCOM/regional/lac/ENG/Default/Pay%20With%20Visa/Find%20a%20Card/Credit%20Cards/Classic/visaclassiccredit-400x225.jpg",
+                    action: ActionOnCard.fromString(
+                        state.uri.queryParameters['action']),
+                    limit:
+                        int.tryParse(state.uri.queryParameters['limit'] ?? ''),
                     queryParameters: state.uri.queryParameters)));
       }),
   LlmGoRoute(
@@ -72,9 +76,12 @@ List<RouteBase> hamburgerRoutes = [
             child: LangBarWrapper(
                 body: CreditCardScreen(
                     label: 'Debit Card',
-                    imageSrc: "https://www.trustcobank.com/wp-content/uploads/2023/01/Trustco-Debit-Card-450.png",
-                    action: ActionOnCard.fromString(state.uri.queryParameters['action']),
-                    limit: int.tryParse(state.uri.queryParameters['limit'] ?? ''),
+                    imageSrc:
+                        "https://www.trustcobank.com/wp-content/uploads/2023/01/Trustco-Debit-Card-450.png",
+                    action: ActionOnCard.fromString(
+                        state.uri.queryParameters['action']),
+                    limit:
+                        int.tryParse(state.uri.queryParameters['limit'] ?? ''),
                     queryParameters: state.uri.queryParameters)));
       }),
   LlmGoRoute(
@@ -108,6 +115,47 @@ List<RouteBase> hamburgerRoutes = [
                         1,
               ),
             ));
+      }),
+  LlmGoRoute(
+      path: '/routeplanner',
+      name: 'routeplanner',
+      description:
+          'Plan a public transport trip from train station A to station B in the Netherlands.',
+      parameters: const [
+        LlmFunctionParameter(
+          name: 'origin',
+          description: 'origin station name in the Netherlands for the trip. Be presumptive and accept very short shorthands.',
+          required: true,
+        ),
+        LlmFunctionParameter(
+          name: 'destination',
+          description: 'destination station name in the Netherlands for the trip. Be presumptive and accept very short shorthands.',
+          required: true,
+        ),
+        LlmFunctionParameter(
+          name: 'trip_date_time',
+          description: 'Requested DateTime for the departure or arrival of the trip in \'YYYY-MM-DDTHH:MM:SS+02:00\' format. The user will use a time in a 12 hour system, make an intelligent guess about what the user is most likely to mean in terms of a 24 hour system, e.g. not planning for the past.',
+          required: false,
+        ),
+        LlmFunctionParameter(
+          name: 'departure',
+          description: 'True to depart at the given time, False to arrive at the given time.',
+          required: true,
+        ),
+        LlmFunctionParameter(
+          name: 'language',
+          description: 'Language of the input text',
+          required: true,
+        ),
+      ],
+      modal: true,
+      parentNavigatorKey: _rootNavigatorKey,
+      pageBuilder: (context, state) {
+        return MaterialPage(
+            fullscreenDialog: true,
+            child: LangBarWrapper(
+                body:
+                    RoutePlanner(queryParameters: state.uri.queryParameters)));
       })
 ];
 
@@ -221,13 +269,12 @@ List<RouteBase> navBarRoutes = [
             pageBuilder: (context, state) {
               return NoTransitionPage(
                   child: TransferScreen(
-                      label: 'Bank Transfer',
-                      amount: double.tryParse(
-                          state.uri.queryParameters['amount'] ?? ''),
-                      destinationName:
-                          state.uri.queryParameters['destinationName'],
-                    description: state.uri.queryParameters['description'],
-                  ));
+                label: 'Bank Transfer',
+                amount:
+                    double.tryParse(state.uri.queryParameters['amount'] ?? ''),
+                destinationName: state.uri.queryParameters['destinationName'],
+                description: state.uri.queryParameters['description'],
+              ));
             },
           ),
         ],
