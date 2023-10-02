@@ -41,7 +41,7 @@ class _LangFieldState extends State<LangField> {
             }
             final llm = ChatOpenAI(
                 apiClient: client, temperature: 0.0, model: 'gpt-3.5-turbo');
-            langbarState.setSendingToOpenAI(true);
+            langbarState.sendingToOpenAI = true;
             sendToOpenai(llm, this._controllerOutlined.text, context);
             _controllerOutlined.clear();
           },
@@ -90,13 +90,13 @@ class _LangFieldState extends State<LangField> {
       response = e.toString();
     }
     var langbarState = Provider.of<LangBarState>(context, listen: false);
-    langbarState.setSendingToOpenAI(false);
+    langbarState.sendingToOpenAI = false;
     // if response contains spaces, we assume it is not a path, but a response from the AI (when this becomes too much of a hack, we should start responding from tools with more complex objects with fields etc.
     var chatHistory = Provider.of<ChatHistory>(context, listen: false);
     if (response.contains(' ')) {
       chatHistory.add(HistoryMessage(query, true));
       chatHistory.add(HistoryMessage(response, false));
-      langbarState.setHistoryShowing(true);
+      langbarState.historyShowing = true;
     } else // add the original query, but the navigation-uri-repsonse as the hyperlink when you click on it
       chatHistory.add(HistoryMessage(query, true, navUri: response));
   }
@@ -138,7 +138,7 @@ class ShowHistoryButton extends StatelessWidget {
     return IconButton(
         icon: Icon(showHistory ? Icons.arrow_downward : Icons.arrow_upward),
         onPressed: () {
-          langbarState.setHistoryShowing(!showHistory);
+          langbarState.historyShowing = !showHistory;
         });
   }
 }

@@ -21,26 +21,32 @@ class ChatHistory extends ChangeNotifier {
 }
 
 class LangBarState extends ChangeNotifier {
-  bool historyShowing = false;
-  bool showLangbar = true;
-  bool sendingToOpenAI = false;
+  bool _historyShowing = false;
 
-  void setHistoryShowing(bool value) {
-    historyShowing = value;
+  bool get historyShowing => _historyShowing;
+
+  set historyShowing(bool value) {
+    _historyShowing = value;
     notifyListeners();
   }
 
-  void setShowLangbar(bool value) {
-    showLangbar = value;
+  bool _showLangbar = true;
+  bool _sendingToOpenAI = false;
+
+  bool get sendingToOpenAI => _sendingToOpenAI;
+  bool get showLangbar => _showLangbar;
+
+  set showLangbar(bool value) {
+    _showLangbar = value;
     notifyListeners();
   }
 
-  void setSendingToOpenAI(bool value) {
-    sendingToOpenAI = value;
+  set sendingToOpenAI(bool value) {
+    _sendingToOpenAI = value;
     notifyListeners();
   }
 
   void toggleLangbar() {
-    setShowLangbar(!showLangbar);
+    showLangbar = !showLangbar;
   }
 }

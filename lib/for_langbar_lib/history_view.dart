@@ -66,7 +66,7 @@ class HistoryView extends StatelessWidget {
                               var langbarState = Provider.of<LangBarState>(
                                   context,
                                   listen: false);
-                              langbarState.setHistoryShowing(false);
+                              langbarState.historyShowing = false;
                               // modal routes are top-routes anyway, so no need dig in subroutes
                               var navUri = message.navUri;
                               var openModal = routes.any((route) {
