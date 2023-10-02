@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../for_langbar_lib/langbar_stuff.dart';
+import '../../../for_langbar_lib/langbar_states.dart';
 import '../../utils.dart';
 
 const smallSpacing = 10.0;

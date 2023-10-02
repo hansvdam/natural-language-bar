@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:langbar/ui/screens/forecast_screen.dart';
 import 'package:provider/provider.dart';
 
-import '../../for_langbar_lib/langbar_stuff.dart';
+import '../../for_langbar_lib/langbar_states.dart';
 import '../../routes.dart';
 import '../main_scaffolds.dart';
 import '../utils.dart';

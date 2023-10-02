@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 
 import '../openAIKey.dart';
 import '../routes.dart';
-import 'langbar_stuff.dart';
+import 'langbar_states.dart';
 import 'llm_go_route.dart';
 import 'package:intl/intl.dart';
 

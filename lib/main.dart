@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:langbar/ui/main_scaffolds.dart';
 import 'package:provider/provider.dart';
 
-import 'for_langbar_lib/langbar_stuff.dart';
+import 'for_langbar_lib/langbar_states.dart';
 import 'routes.dart';
 
 class GlobalContextService {

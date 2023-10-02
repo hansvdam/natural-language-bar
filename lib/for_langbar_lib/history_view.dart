@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../routes.dart';
-import 'langbar_stuff.dart';
+import 'langbar_states.dart';
 import 'llm_go_route.dart';
 
 ScrollController listScrollController = ScrollController();
 
-class ChatHistoryView extends StatelessWidget {
-  ChatHistoryView({required this.messages, super.key});
+class HistoryView extends StatelessWidget {
+  HistoryView({required this.messages, super.key});
 
   List<HistoryMessage> messages = [];
 

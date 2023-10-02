@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'chatview.dart';
-import 'langbar_stuff.dart';
+import 'history_view.dart';
+import 'langbar_states.dart';
 import 'langfield.dart';
 
 class LangBarWrapper extends StatelessWidget {
@@ -23,7 +23,7 @@ class LangBarWrapper extends StatelessWidget {
               bottomSheet: langbarState.historyShowing &&
                       langbarState.showLangbar &&
                       chatHistory.items.isNotEmpty
-                  ? ChatHistoryView(messages: chatHistory.items)
+                  ? HistoryView(messages: chatHistory.items)
                   : null,
               body: Builder(builder: (context) {
                 return body;
