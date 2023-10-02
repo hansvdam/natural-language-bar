@@ -8,7 +8,7 @@ import '../utils.dart';
 
 enum ActionOnCard {
   cancel,
-  renew,
+  replace,
   none;
 
   static ActionOnCard? fromString(String? title) {

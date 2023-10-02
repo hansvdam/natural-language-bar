@@ -22,6 +22,7 @@ for example type:\n
 - 'transfer 60 euros to John for his birthday' (it will not execute but just propose)
 - 'show my accounts'
 - 'show my transactions'
+- 'renew my creditcard'
 - 'I want to speak to someone at the counter'
 
 After your first request, a **↑** button appears, that opens a clickable interaction history.
