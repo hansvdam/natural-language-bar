@@ -7,7 +7,7 @@ const smallSpacing = 10.0;
 
 const String _markdownData = """
 # LangBar
-app-'navigation' using natural language.
+app-'navigation' using natural language.  
 
 ## What is the point of this app?
 
@@ -19,11 +19,10 @@ __You can get to any screen/functionality by typing what you want in the *LangBa
 for example type:\n
 - 'debit card limit to 10000'
 - 'nearest ATM'
-- 'transfer 60 euros to John' (it will not execute but just propose)
-- 'show my car insurance'
-- 'save 1000 euros'
-- 'show all transactions with wall mart'
-- payment request 'nice dinner'
+- 'transfer 60 euros to John for his birthday' (it will not execute but just propose)
+- 'show my accounts'
+- 'show my transactions'
+- 'I want to speak to someone at the counter'
 
 After your first request, a **↑** button appears, that opens a clickable interaction history.
 """;
