@@ -9,14 +9,15 @@ class TransactionsScreen extends DefaultAppbarScreen {
       : super(
             body: TransactionsList(
                 filterString: filterString, accountId: accountId = 1),
-            key: key) {}
+            key: key, leadingHamburger: false) {}
 
   static const name = 'transactions';
 }
 
 class TransactionsList extends ChangeDetectingStatefulWidget {
   TransactionsList({Key? key, this.filterString, required accountId})
-      : super(key: key) {}
+      : super(key: key) {
+  }
 
   final String? filterString;
 

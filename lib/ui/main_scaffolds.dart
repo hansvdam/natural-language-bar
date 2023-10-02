@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:langbar/ui/screens/default_appbar_scaffold.dart';
 import 'package:langbar/ui/utils.dart';
+import 'package:provider/provider.dart';
 
 import '../for_langbar_lib/langbar_wrapper.dart';
 
@@ -13,7 +14,7 @@ const defaultPadding = 16.0;
 var scaffoldKey = GlobalKey<ScaffoldState>();
 
 class ScaffoldWithNestedNavigation extends StatelessWidget {
-  const ScaffoldWithNestedNavigation({
+  ScaffoldWithNestedNavigation({
     Key? key,
     required this.navigationShell,
   }) : super(
@@ -27,15 +28,25 @@ class ScaffoldWithNestedNavigation extends StatelessWidget {
     );
   }
 
+  bool? screenWiderThan450 = null;
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
       if (constraints.maxWidth < 450) {
+        if(screenWiderThan450 = true) {
+          screenWiderThan450 = false;
+          triggerWidthRebuild(context);
+        }
         return ScaffoldWithNavigationBar(
             body: navigationShell,
             selectedIndex: navigationShell.currentIndex,
             onDestinationSelected: _goBranch);
       } else {
+        if(screenWiderThan450 = false) {
+          screenWiderThan450 = true;
+          triggerWidthRebuild(context);
+        }
         return ScaffoldWithNavigationRail(
           body: navigationShell,
           selectedIndex: navigationShell.currentIndex,
@@ -43,6 +54,19 @@ class ScaffoldWithNestedNavigation extends StatelessWidget {
         );
       }
     });
+  }
+
+  void triggerWidthRebuild(BuildContext context) {
+    Future.delayed(Duration.zero, () {
+      Provider.of<WidthChanged>(context, listen: false).trigger();
+    });
+  }
+}
+
+class WidthChanged extends ChangeNotifier {
+
+  void trigger() {
+    notifyListeners();
   }
 }
 

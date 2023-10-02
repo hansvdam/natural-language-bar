@@ -13,14 +13,16 @@ class DefaultAppbarScreen extends StatelessWidget {
 
   final Widget body;
 
-  DefaultAppbarScreen({required this.label, required this.body, Key? key})
+  final bool leadingHamburger;
+
+  DefaultAppbarScreen({required this.label, required this.body, Key? key, this.leadingHamburger = true})
       : super(key: key) {}
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return DefaultAppbarScaffold(
         label: label,
+        leadingHamburger: leadingHamburger,
         body: SafeArea(
             child: Padding(
                 padding: const EdgeInsets.only(
@@ -32,7 +34,9 @@ class DefaultAppbarScreen extends StatelessWidget {
 class DefaultAppbarScaffold extends StatelessWidget {
   final Widget body;
 
-  DefaultAppbarScaffold({required this.body, required this.label});
+  final bool leadingHamburger;
+
+  DefaultAppbarScaffold({required this.body, required this.label, this.leadingHamburger = true});
 
   /// The label
   final String label;
@@ -43,7 +47,7 @@ class DefaultAppbarScaffold extends StatelessWidget {
         appBar: createAppBar(context, label, () {
           var langbar = Provider.of<LangBarState>(context, listen: false);
           langbar.toggleLangbar();
-        }),
+        }, leadingHamburger: leadingHamburger),
         // drawer: DefaultDrawer(),
         body: this.body);
   }

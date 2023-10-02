@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'main_scaffolds.dart';
 
@@ -50,6 +51,8 @@ class HamburgerMenu extends StatelessWidget {
 PreferredSizeWidget createAppBar(
     BuildContext context, String title, Function() showBottomSheet,
     {bool leadingHamburger = true}) {
+  // trigger when screen goes from and to navigation rail:
+  Provider.of<WidthChanged>(context, listen: true);
   ScaffoldWithNavigationBar? parentNavigationbarHolder =
       context.findAncestorWidgetOfExactType<ScaffoldWithNavigationBar>();
   var leadingHamburgerAndNoNavigationRail =
