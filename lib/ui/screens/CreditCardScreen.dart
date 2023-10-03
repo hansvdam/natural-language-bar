@@ -34,7 +34,7 @@ class CardScreenSate extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setLimit(int limit) {
+  void setLimit(int? limit) {
     this.limit = limit;
     notifyListeners();
   }
@@ -49,11 +49,11 @@ class CreditCardScreen extends StatelessWidget {
   CreditCardScreen(
       {required this.label,
       required this.imageSrc,
-      Key? key,
+      super.key,
       required Map<String, String> queryParameters,
       this.action,
       this.limit})
-      : super(key: key) {}
+      : super() {}
 
   static const name = 'creditcard';
 
@@ -104,7 +104,7 @@ class CreditCardScreenBody extends StatelessWidget {
                   FilteringTextInputFormatter.digitsOnly
                 ],
                 onChanged: (value) {
-                  state.setLimit(int.parse(value));
+                  state.setLimit(int.tryParse(value));
                 },
               )),
           DropdownMenu<ActionOnCard>(

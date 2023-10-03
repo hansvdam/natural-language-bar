@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import '../for_langchain/for_langchain.dart';
 
 class LlmGoRoute extends GoRoute {
-  var modal;
+  final bool modal;
 
   LlmGoRoute({
     required this.name,

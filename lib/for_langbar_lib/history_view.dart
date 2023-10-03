@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:langbar/for_langbar_lib/utils.dart';
 import 'package:provider/provider.dart';
 
 import '../routes.dart';
@@ -77,10 +78,7 @@ class HistoryView extends StatelessWidget {
                                     route.path == messagePath &&
                                     route.modal;
                               });
-                              if (openModal)
-                                goRouter.push(navUri!);
-                              else
-                                goRouter.go(navUri!);
+                              activateUri(navUri!, openModal);
                             }
                           : null,
                       child: Text(
@@ -103,4 +101,5 @@ class HistoryView extends StatelessWidget {
           },
         ));
   }
+
 }

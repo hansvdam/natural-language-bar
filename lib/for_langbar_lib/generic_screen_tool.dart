@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:go_router/go_router.dart';
+import 'package:langbar/for_langbar_lib/utils.dart';
 
 import '../for_langchain/for_langchain.dart';
 
@@ -30,10 +31,7 @@ final class GenericScreenTool extends GenericTool {
         queryParameters:
             toolInput.map((key, value) => MapEntry(key, value.toString())));
     var uriString = uri.toString();
-    if (push)
-      goRouter.push(uriString);
-    else
-      goRouter.go(uriString);
+    activateUri(uriString, push);
     return uriString;
   }
 }
