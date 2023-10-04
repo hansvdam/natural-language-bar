@@ -83,7 +83,7 @@ class HistoryView extends StatelessWidget {
                           : null,
                       child: Text(
                         message.text,
-                        textAlign: TextAlign.center,
+                        textAlign: TextAlign.left,
                         style: TextStyle(
                           color: message.isHuman ? Colors.black : Colors.white,
                           fontSize: 15,
