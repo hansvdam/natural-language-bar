@@ -5,7 +5,6 @@ import 'package:langbar/ui/screens/Contacts.dart';
 import 'package:langbar/ui/screens/TransactionsScreen.dart';
 import 'package:langbar/ui/screens/TransferScreen.dart';
 import 'package:langbar/ui/screens/dummy_screens/RoutePlanner.dart';
-import 'package:provider/provider.dart';
 
 import 'for_langbar_lib/langbar_wrapper.dart';
 import 'for_langbar_lib/llm_go_route.dart';
@@ -124,12 +123,12 @@ List<RouteBase> hamburgerRoutes = [
       parameters: const [
         LlmFunctionParameter(
           name: 'origin',
-          description: 'origin address, station station or postal code.',
+          description: 'origin address, train station or postal code.',
           required: true,
         ),
         LlmFunctionParameter(
           name: 'destination',
-          description: 'destination origin address, station station or postal code.',
+          description: 'destination address, train station or postal code.',
           required: true,
         ),
         LlmFunctionParameter(
