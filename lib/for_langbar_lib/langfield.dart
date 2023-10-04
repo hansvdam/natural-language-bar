@@ -1,6 +1,7 @@
 import 'package:dart_openai/dart_openai.dart' as dart_openai;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:langbar/for_langbar_lib/generic_screen_tool.dart';
 import 'package:langchain/langchain.dart';
 import 'package:langchain_openai/langchain_openai.dart';
@@ -10,7 +11,6 @@ import '../openAIKey.dart';
 import '../routes.dart';
 import 'langbar_states.dart';
 import 'llm_go_route.dart';
-import 'package:intl/intl.dart';
 
 class LangField extends StatefulWidget {
   final bool showHistoryButton;
@@ -24,13 +24,23 @@ class LangField extends StatefulWidget {
 class _LangFieldState extends State<LangField> {
   final TextEditingController _controllerOutlined = TextEditingController();
 
+  initState() {
+    super.initState();
+    var langbarText = context.read<LangBarState>().text;
+    _controllerOutlined.text = langbarText;
+    _controllerOutlined.addListener(() {
+      context.read<LangBarState>().text = _controllerOutlined.text;
+    });
+  }
+
   @override
   Widget build(BuildContext context) =>
       Consumer<LangBarState>(builder: (context, langbarState, child) {
         var isLoading = langbarState.sendingToOpenAI;
         return TextField(
-          // decoration: new InputDecoration.collapsed(hintText: 'Type here what you want'),
           controller: _controllerOutlined,
+          maxLines: null,
+          textInputAction: TextInputAction.send,
           onSubmitted: (final String value) {
             var apiKey2 = getOpenAIKey();
             var client = OpenAIClient.instanceFor(
@@ -74,13 +84,15 @@ class _LangFieldState extends State<LangField> {
     DateTime now = DateTime.now();
     String formattedDate = DateFormat('yyyy-MM-ddTHH:mm:ssZ').format(now);
     final agent = OpenAIFunctionsAgent.fromLLMAndTools(
-      systemChatMessage: SystemChatMessagePromptTemplate(
-        prompt: PromptTemplate(
-          inputVariables: {},
-          template: 'The current date and time is ${formattedDate}.',
+        systemChatMessage: SystemChatMessagePromptTemplate(
+          prompt: PromptTemplate(
+            inputVariables: {},
+            template: 'The current date and time is ${formattedDate}.',
+          ),
         ),
-      ),
-        llm: llm, tools: tools, memory: memory);
+        llm: llm,
+        tools: tools,
+        memory: memory);
     final executor = AgentExecutor(agent: agent);
     // final res = await executor.run('What is 40 raised to the 0.43 power?');
     var response;

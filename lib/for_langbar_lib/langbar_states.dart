@@ -22,6 +22,9 @@ class LangBarState extends ChangeNotifier {
 
   bool get historyShowing => _historyShowing;
 
+  // do not use setter here, we use a local textcontroller initialized with this value:
+  String text = '';
+
   set historyShowing(bool value) {
     _historyShowing = value;
     notifyListeners();
