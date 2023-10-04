@@ -57,7 +57,7 @@ class _LangFieldState extends State<LangField> {
           },
           decoration: InputDecoration(
             hintText: 'Type here what you want',
-            prefixIcon: const Icon(Icons.search),
+            // prefixIcon: const Icon(Icons.search),
             suffixIcon: isLoading
                 ? const SizedBox(
                     width: 20,
