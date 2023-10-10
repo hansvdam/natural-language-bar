@@ -144,7 +144,8 @@ class TransferContentState extends UpdatingScreenState<TransferContentWidget> {
   /// ******* look for flutter material autocomplete***********
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Expanded(
+        child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -192,6 +193,6 @@ class TransferContentState extends UpdatingScreenState<TransferContentWidget> {
           child: const Text('Transfer'),
         )),
       ],
-    );
+    ));
   }
 }
