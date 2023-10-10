@@ -38,40 +38,33 @@ class AccountsList extends StatelessWidget {
             title: Text(
           'Checking Accounts',
         )),
-        ListView.builder(
-          shrinkWrap: true,
-          itemCount: checkingAccounts.length,
-          itemBuilder: (context, index) {
-            var account = checkingAccounts[index];
-            return GestureDetector(
-                onTap: () {
-                  context.go(detailsPath + "?accountid=${account.id}");
-                },
-                child: Card(
-                    child: AccountTile(
-                        name: account.name,
-                        iban: account.number,
-                        balance: account.balance.toString())));
-          },
-        ),
+        createAccountList(checkingAccounts),
         ListTile(
             title: Text(
           'Saving Accounts',
           // style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)
         )),
-        ListView.builder(
-          shrinkWrap: true,
-          itemCount: savingAccounts.length,
-          itemBuilder: (context, index) {
-            var account = savingAccounts[index];
-            return Card(
+        createAccountList(savingAccounts),
+      ],
+    );
+  }
+
+  ListView createAccountList(List<BankAccount> accounts) {
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: accounts.length,
+      itemBuilder: (context, index) {
+        var account = accounts[index];
+        return GestureDetector(
+            onTap: () {
+              context.go(detailsPath + "?accountid=${account.id}");
+            },
+            child: Card(
                 child: AccountTile(
                     name: account.name,
                     iban: account.number,
-                    balance: account.balance.toString()));
-          },
-        ),
-      ],
+                    balance: account.balance.toStringAsFixed(2))));
+      },
     );
   }
 }
