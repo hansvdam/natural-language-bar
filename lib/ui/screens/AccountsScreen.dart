@@ -59,8 +59,17 @@ class AccountsList extends StatelessWidget {
           'Saving Accounts',
           // style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)
         )),
-        Card(
-          child: AccountTile(name: "title", iban: "iban", balance: "balance"),
+        ListView.builder(
+          shrinkWrap: true,
+          itemCount: savingAccounts.length,
+          itemBuilder: (context, index) {
+            var account = savingAccounts[index];
+            return Card(
+                child: AccountTile(
+                    name: account.name,
+                    iban: account.number,
+                    balance: account.balance.toString()));
+          },
         ),
       ],
     );

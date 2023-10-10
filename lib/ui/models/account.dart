@@ -18,9 +18,9 @@ enum AccountType {
 
 var accounts = {
   "1": BankAccount(
-      "1", AccountType.checking, "Checking Account", "DE1234567890", 5000.0),
+      "1", AccountType.checking, "John Doe", "DE1234567890", 5000.0),
   "2": BankAccount(
-      "2", AccountType.saving, "Saving Account", "DE0987654321", 10000.0),
+      "2", AccountType.saving, "Orange Saving", "DE0987654321", 10000.0),
 };
 
 class BankTransaction {
