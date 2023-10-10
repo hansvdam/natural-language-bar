@@ -5,5 +5,7 @@ class Assets {
   static const String dataContacts = 'assets/data/contacts.csv';
   static const String dataTransactions = 'assets/data/transactions.csv';
   static const String imagesAtms = 'assets/images/atms.jpg';
+  static const String imagesDrawerBackground =
+      'assets/images/drawer_background.jpg';
   static const String imagesOffices = 'assets/images/offices.jpg';
 }

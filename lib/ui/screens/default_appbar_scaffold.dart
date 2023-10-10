@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:langbar/ui/screens/forecast_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../../for_langbar_lib/langbar_states.dart';
 import '../../routes.dart';
 import '../main_scaffolds.dart';
 import '../utils.dart';
-import 'CreditCardScreen.dart';
 
 class DefaultAppbarScreen extends StatelessWidget {
   final String label;
@@ -15,7 +13,11 @@ class DefaultAppbarScreen extends StatelessWidget {
 
   final bool leadingHamburger;
 
-  DefaultAppbarScreen({required this.label, required this.body, Key? key, this.leadingHamburger = true})
+  DefaultAppbarScreen(
+      {required this.label,
+      required this.body,
+      Key? key,
+      this.leadingHamburger = true})
       : super(key: key) {}
 
   @override
@@ -36,7 +38,8 @@ class DefaultAppbarScaffold extends StatelessWidget {
 
   final bool leadingHamburger;
 
-  DefaultAppbarScaffold({required this.body, required this.label, this.leadingHamburger = true});
+  DefaultAppbarScaffold(
+      {required this.body, required this.label, this.leadingHamburger = true});
 
   /// The label
   final String label;
@@ -68,6 +71,7 @@ class _DefaultDrawerState extends State<DefaultDrawer> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      width: 200,
       // Add a ListView to the drawer. This ensures the user can scroll
       // through the options in the drawer if there isn't enough vertical
       // space to fit everything.
@@ -75,11 +79,27 @@ class _DefaultDrawerState extends State<DefaultDrawer> {
         // Important: Remove any padding from the ListView.
         padding: EdgeInsets.zero,
         children: [
-          const DrawerHeader(
-            decoration: BoxDecoration(
-              color: Colors.blue,
+          DrawerHeader(
+            child: Stack(
+              children: [
+                Positioned(
+                  bottom: 8.0,
+                  left: 4.0,
+                  child: Text(
+                    "More",
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.onBackground,
+                        fontSize: 20),
+                  ),
+                )
+              ],
             ),
-            child: Text('Drawer Header'),
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/images/drawer_background.jpg"),
+                fit: BoxFit.fill,
+              ),
+            ),
           ),
           DrawerItem(
               selectedIndex: _selectedIndex,
@@ -89,10 +109,10 @@ class _DefaultDrawerState extends State<DefaultDrawer> {
               selectedIndex: _selectedIndex,
               label: "Debit Card",
               path: '/debitcard'),
-          DrawerItem(
-              selectedIndex: _selectedIndex,
-              label: "Weather",
-              path: '/${ForecastScreen.name}'),
+          // DrawerItem(
+          //     selectedIndex: _selectedIndex,
+          //     label: "Weather",
+          //     path: '/${ForecastScreen.name}'),
         ],
       ),
     );
