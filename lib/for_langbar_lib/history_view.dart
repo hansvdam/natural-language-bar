@@ -47,27 +47,35 @@ class HistoryView extends StatelessWidget {
           maxHeight: 300.0,
         ),
         child: Column(children: <Widget>[
-          Container(
-              // width: _size.width,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surface,
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(20.0),
-                    topLeft: Radius.circular(20.0),
-                  ),
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                        color: Colors.grey, spreadRadius: 0.4, blurRadius: 1.0),
-                  ]),
-              height: 20,
-              child: SizedBox(
-                width: 40,
-                child: DividerWidget(
-                  thickness: 5,
-                  color: Colors.grey,
-                ),
-              )),
+          GestureDetector(
+              onTap: () {
+                var langbarState =
+                    Provider.of<LangBarState>(context, listen: false);
+                langbarState.historyShowing = false;
+              },
+              child: Container(
+                  // width: _size.width,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.surface,
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(20.0),
+                        topLeft: Radius.circular(20.0),
+                      ),
+                      boxShadow: <BoxShadow>[
+                        BoxShadow(
+                            color: Colors.grey,
+                            spreadRadius: 0.4,
+                            blurRadius: 1.0),
+                      ]),
+                  height: 20,
+                  child: SizedBox(
+                    width: 40,
+                    child: DividerWidget(
+                      thickness: 5,
+                      color: Colors.grey,
+                    ),
+                  ))),
           getHistoryList()
         ]));
   }
