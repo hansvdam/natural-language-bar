@@ -27,7 +27,7 @@ final _shellNavigatorContactsKey =
 List<LlmFunctionParameter> cardparams = const [
   LlmFunctionParameter(
     name: 'limit',
-    description: 'New limit for the credit card',
+    description: 'New limit for the  card',
     type: 'integer',
     required: false,
   ),
