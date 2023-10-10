@@ -72,6 +72,7 @@ class HistoryProvider {
       // path to perform database upgrades and downgrades.
       version: 1,
     );
+    // await clear();
   }
 
   insert(HistoryMessage historyMessage) async {
@@ -98,6 +99,10 @@ class HistoryProvider {
   Future<int> delete(int id) async {
     return await db
         .delete(tableHistory, where: '$columnId = ?', whereArgs: [id]);
+  }
+
+  Future<int> clear() async {
+    return await db.delete(tableHistory);
   }
 
   // Future<int> update(Todo todo) async {
