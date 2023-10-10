@@ -17,7 +17,7 @@ class _BottomSheetButton extends StatelessWidget {
     final isBright = Theme.of(context).brightness == Brightness.light;
     return Tooltip(
       preferBelow: showTooltipBelow,
-      message: 'Toggle brightness',
+      message: 'Toggle Langbar',
       child: IconButton(
         icon: const Icon(Icons.short_text_outlined),
         onPressed: () {
