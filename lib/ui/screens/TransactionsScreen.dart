@@ -91,7 +91,7 @@ class _TransactionsListState extends UpdatingScreenState<TransactionsList> {
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                         trailing: Text(
-                          '€ ${contact.amount}',
+                          '€ ${contact.amount.toStringAsFixed(2)}',
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
                       ),
