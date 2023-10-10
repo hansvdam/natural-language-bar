@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 
-import '../../routes.dart';
 import '../../utils/name_matcher.dart';
 import '../models/account.dart';
 import '../param_change_detecting_screens.dart';
@@ -126,7 +124,7 @@ class TransferContentState extends UpdatingScreenState<TransferContentWidget> {
 
   @override
   void initOrUpdateWidgetParams() {
-    _amountController.text = widget.amount?.toString() ?? '';
+    _amountController.text = widget.amount?.toStringAsFixed(2) ?? '';
     _destinationAccountNameController.text =
         widget.destinationContact?.name.toString() ?? '';
     _destinationaccountNumberController.text =
@@ -147,6 +145,8 @@ class TransferContentState extends UpdatingScreenState<TransferContentWidget> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: [
         Text("from:"),
         ListTile(
@@ -156,13 +156,13 @@ class TransferContentState extends UpdatingScreenState<TransferContentWidget> {
           subtitle: Text(
             fromAccount.number,
           ),
-          trailing: Text(
-            "€ ${fromAccount.balance.toString()}",
-          ),
         ),
         TextField(
           controller: _amountController,
-          decoration: const InputDecoration(labelText: 'Amount'),
+          decoration: const InputDecoration(
+            labelText: 'Amount',
+            prefixText: '€ ',
+          ),
         ),
         TextField(
           controller: _destinationAccountNameController,
@@ -177,7 +177,8 @@ class TransferContentState extends UpdatingScreenState<TransferContentWidget> {
           decoration: const InputDecoration(labelText: 'Description'),
         ),
         SizedBox(height: 20),
-        FilledButton(
+        Center(
+            child: FilledButton(
           onPressed: () {
             // need to clear the transfer screen somehow:
             context.go("/transfer");
@@ -189,7 +190,7 @@ class TransferContentState extends UpdatingScreenState<TransferContentWidget> {
             });
           },
           child: const Text('Transfer'),
-        ),
+        )),
       ],
     );
   }
