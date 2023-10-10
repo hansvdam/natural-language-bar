@@ -11,7 +11,7 @@ ScrollController listScrollController = ScrollController();
 class HistoryView extends StatelessWidget {
   HistoryView({required this.messages, super.key});
 
-  List<HistoryMessage> messages = [];
+  final List<HistoryMessage> messages;
 
   late List<HistoryMessage> reversedMessages = messages.reversed.toList();
 
