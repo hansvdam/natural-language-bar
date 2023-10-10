@@ -40,6 +40,7 @@ class _LangFieldState extends State<LangField> {
         return TextField(
           controller: _controllerOutlined,
           maxLines: null,
+          textAlignVertical: TextAlignVertical.center,
           textInputAction: TextInputAction.send,
           onSubmitted: (final String value) {
             var apiKey2 = getOpenAIKey();
@@ -57,7 +58,8 @@ class _LangFieldState extends State<LangField> {
           },
           decoration: InputDecoration(
             hintText: 'Type here what you want',
-            // prefixIcon: const Icon(Icons.search),
+            border: InputBorder.none,
+            // prevent a line from appearing under the input field
             suffixIcon: isLoading
                 ? const SizedBox(
                     width: 20,
@@ -79,6 +81,8 @@ class _LangFieldState extends State<LangField> {
       ChatOpenAI llm, String query, BuildContext context) async {
     // final forecastTool = ForecastScreen.getTool(GoRouter.of(context));
     // final creditCardTool = CreditCardScreen.getTool(GoRouter.of(context));
+    var langbarState = Provider.of<LangBarState>(context, listen: false);
+    langbarState.historyShowing = false;
     var tools = parseRouters(GoRouter.of(context), routes);
 
     DateTime now = DateTime.now();
@@ -101,7 +105,6 @@ class _LangFieldState extends State<LangField> {
     } catch (e) {
       response = e.toString();
     }
-    var langbarState = Provider.of<LangBarState>(context, listen: false);
     langbarState.sendingToOpenAI = false;
     // if response contains spaces, we assume it is not a path, but a response from the AI (when this becomes too much of a hack, we should start responding from tools with more complex objects with fields etc.
     var chatHistory = Provider.of<ChatHistory>(context, listen: false);
