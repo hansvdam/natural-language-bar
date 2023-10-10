@@ -43,6 +43,8 @@ dependencies:
   flutter_markdown: ^0.6.17+3
   photo_view: ^0.14.0
   encrypt: ^5.0.3
+  sqflite: ^2.3.0
+  path: ^1.8.3
 
 dev_dependencies:
   flutter_test:

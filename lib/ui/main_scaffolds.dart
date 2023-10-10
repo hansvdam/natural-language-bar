@@ -28,14 +28,15 @@ class ScaffoldWithNestedNavigation extends StatelessWidget {
     );
   }
 
-  bool? screenWiderThan450 = null;
+  bool? screenWiderThanPhone;
+  static const maxPhoneWidth = 505;
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
-      if (constraints.maxWidth < 450) {
-        if(screenWiderThan450 = true) {
-          screenWiderThan450 = false;
+      if (constraints.maxWidth < maxPhoneWidth) {
+        if (screenWiderThanPhone = true) {
+          screenWiderThanPhone = false;
           triggerWidthRebuild(context);
         }
         return ScaffoldWithNavigationBar(
@@ -43,8 +44,8 @@ class ScaffoldWithNestedNavigation extends StatelessWidget {
             selectedIndex: navigationShell.currentIndex,
             onDestinationSelected: _goBranch);
       } else {
-        if(screenWiderThan450 = false) {
-          screenWiderThan450 = true;
+        if (screenWiderThanPhone = false) {
+          screenWiderThanPhone = true;
           triggerWidthRebuild(context);
         }
         return ScaffoldWithNavigationRail(
@@ -64,7 +65,6 @@ class ScaffoldWithNestedNavigation extends StatelessWidget {
 }
 
 class WidthChanged extends ChangeNotifier {
-
   void trigger() {
     notifyListeners();
   }

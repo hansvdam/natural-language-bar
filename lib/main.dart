@@ -42,10 +42,6 @@ class MyApp extends StatelessWidget {
             create: (context) => WidthChanged(),
             // child: const MyApp(),
           ),
-          ChangeNotifierProvider(
-            create: (context) => WidthChanged(),
-            // child: const MyApp(),
-          ),
         ],
         child: Consumer<ChatHistory>(builder: (context, cart, child) {
           return MaterialApp.router(

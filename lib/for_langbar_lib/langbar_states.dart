@@ -1,18 +1,37 @@
 import 'package:flutter/material.dart';
 
+import 'langbar_history_storage.dart';
+
 class HistoryMessage {
-  HistoryMessage(this.text, this.isHuman, {this.navUri});
+  HistoryMessage({required this.text, required this.isHuman, this.navUri, time})
+      : this.time = time ?? DateTime.now();
 
   final String? navUri;
   final String text;
   final bool isHuman;
+  final DateTime time;
 }
 
 class ChatHistory extends ChangeNotifier {
+  ChatHistory() {
+    init();
+  }
+
   final List<HistoryMessage> items = [];
+
+  late final HistoryProvider historyProvider;
+
+  init() async {
+    historyProvider = HistoryProvider();
+    await historyProvider.open();
+    var historyItemsFromDatabase = await historyProvider.getHistoryItems();
+    items.addAll(historyItemsFromDatabase);
+    notifyListeners();
+  }
 
   void add(HistoryMessage item) {
     items.add(item);
+    historyProvider.insert(item);
     notifyListeners();
   }
 }

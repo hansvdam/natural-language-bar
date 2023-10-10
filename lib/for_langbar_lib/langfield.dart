@@ -106,11 +106,12 @@ class _LangFieldState extends State<LangField> {
     // if response contains spaces, we assume it is not a path, but a response from the AI (when this becomes too much of a hack, we should start responding from tools with more complex objects with fields etc.
     var chatHistory = Provider.of<ChatHistory>(context, listen: false);
     if (response.contains(' ')) {
-      chatHistory.add(HistoryMessage(query, true));
-      chatHistory.add(HistoryMessage(response, false));
+      chatHistory.add(HistoryMessage(text: query, isHuman: true));
+      chatHistory.add(HistoryMessage(text: response, isHuman: false));
       langbarState.historyShowing = true;
     } else // add the original query, but the navigation-uri-repsonse as the hyperlink when you click on it
-      chatHistory.add(HistoryMessage(query, true, navUri: response));
+      chatHistory
+          .add(HistoryMessage(text: query, isHuman: true, navUri: response));
   }
 
   parseRouters(GoRouter, List<RouteBase> routes, {parentPath}) {
