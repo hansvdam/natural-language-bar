@@ -75,20 +75,24 @@ class _TransactionsListState extends UpdatingScreenState<TransactionsList> {
                 child: ListView.builder(
                   itemCount: filteredContacts?.length,
                   itemBuilder: (context, index) {
-                    var contact = filteredContacts?[index];
+                    var contact = filteredContacts![index];
                     return Card(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       child: ListTile(
-                        title: Text(contact?.description ?? '',
+                        title: Text(contact.description ?? '',
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyLarge
                                 ?.copyWith(fontWeight: FontWeight.bold)),
                         subtitle: Text(
-                          contact?.destinationName ?? '',
+                          contact.destinationName,
                           style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                        trailing: Text(
+                          '€ ${contact.amount}',
+                          style: Theme.of(context).textTheme.bodyLarge,
                         ),
                       ),
                     );
