@@ -92,6 +92,7 @@ class CreditCardScreenBody extends StatelessWidget {
       List<Widget> children = [];
       children.add(Image.network(imageSrc));
       var actionRow = Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           SizedBox(
