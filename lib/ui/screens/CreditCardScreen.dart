@@ -109,7 +109,6 @@ class CreditCardScreenBody extends StatelessWidget {
               )),
           DropdownMenu<ActionOnCard>(
               controller: actionController,
-              leadingIcon: const Icon(Icons.search),
               label: const Text('Action'),
               dropdownMenuEntries: actionEntries,
               onSelected: (icon) {
