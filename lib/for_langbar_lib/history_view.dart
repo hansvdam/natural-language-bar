@@ -76,7 +76,7 @@ class HistoryView extends StatelessWidget {
                       color: Colors.grey,
                     ),
                   ))),
-          getHistoryList()
+          Expanded(child: getHistoryList())
         ]));
   }
 
