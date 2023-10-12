@@ -91,7 +91,8 @@ class _LangFieldState extends State<LangField> {
         systemChatMessage: SystemChatMessagePromptTemplate(
           prompt: PromptTemplate(
             inputVariables: {},
-            template: 'The current date and time is ${formattedDate}.',
+            template:
+                'You are a helpful AI assistant. The current date and time is ${formattedDate}.',
           ),
         ),
         llm: llm,
