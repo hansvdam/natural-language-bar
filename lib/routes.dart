@@ -13,7 +13,6 @@ import 'ui/main_scaffolds.dart';
 import 'ui/screens/CreditCardScreen.dart';
 import 'ui/screens/MapScreen.dart';
 import 'ui/screens/forecast_screen.dart';
-import 'ui/screens/front_screen.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigator1Key = GlobalKey<NavigatorState>(debugLabel: 'shell1');
@@ -27,7 +26,7 @@ final _shellNavigatorContactsKey =
 List<LlmFunctionParameter> cardparams = const [
   LlmFunctionParameter(
     name: 'limit',
-    description: 'New limit for the  card',
+    description: 'New limit for the card',
     type: 'integer',
     required: false,
   ),
@@ -55,7 +54,7 @@ List<RouteBase> hamburgerRoutes = [
                 body: CreditCardScreen(
                     label: 'Credit Card',
                     imageSrc:
-                        "https://www.visa.com.ag/dam/VCOM/regional/lac/ENG/Default/Pay%20With%20Visa/Find%20a%20Card/Credit%20Cards/Classic/visaclassiccredit-400x225.jpg",
+                        "https://ae.visamiddleeast.com/dam/VCOM/regional/ap/taiwan/global-elements/images/tw-visa-platinum-card-498x280.png",
                     action: ActionOnCard.fromString(
                         state.uri.queryParameters['action']),
                     limit:
@@ -221,7 +220,8 @@ List<RouteBase> navBarRoutes = [
         routes: [
           LlmGoRoute(
             name: MapScreen.name,
-            description: "Show ATMs or Bank offices on map",
+            description:
+                "Show ATMs or Bank offices on map, nearest to user's current location",
             path: "/${MapScreen.name}",
             parameters: const [
               LlmFunctionParameter(
