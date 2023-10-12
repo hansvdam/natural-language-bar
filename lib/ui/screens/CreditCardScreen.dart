@@ -90,7 +90,7 @@ class CreditCardScreenBody extends StatelessWidget {
             DropdownMenuEntry<ActionOnCard>(value: action, label: action.name));
       }
       List<Widget> children = [];
-      children.add(Image.network(imageSrc));
+      children.add(Center(child: Image.network(imageSrc)));
       var actionRow = Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
