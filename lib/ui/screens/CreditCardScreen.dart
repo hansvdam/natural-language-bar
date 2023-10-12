@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_network/image_network.dart';
 import 'package:langbar/ui/screens/dummy_screens/SampleScreenTemplate.dart';
 import 'package:provider/provider.dart';
 
@@ -81,7 +82,7 @@ class CreditCardScreenBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<CardScreenSate>(
         builder: (BuildContext context, CardScreenSate state, Widget? child) {
-      textEditingController.text = (state.limit ?? '').toString();
+          textEditingController.text = (state.limit ?? '').toString();
       actionController.text = state.action.name;
       final List<DropdownMenuEntry<ActionOnCard>> actionEntries =
           <DropdownMenuEntry<ActionOnCard>>[];
@@ -90,7 +91,14 @@ class CreditCardScreenBody extends StatelessWidget {
             DropdownMenuEntry<ActionOnCard>(value: action, label: action.name));
       }
       List<Widget> children = [];
-      children.add(Center(child: Image.network(imageSrc)));
+      children.add(Center(
+          child: ImageNetwork(
+              image: imageSrc,
+              height: 150,
+              width: 300,
+              fitWeb: BoxFitWeb.contain,
+              fitAndroidIos: BoxFit.contain)));
+      // children.add(Center(child: Image.network(imageSrc))); // has CORS problems
       var actionRow = Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
