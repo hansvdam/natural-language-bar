@@ -38,7 +38,6 @@ class _LangFieldState extends State<LangField> {
   @override
   Widget build(BuildContext context) =>
       Consumer<LangBarState>(builder: (context, langbarState, child) {
-        var isLoading = langbarState.sendingToOpenAI;
         return TextField(
           controller: _controllerOutlined,
           maxLines: null,
@@ -51,14 +50,16 @@ class _LangFieldState extends State<LangField> {
             hintText: 'Type here what you want',
             // prevent a line from appearing under the input field
             border: InputBorder.none,
-            suffixIcon: createSuffixButtons(isLoading, langbarState),
+            suffixIcon: createSuffixButtons(langbarState),
             // isDense: true,
             filled: true,
           ),
         );
       });
 
-  Widget? createSuffixButtons(bool isLoading, LangBarState langbarState) {
+  Widget? createSuffixButtons(LangBarState langbarState) {
+    var isLoading = langbarState.sendingToOpenAI;
+    var speechEnabled = langbarState.speechEnabled;
     List<Widget> children = [];
     if (isLoading) {
       children.add(const SizedBox(
@@ -70,8 +71,10 @@ class _LangFieldState extends State<LangField> {
     } else if (widget.showHistoryButton) {
       children.add(ShowHistoryButton(langbarState: langbarState));
     }
-    children.add(SpeechButton(
-        langbarState: langbarState, toggleRecording: toggleRecording));
+    if (speechEnabled) {
+      children.add(SpeechButton(
+          langbarState: langbarState, toggleRecording: toggleRecording));
+    }
     Row row = Row(mainAxisSize: MainAxisSize.min, children: children);
     return row;
   }
@@ -94,20 +97,18 @@ class _LangFieldState extends State<LangField> {
   final memory = ConversationBufferMemory(returnMessages: true);
 
   Future toggleRecording() {
+    var langbarState = Provider.of<LangBarState>(context, listen: false);
     return Speech.toggleRecording(
         onResult: (String text) => setState(() {
               _controllerOutlined.text = text;
             }),
         onListening: (bool isListening) {
-          setState(() {
-            this.isListening = isListening;
-          });
+          langbarState.listeningForSpeech = isListening;
           if (!isListening) {
             Future.delayed(const Duration(milliseconds: 1000), () {
               var langbarState =
                   Provider.of<LangBarState>(context, listen: false);
               submit(langbarState, context);
-              // Utils.scanVoicedText(textSample);
             });
           }
         });
@@ -206,12 +207,18 @@ class SpeechButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool showHistory = langbarState.historyShowing;
+    bool listeningForSpeach = langbarState.listeningForSpeech;
+    var themeData = Theme.of(context);
     return IconButton(
-        icon: Icon(showHistory ? Icons.mic : Icons.mic),
-        onPressed: () {
-          toggleRecording();
-          langbarState.historyShowing = !showHistory;
-        });
+        icon: Icon(Icons.mic,
+            color: listeningForSpeach
+                ? themeData.colorScheme.primary
+                : themeData.colorScheme.onSurface),
+        onPressed: listeningForSpeach
+            ? null
+            : () {
+                toggleRecording();
+                langbarState.historyShowing = !listeningForSpeach;
+              });
   }
 }

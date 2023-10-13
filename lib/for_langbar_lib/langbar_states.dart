@@ -41,6 +41,24 @@ class LangBarState extends ChangeNotifier {
 
   bool get historyShowing => _historyShowing;
 
+  bool _speechEnabled = true;
+
+  bool get speechEnabled => _speechEnabled;
+
+  set speechEnabled(bool value) {
+    _speechEnabled = value;
+    notifyListeners();
+  }
+
+  bool _isListeningForSpeech = false;
+
+  bool get listeningForSpeech => _isListeningForSpeech;
+
+  set listeningForSpeech(bool value) {
+    _isListeningForSpeech = value;
+    notifyListeners();
+  }
+
   // do not use setter here, we use a local textcontroller initialized with this value:
   String text = '';
 
