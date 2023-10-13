@@ -39,6 +39,10 @@ class ChatHistory extends ChangeNotifier {
 class LangBarState extends ChangeNotifier {
   bool _historyShowing = false;
 
+  LangBarState({bool enableSpeech = true}) {
+    _speechEnabled = enableSpeech;
+  }
+
   bool get historyShowing => _historyShowing;
 
   bool _speechEnabled = true;

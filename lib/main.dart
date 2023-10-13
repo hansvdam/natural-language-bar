@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_web_plugins/url_strategy.dart';
@@ -26,7 +28,6 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  @override
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
@@ -35,7 +36,8 @@ class MyApp extends StatelessWidget {
             // child: const MyApp(),
           ),
           ChangeNotifierProvider(
-            create: (context) => LangBarState(),
+            create: (context) => LangBarState(
+                enableSpeech: Platform.isAndroid || Platform.isIOS),
             // child: const MyApp(),
           ),
           ChangeNotifierProvider(
