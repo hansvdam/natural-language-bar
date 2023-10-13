@@ -89,7 +89,6 @@ class _LangFieldState extends State<LangField> {
         ChatOpenAI(apiClient: client, temperature: 0.0, model: 'gpt-3.5-turbo');
     langbarState.sendingToOpenAI = true;
     sendToOpenai(llm, this._controllerOutlined.text, context);
-    _controllerOutlined.clear();
   }
 
   final memory = ConversationBufferMemory(returnMessages: true);
@@ -140,6 +139,7 @@ class _LangFieldState extends State<LangField> {
     } catch (e) {
       response = e.toString();
     }
+    _controllerOutlined.clear();
     langbarState.sendingToOpenAI = false;
     // if response contains spaces, we assume it is not a path, but a response from the AI (when this becomes too much of a hack, we should start responding from tools with more complex objects with fields etc.
     var chatHistory = Provider.of<ChatHistory>(context, listen: false);
