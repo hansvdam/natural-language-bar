@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:langbar/for_langbar_lib/generic_screen_tool.dart';
+import 'package:langbar/for_langbar_lib/speech.dart';
 import 'package:langchain/langchain.dart';
 import 'package:langchain_openai/langchain_openai.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +24,7 @@ class LangField extends StatefulWidget {
 
 class _LangFieldState extends State<LangField> {
   final TextEditingController _controllerOutlined = TextEditingController();
+  bool isListening = false;
 
   initState() {
     super.initState();
@@ -43,39 +45,68 @@ class _LangFieldState extends State<LangField> {
           textAlignVertical: TextAlignVertical.center,
           textInputAction: TextInputAction.send,
           onSubmitted: (final String value) {
-            var apiKey2 = getOpenAIKey();
-            var client = OpenAIClient.instanceFor(
-                apiKey: apiKey2, apiBaseUrl: openAiApiBaseUrl());
-            var sessionToken = getSessionToken();
-            if (sessionToken != null) {
-              dart_openai.OpenAI.includeHeaders({"session": sessionToken});
-            }
-            final llm = ChatOpenAI(
-                apiClient: client, temperature: 0.0, model: 'gpt-3.5-turbo');
-            langbarState.sendingToOpenAI = true;
-            sendToOpenai(llm, this._controllerOutlined.text, context);
-            _controllerOutlined.clear();
+            submit(langbarState, context);
           },
           decoration: InputDecoration(
             hintText: 'Type here what you want',
             border: InputBorder.none,
             // prevent a line from appearing under the input field
-            suffixIcon: isLoading
-                ? const SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: CircularProgressIndicator()))
-                : widget.showHistoryButton
-                    ? ShowHistoryButton(langbarState: langbarState)
-                    : null,
+            suffixIcon: createSuffixButtons(isLoading, langbarState),
             filled: true,
           ),
         );
       });
 
+  Widget? createSuffixButtons(bool isLoading, LangBarState langbarState) {
+    return isLoading
+        ? const SizedBox(
+            width: 20,
+            height: 20,
+            child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: CircularProgressIndicator()))
+        : widget.showHistoryButton
+            ? SpeechButton(
+                langbarState: langbarState, toggleRecording: toggleRecording)
+            : null;
+  }
+
+  void submit(LangBarState langbarState, BuildContext context) {
+    var apiKey2 = getOpenAIKey();
+    var client = OpenAIClient.instanceFor(
+        apiKey: apiKey2, apiBaseUrl: openAiApiBaseUrl());
+    var sessionToken = getSessionToken();
+    if (sessionToken != null) {
+      dart_openai.OpenAI.includeHeaders({"session": sessionToken});
+    }
+    final llm =
+        ChatOpenAI(apiClient: client, temperature: 0.0, model: 'gpt-3.5-turbo');
+    langbarState.sendingToOpenAI = true;
+    sendToOpenai(llm, this._controllerOutlined.text, context);
+    _controllerOutlined.clear();
+  }
+
   final memory = ConversationBufferMemory(returnMessages: true);
+
+  Future toggleRecording() {
+    return Speech.toggleRecording(
+        onResult: (String text) => setState(() {
+              _controllerOutlined.text = text;
+            }),
+        onListening: (bool isListening) {
+          setState(() {
+            this.isListening = isListening;
+          });
+          if (!isListening) {
+            Future.delayed(const Duration(milliseconds: 1000), () {
+              var langbarState =
+                  Provider.of<LangBarState>(context, listen: false);
+              submit(langbarState, context);
+              // Utils.scanVoicedText(textSample);
+            });
+          }
+        });
+  }
 
   Future<void> sendToOpenai(
       ChatOpenAI llm, String query, BuildContext context) async {
@@ -155,6 +186,26 @@ class ShowHistoryButton extends StatelessWidget {
     return IconButton(
         icon: Icon(showHistory ? Icons.arrow_downward : Icons.arrow_upward),
         onPressed: () {
+          langbarState.historyShowing = !showHistory;
+        });
+  }
+}
+
+class SpeechButton extends StatelessWidget {
+  final LangBarState langbarState;
+
+  final Function() toggleRecording;
+
+  const SpeechButton(
+      {super.key, required this.langbarState, required this.toggleRecording});
+
+  @override
+  Widget build(BuildContext context) {
+    bool showHistory = langbarState.historyShowing;
+    return IconButton(
+        icon: Icon(showHistory ? Icons.mic : Icons.mic),
+        onPressed: () {
+          toggleRecording();
           langbarState.historyShowing = !showHistory;
         });
   }
