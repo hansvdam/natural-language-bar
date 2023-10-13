@@ -24,7 +24,6 @@ class LangField extends StatefulWidget {
 
 class _LangFieldState extends State<LangField> {
   final TextEditingController _controllerOutlined = TextEditingController();
-  bool isListening = false;
 
   initState() {
     super.initState();
@@ -72,8 +71,7 @@ class _LangFieldState extends State<LangField> {
       children.add(ShowHistoryButton(langbarState: langbarState));
     }
     if (speechEnabled) {
-      children.add(SpeechButton(
-          langbarState: langbarState, toggleRecording: toggleRecording));
+      children.add(SpeechButton(toggleRecording: toggleRecording));
     }
     Row row = Row(mainAxisSize: MainAxisSize.min, children: children);
     return row;
@@ -98,20 +96,19 @@ class _LangFieldState extends State<LangField> {
 
   Future toggleRecording() {
     var langbarState = Provider.of<LangBarState>(context, listen: false);
-    return Speech.toggleRecording(
-        onResult: (String text) => setState(() {
-              _controllerOutlined.text = text;
-            }),
-        onListening: (bool isListening) {
-          langbarState.listeningForSpeech = isListening;
-          if (!isListening) {
-            Future.delayed(const Duration(milliseconds: 1000), () {
-              var langbarState =
-                  Provider.of<LangBarState>(context, listen: false);
-              submit(langbarState, context);
-            });
-          }
-        });
+    langbarState.listeningForSpeech = true;
+    return Speech.toggleRecording(onResult: (String text) {
+      _controllerOutlined.text = text;
+      print("result $text");
+    }, onListening: (bool isListening, String status) {
+      print("listening state $isListening, status $status");
+      if (status == "done") {
+        var langbarState = Provider.of<LangBarState>(context, listen: false);
+        submit(langbarState, context);
+        langbarState.listeningForSpeech = false;
+        print("sending ${_controllerOutlined.text}");
+      }
+    });
   }
 
   Future<void> sendToOpenai(
@@ -197,28 +194,65 @@ class ShowHistoryButton extends StatelessWidget {
   }
 }
 
-class SpeechButton extends StatelessWidget {
-  final LangBarState langbarState;
-
+class SpeechButton extends StatefulWidget {
   final Function() toggleRecording;
 
-  const SpeechButton(
-      {super.key, required this.langbarState, required this.toggleRecording});
+  const SpeechButton({Key? key, required this.toggleRecording})
+      : super(key: key);
+
+  @override
+  _SpeechButtonState createState() => _SpeechButtonState();
+}
+
+class _SpeechButtonState extends State<SpeechButton>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late ColorTween _colorTween;
+
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<LangBarState>(context, listen: false).addListener(() {
+      if (!Provider.of<LangBarState>(context, listen: false).listeningForSpeech)
+        _controller.stop();
+    });
+    _controller = AnimationController(
+      duration: const Duration(seconds: 1),
+      vsync: this,
+    );
+    // following is necessary to make the color of the Iconbutton animate (since IconButton does not animate natively):
+    _controller.addListener(() {
+      setState(() {});
+    });
+    _colorTween = ColorTween(begin: Colors.lightGreen, end: Colors.greenAccent);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    bool listeningForSpeach = langbarState.listeningForSpeech;
-    var themeData = Theme.of(context);
-    return IconButton(
-        icon: Icon(Icons.mic,
-            color: listeningForSpeach
-                ? themeData.colorScheme.primary
-                : themeData.colorScheme.onSurface),
-        onPressed: listeningForSpeach
-            ? null
-            : () {
-                toggleRecording();
-                langbarState.historyShowing = !listeningForSpeach;
-              });
+    return Consumer<LangBarState>(builder: (context, langbarState, child) {
+      bool listeningForSpeech = langbarState.listeningForSpeech;
+      var themeData = Theme.of(context);
+      return IconButton(
+        style: IconButton.styleFrom(
+            backgroundColor:
+                listeningForSpeech ? _colorTween.evaluate(_controller) : null),
+        icon: listeningForSpeech ? Icon(Icons.hearing) : Icon(Icons.mic),
+        color: listeningForSpeech
+            ? themeData.colorScheme.primary
+            : themeData.colorScheme.onSurface,
+        onPressed: () {
+          setState(() {
+            _controller.repeat(reverse: true);
+            widget.toggleRecording();
+          });
+        },
+      );
+    });
   }
 }

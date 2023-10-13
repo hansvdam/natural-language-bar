@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
 class Speech {
@@ -6,9 +5,10 @@ class Speech {
 
   static Future<bool> toggleRecording(
       {required Function(String text) onResult,
-      required ValueChanged<bool> onListening}) async {
+      required Function(bool onListening, String status) onListening}) async {
     final isAvailable = await _speech.initialize(
-        onStatus: (status) => onListening(_speech.isListening),
+        finalTimeout: Duration(milliseconds: 1000),
+        onStatus: (status) => onListening(_speech.isListening, status),
         onError: (error) => print('Error $error'));
 
     if (_speech.isListening) {
@@ -17,7 +17,10 @@ class Speech {
     }
 
     if (isAvailable) {
-      _speech.listen(onResult: (value) => onResult(value.recognizedWords));
+      _speech.listen(
+        onResult: (value) => onResult(value.recognizedWords),
+        // partialResults: false
+      );
     }
 
     return isAvailable;
