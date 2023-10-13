@@ -1,5 +1,4 @@
-import 'dart:io' show Platform;
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_web_plugins/url_strategy.dart';
@@ -9,6 +8,27 @@ import 'package:provider/provider.dart';
 
 import 'for_langbar_lib/langbar_states.dart';
 import 'routes.dart';
+
+class PlatformDetails {
+  static final PlatformDetails _singleton = PlatformDetails._internal();
+
+  factory PlatformDetails() {
+    return _singleton;
+  }
+
+  PlatformDetails._internal();
+
+  bool get isDesktop =>
+      defaultTargetPlatform == TargetPlatform.macOS ||
+      defaultTargetPlatform == TargetPlatform.linux ||
+      defaultTargetPlatform == TargetPlatform.windows;
+
+  bool get isMobile =>
+      defaultTargetPlatform == TargetPlatform.iOS ||
+      defaultTargetPlatform == TargetPlatform.android;
+
+  bool get isWeb => kIsWeb;
+}
 
 class GlobalContextService {
   static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -37,7 +57,8 @@ class MyApp extends StatelessWidget {
           ),
           ChangeNotifierProvider(
             create: (context) => LangBarState(
-                enableSpeech: Platform.isAndroid || Platform.isIOS),
+                enableSpeech:
+                    PlatformDetails().isMobile || PlatformDetails().isWeb),
             // child: const MyApp(),
           ),
           ChangeNotifierProvider(
