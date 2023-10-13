@@ -49,26 +49,31 @@ class _LangFieldState extends State<LangField> {
           },
           decoration: InputDecoration(
             hintText: 'Type here what you want',
-            border: InputBorder.none,
             // prevent a line from appearing under the input field
+            border: InputBorder.none,
             suffixIcon: createSuffixButtons(isLoading, langbarState),
+            // isDense: true,
             filled: true,
           ),
         );
       });
 
   Widget? createSuffixButtons(bool isLoading, LangBarState langbarState) {
-    return isLoading
-        ? const SizedBox(
-            width: 20,
-            height: 20,
-            child: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: CircularProgressIndicator()))
-        : widget.showHistoryButton
-            ? SpeechButton(
-                langbarState: langbarState, toggleRecording: toggleRecording)
-            : null;
+    List<Widget> children = [];
+    if (isLoading) {
+      children.add(const SizedBox(
+          width: 20,
+          height: 20,
+          child: Padding(
+              padding: EdgeInsets.all(2.0),
+              child: CircularProgressIndicator())));
+    } else if (widget.showHistoryButton) {
+      children.add(ShowHistoryButton(langbarState: langbarState));
+    }
+    children.add(SpeechButton(
+        langbarState: langbarState, toggleRecording: toggleRecording));
+    Row row = Row(mainAxisSize: MainAxisSize.min, children: children);
+    return row;
   }
 
   void submit(LangBarState langbarState, BuildContext context) {
