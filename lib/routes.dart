@@ -33,7 +33,6 @@ List<LlmFunctionParameter> cardparams = const [
   LlmFunctionParameter(
     name: 'action',
     description: 'action to perform on the card',
-    type: 'string',
     enumeration: ['replace', 'cancel'],
   ),
 ];
