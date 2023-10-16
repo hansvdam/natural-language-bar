@@ -79,8 +79,8 @@ class _LangFieldState extends State<LangField> {
 
   void submit(LangBarState langbarState, BuildContext context) {
     var apiKey2 = getOpenAIKey();
-    var client = OpenAIClient.instanceFor(
-        apiKey: apiKey2, apiBaseUrl: openAiApiBaseUrl());
+    var client =
+        OpenAIClient.instanceFor(apiKey: apiKey2, apiBaseUrl: getLlmBaseUrl());
     var sessionToken = getSessionToken();
     if (sessionToken != null) {
       dart_openai.OpenAI.includeHeaders({"session": sessionToken});
