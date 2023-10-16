@@ -212,9 +212,9 @@ class _SpeechButtonState extends State<SpeechButton>
   @override
   void initState() {
     super.initState();
-    Provider.of<LangBarState>(context, listen: false).addListener(() {
-      if (!Provider.of<LangBarState>(context, listen: false).listeningForSpeech)
-        _controller.stop();
+    var langbarState = Provider.of<LangBarState>(context, listen: false);
+    langbarState.addListener(() {
+      if (!langbarState.listeningForSpeech) _controller.stop();
     });
     _controller = AnimationController(
       duration: const Duration(seconds: 1),
