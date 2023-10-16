@@ -5,7 +5,7 @@ class LlmFunctionParameter {
     required this.name,
     required this.description,
     this.type = 'string',
-    this.required = true,
+    this.required = false,
     this.enumeration,
   });
 

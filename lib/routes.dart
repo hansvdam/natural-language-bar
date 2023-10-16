@@ -29,14 +29,12 @@ List<LlmFunctionParameter> cardparams = const [
     name: 'limit',
     description: 'New limit for the card',
     type: 'integer',
-    required: false,
   ),
   LlmFunctionParameter(
     name: 'action',
     description: 'action to perform on the card',
     type: 'string',
     enumeration: ['replace', 'cancel'],
-    required: false,
   ),
 ];
 
@@ -92,12 +90,12 @@ List<RouteBase> hamburgerRoutes = [
         LlmFunctionParameter(
           name: 'place',
           description: 'place on earth',
+          required: true,
         ),
         LlmFunctionParameter(
           name: 'numDays',
           description: 'The number of days to forecast',
           type: 'integer',
-          required: false,
         ),
       ],
       path: "/${ForecastScreen.name}",
@@ -134,7 +132,6 @@ List<RouteBase> hamburgerRoutes = [
         LlmFunctionParameter(
           name: 'trip_date_time',
           description: 'Requested DateTime for the departure or arrival of the trip in \'YYYY-MM-DDTHH:MM:SS+02:00\' format. The user will use a time in a 12 hour system, make an intelligent guess about what the user is most likely to mean in terms of a 24 hour system, e.g. not planning for the past.',
-          required: false,
         ),
         LlmFunctionParameter(
           name: 'departure',
@@ -203,7 +200,6 @@ List<RouteBase> navBarRoutes = [
                   LlmFunctionParameter(
                     name: 'filterString',
                     description: 'filter string for the list',
-                    required: false,
                   ),
                 ],
                 builder: (context, state) => TransactionsScreen(
@@ -229,7 +225,6 @@ List<RouteBase> navBarRoutes = [
                 name: 'atmOrOffice',
                 description: 'show atms or offices',
                 enumeration: ["atms", "offices"],
-                required: false,
               ),
             ],
             pageBuilder: (context, state) {
@@ -253,17 +248,14 @@ List<RouteBase> navBarRoutes = [
                 name: 'amount',
                 description: 'amount to transfer',
                 type: 'number',
-                required: false,
               ),
               LlmFunctionParameter(
                 name: 'destinationName',
                 description: 'destination account name to transfer money to',
-                required: false,
               ),
               LlmFunctionParameter(
                 name: 'description',
                 description: 'description of the transfer',
-                required: false,
               ),
             ],
             pageBuilder: (context, state) {
