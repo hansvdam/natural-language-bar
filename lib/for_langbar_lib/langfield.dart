@@ -60,7 +60,7 @@ class _LangFieldState extends State<LangField> {
       children.add(ShowHistoryButton(langbarState: langbarState));
     }
     if (speechEnabled) {
-      children.add(SpeechButton(toggleRecording: toggleRecording));
+      children.add(SpeechButton(submit: () => submit(context)));
     }
     Row row = Row(mainAxisSize: MainAxisSize.min, children: children);
     return row;
@@ -70,24 +70,6 @@ class _LangFieldState extends State<LangField> {
     submitToLLM(context);
   }
 
-  Future toggleRecording() {
-    var langbarState = Provider.of<LangBarState>(context, listen: false);
-    langbarState.listeningForSpeech = true;
-    return Speech.toggleRecording(onResult: (String text) {
-      var eventTime = DateTime.now().toIso8601String();
-      _controllerOutlined.text = text;
-      print("$eventTime: result $text");
-    }, onListening: (bool isListening, String status) {
-      var eventTime = DateTime.now().toIso8601String();
-      print("$eventTime: listening state $isListening, status $status");
-      if (status == "done") {
-        var langbarState = Provider.of<LangBarState>(context, listen: false);
-        submit(context);
-        langbarState.listeningForSpeech = false;
-        print("$eventTime: sending ${_controllerOutlined.text}");
-      }
-    });
-  }
 }
 
 class ShowHistoryButton extends StatelessWidget {
@@ -107,10 +89,9 @@ class ShowHistoryButton extends StatelessWidget {
 }
 
 class SpeechButton extends StatefulWidget {
-  final Function() toggleRecording;
+  final Function() submit;
 
-  const SpeechButton({Key? key, required this.toggleRecording})
-      : super(key: key);
+  const SpeechButton({Key? key, required this.submit}) : super(key: key);
 
   @override
   _SpeechButtonState createState() => _SpeechButtonState();
@@ -120,6 +101,25 @@ class _SpeechButtonState extends State<SpeechButton>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late ColorTween _colorTween;
+
+  Future toggleRecording() {
+    var langbarState = Provider.of<LangBarState>(context, listen: false);
+    langbarState.listeningForSpeech = true;
+    return Speech.toggleRecording(onResult: (String text) {
+      var eventTime = DateTime.now().toIso8601String();
+      langbarState.controllerOutlined.text = text;
+      print("$eventTime: result $text");
+    }, onListening: (bool isListening, String status) {
+      var eventTime = DateTime.now().toIso8601String();
+      print("$eventTime: listening state $isListening, status $status");
+      if (status == "done") {
+        var langbarState = Provider.of<LangBarState>(context, listen: false);
+        widget.submit();
+        langbarState.listeningForSpeech = false;
+        print("$eventTime: sending ${langbarState.controllerOutlined.text}");
+      }
+    });
+  }
 
   @override
   void initState() {
@@ -161,7 +161,7 @@ class _SpeechButtonState extends State<SpeechButton>
         onPressed: () {
           setState(() {
             _controller.repeat(reverse: true);
-            widget.toggleRecording();
+            toggleRecording();
           });
         },
       );
