@@ -37,6 +37,8 @@ class ChatHistory extends ChangeNotifier {
 }
 
 class LangBarState extends ChangeNotifier {
+  final TextEditingController controllerOutlined = TextEditingController();
+
   bool _historyShowing = false;
 
   LangBarState({bool enableSpeech = true}) {
@@ -75,6 +77,7 @@ class LangBarState extends ChangeNotifier {
   bool _sendingToOpenAI = false;
 
   bool get sendingToOpenAI => _sendingToOpenAI;
+
   bool get showLangbar => _showLangbar;
 
   set showLangbar(bool value) {

@@ -15,15 +15,12 @@ class LangField extends StatefulWidget {
 }
 
 class _LangFieldState extends State<LangField> {
-  final TextEditingController _controllerOutlined = TextEditingController();
+  late TextEditingController _controllerOutlined;
 
   initState() {
     super.initState();
-    var langbarText = context.read<LangBarState>().text;
-    _controllerOutlined.text = langbarText;
-    _controllerOutlined.addListener(() {
-      context.read<LangBarState>().text = _controllerOutlined.text;
-    });
+    var langbarState = context.read<LangBarState>();
+    _controllerOutlined = langbarState.controllerOutlined;
   }
 
   @override
