@@ -12,8 +12,7 @@ import 'generic_screen_tool.dart';
 import 'langbar_states.dart';
 import 'llm_go_route.dart';
 
-void submitToLLM(BuildContext context, String query,
-    TextEditingController controllerOutlined) {
+void submitToLLM(BuildContext context) {
   var langbarState = Provider.of<LangBarState>(context, listen: false);
   var apiKey2 = getOpenAIKey();
   var client =
@@ -25,13 +24,12 @@ void submitToLLM(BuildContext context, String query,
   final llm =
       ChatOpenAI(apiClient: client, temperature: 0.0, model: 'gpt-3.5-turbo');
   langbarState.sendingToOpenAI = true;
-  sendToOpenai(llm, query, controllerOutlined, context);
+  sendToOpenai(llm, context);
 }
 
 final memory = ConversationBufferMemory(returnMessages: true);
 
-Future<void> sendToOpenai(ChatOpenAI llm, String query,
-    TextEditingController controllerOutlined, BuildContext context) async {
+Future<void> sendToOpenai(ChatOpenAI llm, BuildContext context) async {
   // final forecastTool = ForecastScreen.getTool(GoRouter.of(context));
   // final creditCardTool = CreditCardScreen.getTool(GoRouter.of(context));
   var langbarState = Provider.of<LangBarState>(context, listen: false);
@@ -54,12 +52,13 @@ Future<void> sendToOpenai(ChatOpenAI llm, String query,
   final executor = AgentExecutor(agent: agent);
   // final res = await executor.run('What is 40 raised to the 0.43 power?');
   var response;
+  var query = langbarState.controllerOutlined.text;
   try {
     response = await executor.run(query);
   } catch (e) {
     response = e.toString();
   }
-  controllerOutlined.clear();
+  langbarState.controllerOutlined.clear();
   langbarState.sendingToOpenAI = false;
   // if response contains spaces, we assume it is not a path, but a response from the AI (when this becomes too much of a hack, we should start responding from tools with more complex objects with fields etc.
   var chatHistory = Provider.of<ChatHistory>(context, listen: false);

@@ -67,8 +67,7 @@ class _LangFieldState extends State<LangField> {
   }
 
   void submit(BuildContext context) {
-    submitToLLM(
-        context, this._controllerOutlined.text, this._controllerOutlined);
+    submitToLLM(context);
   }
 
   Future toggleRecording() {
