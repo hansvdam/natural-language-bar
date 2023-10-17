@@ -69,7 +69,6 @@ class _LangFieldState extends State<LangField> {
   void submit(BuildContext context) {
     submitToLLM(context);
   }
-
 }
 
 class ShowHistoryButton extends StatelessWidget {
@@ -114,9 +113,11 @@ class _SpeechButtonState extends State<SpeechButton>
       print("$eventTime: listening state $isListening, status $status");
       if (status == "done") {
         var langbarState = Provider.of<LangBarState>(context, listen: false);
-        widget.submit();
+        if (langbarState.controllerOutlined.text.isNotEmpty) {
+          widget.submit();
+          print("$eventTime: sending ${langbarState.controllerOutlined.text}");
+        }
         langbarState.listeningForSpeech = false;
-        print("$eventTime: sending ${langbarState.controllerOutlined.text}");
       }
     });
   }
