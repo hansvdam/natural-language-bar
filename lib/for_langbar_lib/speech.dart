@@ -10,7 +10,7 @@ class Speech {
       print('statusListener is not null');
     }
     final isAvailable = await _speech.initialize(
-        finalTimeout: Duration(milliseconds: 60),
+        // finalTimeout: Duration(milliseconds: 60),
         onStatus: (status) => onListening(_speech.isListening, status),
         onError: (error) => print('Error $error'));
 
