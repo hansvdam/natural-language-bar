@@ -78,15 +78,17 @@ class _LangFieldState extends State<LangField> {
     var langbarState = Provider.of<LangBarState>(context, listen: false);
     langbarState.listeningForSpeech = true;
     return Speech.toggleRecording(onResult: (String text) {
+      var eventTime = DateTime.now().toIso8601String();
       _controllerOutlined.text = text;
-      print("result $text");
+      print("$eventTime: result $text");
     }, onListening: (bool isListening, String status) {
-      print("listening state $isListening, status $status");
+      var eventTime = DateTime.now().toIso8601String();
+      print("$eventTime: listening state $isListening, status $status");
       if (status == "done") {
         var langbarState = Provider.of<LangBarState>(context, listen: false);
         submit(context);
         langbarState.listeningForSpeech = false;
-        print("sending ${_controllerOutlined.text}");
+        print("$eventTime: sending ${_controllerOutlined.text}");
       }
     });
   }
