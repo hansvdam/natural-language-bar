@@ -1,7 +1,7 @@
 import 'package:langchain/langchain.dart';
 
-class LlmFunctionParameter {
-  const LlmFunctionParameter({
+class UIParameter {
+  const UIParameter({
     required this.name,
     required this.description,
     this.type = 'string',
@@ -31,7 +31,7 @@ abstract base class GenericTool extends BaseTool {
   GenericTool(
       {required super.name,
       required super.description,
-      required List<LlmFunctionParameter> parameters,
+      required List<UIParameter> parameters,
       super.returnDirect})
       : super(
           inputJsonSchema: {

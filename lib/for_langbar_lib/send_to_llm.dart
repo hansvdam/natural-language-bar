@@ -79,7 +79,7 @@ parseRouters(GoRouter, List<RouteBase> routes, {parentPath}) {
       // route.path is only the local path. If the route e.g. points to a details screen, we have to prepend the path of the parent:
       newPath = (parentPath != null ? parentPath + "/" : "") + route.path;
     }
-    if (route is LlmGoRoute) {
+    if (route is DocumentedGoRoute) {
       var tool = GenericScreenTool(
           goRouter: goRouter,
           name: route.name,

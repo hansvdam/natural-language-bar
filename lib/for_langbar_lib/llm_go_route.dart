@@ -2,10 +2,10 @@ import 'package:go_router/go_router.dart';
 
 import '../for_langchain/for_langchain.dart';
 
-class LlmGoRoute extends GoRoute {
+class DocumentedGoRoute extends GoRoute {
   final bool modal;
 
-  LlmGoRoute({
+  DocumentedGoRoute({
     required this.name,
     required this.description,
     required super.path,
@@ -19,5 +19,5 @@ class LlmGoRoute extends GoRoute {
 
   final String name;
   final String description;
-  final List<LlmFunctionParameter> parameters;
+  final List<UIParameter> parameters;
 }

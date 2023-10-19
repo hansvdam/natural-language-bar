@@ -24,13 +24,13 @@ final _shellNavigatorMapKey = GlobalKey<NavigatorState>(debugLabel: 'shellB');
 final _shellNavigatorContactsKey =
     GlobalKey<NavigatorState>(debugLabel: 'shellContacts');
 
-List<LlmFunctionParameter> cardparams = const [
-  LlmFunctionParameter(
+List<UIParameter> cardparams = const [
+  UIParameter(
     name: 'limit',
     description: 'New limit for the card',
     type: 'integer',
   ),
-  LlmFunctionParameter(
+  UIParameter(
     name: 'action',
     description: 'action to perform on the card',
     enumeration: ['replace', 'cancel'],
@@ -38,7 +38,7 @@ List<LlmFunctionParameter> cardparams = const [
 ];
 
 List<RouteBase> hamburgerRoutes = [
-  LlmGoRoute(
+  DocumentedGoRoute(
       path: '/creditcard',
       name: 'creditcard',
       description: 'Show your credit card and maybe perform an action on it',
@@ -58,7 +58,7 @@ List<RouteBase> hamburgerRoutes = [
                     limit: int.tryParse(
                         state.uri.queryParameters['limit'] ?? ''))));
       }),
-  LlmGoRoute(
+  DocumentedGoRoute(
       path: '/debitcard',
       name: 'debitcard',
       description: 'Show your debit card and maybe perform an action on it',
@@ -78,18 +78,18 @@ List<RouteBase> hamburgerRoutes = [
                     limit: int.tryParse(
                         state.uri.queryParameters['limit'] ?? ''))));
       }),
-  LlmGoRoute(
+  DocumentedGoRoute(
       name: ForecastScreen.name,
       modal: true,
       parentNavigatorKey: _rootNavigatorKey,
       description: "get weather forecast information for a place on earth",
       parameters: const [
-        LlmFunctionParameter(
+        UIParameter(
           name: 'place',
           description: 'place on earth',
           required: true,
         ),
-        LlmFunctionParameter(
+        UIParameter(
           name: 'numDays',
           description: 'The number of days to forecast',
           type: 'integer',
@@ -110,32 +110,34 @@ List<RouteBase> hamburgerRoutes = [
               ),
             ));
       }),
-  LlmGoRoute(
+  DocumentedGoRoute(
       path: '/routeplanner',
       name: 'routeplanner',
       description:
           'Plan a public transport trip from A to B in the Netherlands.',
       parameters: const [
-        LlmFunctionParameter(
+        UIParameter(
           name: 'origin',
           description: 'origin address, train station or postal code.',
           required: true,
         ),
-        LlmFunctionParameter(
+        UIParameter(
           name: 'destination',
           description: 'destination address, train station or postal code.',
           required: true,
         ),
-        LlmFunctionParameter(
+        UIParameter(
           name: 'trip_date_time',
-          description: 'Requested DateTime for the departure or arrival of the trip in \'YYYY-MM-DDTHH:MM:SS+02:00\' format. The user will use a time in a 12 hour system, make an intelligent guess about what the user is most likely to mean in terms of a 24 hour system, e.g. not planning for the past.',
+          description:
+              'Requested DateTime for the departure or arrival of the trip in \'YYYY-MM-DDTHH:MM:SS+02:00\' format. The user will use a time in a 12 hour system, make an intelligent guess about what the user is most likely to mean in terms of a 24 hour system, e.g. not planning for the past.',
         ),
-        LlmFunctionParameter(
+        UIParameter(
           name: 'departure',
-          description: 'True to depart at the given time, False to arrive at the given time.',
+          description:
+              'True to depart at the given time, False to arrive at the given time.',
           required: true,
         ),
-        LlmFunctionParameter(
+        UIParameter(
           name: 'language',
           description: 'Language of the input text',
           required: true,
@@ -175,7 +177,7 @@ List<RouteBase> navBarRoutes = [
       StatefulShellBranch(
         navigatorKey: _shellNavigatorAKey,
         routes: [
-          LlmGoRoute(
+          DocumentedGoRoute(
             name: AccountsScreen.name,
             description: "Show all accounts",
             path: "/${AccountsScreen.name}",
@@ -188,13 +190,13 @@ List<RouteBase> navBarRoutes = [
                       queryParameters: state.uri.queryParameters));
             },
             routes: [
-              LlmGoRoute(
+              DocumentedGoRoute(
                 name: TransactionsScreen.name,
                 description:
                     "Show transactions of an account, and maybe filter them",
                 path: "${TransactionsScreen.name}",
                 parameters: const [
-                  LlmFunctionParameter(
+                  UIParameter(
                     name: 'filterString',
                     description: 'filter string for the list',
                   ),
@@ -212,13 +214,13 @@ List<RouteBase> navBarRoutes = [
       StatefulShellBranch(
         navigatorKey: _shellNavigatorMapKey,
         routes: [
-          LlmGoRoute(
+          DocumentedGoRoute(
             name: MapScreen.name,
             description:
                 "Show ATMs or Bank offices on map, nearest to user's current location",
             path: "/${MapScreen.name}",
             parameters: const [
-              LlmFunctionParameter(
+              UIParameter(
                 name: 'atmOrOffice',
                 description: 'show atms or offices',
                 enumeration: ["atms", "offices"],
@@ -236,21 +238,21 @@ List<RouteBase> navBarRoutes = [
       StatefulShellBranch(
         navigatorKey: shellNavigatorTransfersKey,
         routes: [
-          LlmGoRoute(
+          DocumentedGoRoute(
             name: TransferScreen.name,
             description: "Make a bank transfer",
             path: "/${TransferScreen.name}",
             parameters: const [
-              LlmFunctionParameter(
+              UIParameter(
                 name: 'amount',
                 description: 'amount to transfer',
                 type: 'number',
               ),
-              LlmFunctionParameter(
+              UIParameter(
                 name: 'destinationName',
                 description: 'destination account name to transfer money to',
               ),
-              LlmFunctionParameter(
+              UIParameter(
                 name: 'description',
                 description: 'description of the transfer',
               ),
@@ -271,12 +273,12 @@ List<RouteBase> navBarRoutes = [
       StatefulShellBranch(
         navigatorKey: _shellNavigatorContactsKey,
         routes: [
-          LlmGoRoute(
+          DocumentedGoRoute(
             name: ContactsScreen.name,
             description: "Show address book of contacts and maybe filter them",
             path: "/${ContactsScreen.name}",
             parameters: const [
-              LlmFunctionParameter(
+              UIParameter(
                 name: 'filterString',
                 description: 'string for filtering the list',
                 required: false,

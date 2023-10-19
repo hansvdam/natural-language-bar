@@ -130,7 +130,7 @@ class HistoryView extends StatelessWidget {
                           var openModal = routes.any((route) {
                             var messagePath =
                                 navUri != null ? Uri.parse(navUri).path : null;
-                            return route is LlmGoRoute &&
+                            return route is DocumentedGoRoute &&
                                 route.path == messagePath &&
                                 route.modal;
                           });
