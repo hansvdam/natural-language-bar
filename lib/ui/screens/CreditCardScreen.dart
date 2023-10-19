@@ -51,7 +51,6 @@ class CreditCardScreen extends StatelessWidget {
       {required this.label,
       required this.imageSrc,
       super.key,
-      required Map<String, String> queryParameters,
       this.action,
       this.limit})
       : super() {}

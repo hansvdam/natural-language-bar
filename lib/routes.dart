@@ -55,9 +55,8 @@ List<RouteBase> hamburgerRoutes = [
                         "https://ae.visamiddleeast.com/dam/VCOM/regional/ap/taiwan/global-elements/images/tw-visa-platinum-card-498x280.png",
                     action: ActionOnCard.fromString(
                         state.uri.queryParameters['action']),
-                    limit:
-                        int.tryParse(state.uri.queryParameters['limit'] ?? ''),
-                    queryParameters: state.uri.queryParameters)));
+                    limit: int.tryParse(
+                        state.uri.queryParameters['limit'] ?? ''))));
       }),
   LlmGoRoute(
       path: '/debitcard',
@@ -76,9 +75,8 @@ List<RouteBase> hamburgerRoutes = [
                         "https://www.trustcobank.com/wp-content/uploads/2023/01/Trustco-Debit-Card-450.png",
                     action: ActionOnCard.fromString(
                         state.uri.queryParameters['action']),
-                    limit:
-                        int.tryParse(state.uri.queryParameters['limit'] ?? ''),
-                    queryParameters: state.uri.queryParameters)));
+                    limit: int.tryParse(
+                        state.uri.queryParameters['limit'] ?? ''))));
       }),
   LlmGoRoute(
       name: ForecastScreen.name,
