@@ -17,7 +17,7 @@ using
 ### Installation
 
 1. Clone the repo
-2. Install dependencies
+2. Install dependencies by running the following command in the project root folder:
     ```sh
     flutter pub get
     ```
@@ -38,7 +38,8 @@ seconds from the first request.
 
 ### run the project e.g. from Android Studio
 
-1. Open the project in Android Studio
+1. [Download Android Studio](https://developer.android.com/studio) ;)
+2. Open the project in Android Studio
 2. Run it:
 
 ![run the project](https://raw.githubusercontent.com/hansvdam/langbar/main/docs/img/startingSampleApp.png)
