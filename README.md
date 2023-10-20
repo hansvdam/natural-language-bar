@@ -39,7 +39,10 @@ seconds from the first request.
 ### run the project e.g. from Android Studio
 
 1. Open the project in Android Studio
-2. ![run the project](https://raw.githubusercontent.com/hansvdam/langbar/main/docs/img/startingSampleApp.png)
+2. Run it:
+
+![run the project](https://raw.githubusercontent.com/hansvdam/langbar/main/docs/img/startingSampleApp.png)
+
 
 ### Further explanation
 
