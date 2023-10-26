@@ -20,14 +20,15 @@ class ChatHistory extends ChangeNotifier {
 
   final List<HistoryMessage> items = [];
 
-  late final HistoryProvider historyProvider;
+  late final HistoryProvider? historyProvider;
 
   init() async {
     if (!PlatformDetails().isWeb) {
       // sqlite does not wrk on web (maybe move to sharedprefs at some point)
       historyProvider = HistoryProvider();
-      await historyProvider.open();
-      var historyItemsFromDatabase = await historyProvider.getHistoryItems();
+      await historyProvider?.open();
+      var historyItemsFromDatabase =
+          await historyProvider?.getHistoryItems() ?? <HistoryMessage>[];
       items.addAll(historyItemsFromDatabase);
       notifyListeners();
     }
@@ -35,7 +36,7 @@ class ChatHistory extends ChangeNotifier {
 
   void add(HistoryMessage item) {
     items.add(item);
-    historyProvider.insert(item);
+    historyProvider?.insert(item);
     notifyListeners();
   }
 }
