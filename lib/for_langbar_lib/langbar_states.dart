@@ -20,7 +20,7 @@ class ChatHistory extends ChangeNotifier {
 
   final List<HistoryMessage> items = [];
 
-  late final HistoryProvider? historyProvider;
+  HistoryProvider? historyProvider;
 
   init() async {
     if (!PlatformDetails().isWeb) {
