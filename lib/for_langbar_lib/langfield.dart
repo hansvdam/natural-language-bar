@@ -122,13 +122,17 @@ class _SpeechButtonState extends State<SpeechButton>
     });
   }
 
+  VoidCallback? _listener;
+  LangBarState? langbarState;
+
   @override
   void initState() {
     super.initState();
-    var langbarState = Provider.of<LangBarState>(context, listen: false);
-    langbarState.addListener(() {
-      if (!langbarState.listeningForSpeech) _controller.stop();
-    });
+    langbarState = Provider.of<LangBarState>(context, listen: false);
+    _listener = () {
+      if (!langbarState!.listeningForSpeech) _controller.stop();
+    };
+    langbarState!.addListener(_listener!);
     _controller = AnimationController(
       duration: const Duration(seconds: 1),
       vsync: this,
@@ -142,6 +146,7 @@ class _SpeechButtonState extends State<SpeechButton>
 
   @override
   void dispose() {
+    langbarState?.removeListener(_listener!);
     _controller.dispose();
     super.dispose();
   }
