@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:langbar/for_langbar_lib/platform_details.dart';
 
 import 'langbar_history_storage.dart';
 
@@ -22,11 +23,14 @@ class ChatHistory extends ChangeNotifier {
   late final HistoryProvider historyProvider;
 
   init() async {
-    historyProvider = HistoryProvider();
-    await historyProvider.open();
-    var historyItemsFromDatabase = await historyProvider.getHistoryItems();
-    items.addAll(historyItemsFromDatabase);
-    notifyListeners();
+    if (!PlatformDetails().isWeb) {
+      // sqlite does not wrk on web (maybe move to sharedprefs at some point)
+      historyProvider = HistoryProvider();
+      await historyProvider.open();
+      var historyItemsFromDatabase = await historyProvider.getHistoryItems();
+      items.addAll(historyItemsFromDatabase);
+      notifyListeners();
+    }
   }
 
   void add(HistoryMessage item) {

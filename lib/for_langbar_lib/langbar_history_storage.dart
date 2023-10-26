@@ -52,7 +52,7 @@ extension HistoryMessageExtension on HistoryMessage {
 }
 
 class HistoryProvider {
-  late Database db;
+  Database? db;
 
   Future open() async {
     WidgetsFlutterBinding.ensureInitialized();
@@ -76,18 +76,19 @@ class HistoryProvider {
   }
 
   insert(HistoryMessage historyMessage) async {
-    var result = await db.insert(tableHistory, historyMessage.toMap());
+    var result = await db?.insert(tableHistory, historyMessage.toMap());
     print('inserted: ' + result.toString());
   }
 
   Future<List<HistoryMessage>> getHistoryItems() async {
-    final List<Map> maps = await db.query(tableHistory, columns: [
-      columnId,
-      columnNavUri,
-      columnText,
-      columnIsHuman,
-      columnTime
-    ]);
+    final List<Map> maps = await db?.query(tableHistory, columns: [
+          columnId,
+          columnNavUri,
+          columnText,
+          columnIsHuman,
+          columnTime
+        ]) ??
+        [];
     if (maps.isNotEmpty) {
       List<HistoryMessage> map2 =
           maps.map((map) => historyMessagefromMap(map)).toList();
@@ -98,11 +99,12 @@ class HistoryProvider {
 
   Future<int> delete(int id) async {
     return await db
-        .delete(tableHistory, where: '$columnId = ?', whereArgs: [id]);
+            ?.delete(tableHistory, where: '$columnId = ?', whereArgs: [id]) ??
+        0;
   }
 
   Future<int> clear() async {
-    return await db.delete(tableHistory);
+    return await db?.delete(tableHistory) ?? 0;
   }
 
   // Future<int> update(Todo todo) async {
@@ -110,7 +112,7 @@ class HistoryProvider {
   //       where: '$columnId = ?', whereArgs: [todo.id]);
   // }
 
-  Future close() async => db.close();
+  Future close() async => db?.close();
 }
 
 // // Create a Dog and add it to the dogs table
