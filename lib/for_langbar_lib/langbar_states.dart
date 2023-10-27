@@ -66,8 +66,10 @@ class LangBarState extends ChangeNotifier {
   bool get listeningForSpeech => _isListeningForSpeech;
 
   set listeningForSpeech(bool value) {
-    _isListeningForSpeech = value;
-    notifyListeners();
+    if (_isListeningForSpeech != value) {
+      _isListeningForSpeech = value;
+      notifyListeners();
+    }
   }
 
   // do not use setter here, we use a local textcontroller initialized with this value:

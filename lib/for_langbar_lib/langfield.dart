@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:langbar/for_langbar_lib/platform_details.dart';
 import 'package:langbar/for_langbar_lib/send_to_llm.dart';
 import 'package:langbar/for_langbar_lib/speech.dart';
+import 'package:langbar/for_langbar_lib/utils.dart';
 import 'package:provider/provider.dart';
 
 import 'langbar_states.dart';
@@ -101,25 +103,53 @@ class _SpeechButtonState extends State<SpeechButton>
   late AnimationController _controller;
   late ColorTween _colorTween;
 
+  // make sure to only send the text once, when the user stops speaking:
+  bool _alreadyStoppingSpeech = false;
+
   Future toggleRecording() {
     var langbarState = Provider.of<LangBarState>(context, listen: false);
-    langbarState.listeningForSpeech = true;
-    return Speech.toggleRecording(onResult: (String text) {
-      var eventTime = DateTime.now().toIso8601String();
-      langbarState.controllerOutlined.text = text;
-      print("$eventTime: result $text");
-    }, onListening: (bool isListening, String status) {
-      var eventTime = DateTime.now().toIso8601String();
-      print("$eventTime: listening state $isListening, status $status");
-      if (status == "done") {
+    if (!langbarState.listeningForSpeech) {
+      _controller.repeat(reverse: true);
+    }
+
+    onResult(String text) {
+      if (!_alreadyStoppingSpeech) {
+        langbarState.controllerOutlined.text = text;
+      }
+      print("result $text");
+      langbarLogger.d("result $text");
+    }
+
+    onListening(bool isListening, String status) {
+      if (isListening) {
+        _alreadyStoppingSpeech = false;
+        langbarState.listeningForSpeech = true;
+      }
+      langbarLogger.d("listening state $isListening, status $status");
+      var resultComplete = resultCompletelyAvailable(status);
+      if (resultComplete && !_alreadyStoppingSpeech) {
+        _alreadyStoppingSpeech = true;
         var langbarState = Provider.of<LangBarState>(context, listen: false);
         if (langbarState.controllerOutlined.text.isNotEmpty) {
           widget.submit();
-          print("$eventTime: sending ${langbarState.controllerOutlined.text}");
+          langbarLogger.d("sending ${langbarState.controllerOutlined.text}");
         }
         langbarState.listeningForSpeech = false;
       }
-    });
+    }
+
+    return Speech.toggleRecording(onResult: onResult, onListening: onListening);
+  }
+
+  // on web the status is "notListening" when the user stops speaking, on mobile it is "done", or rather
+  // on web the 'done' status still comes, but after a long time; way too long after. So on web we already respond
+  // to the 'notListening' status, but we have to ignore the results after that, hence the _alreadyStoppingSpeech variable (ugh...).
+  bool resultCompletelyAvailable(String status) {
+    if (PlatformDetails().isWeb) {
+      return status == "notListening";
+    } else {
+      return status == "done";
+    }
   }
 
   VoidCallback? _listener;
@@ -131,6 +161,7 @@ class _SpeechButtonState extends State<SpeechButton>
     langbarState = Provider.of<LangBarState>(context, listen: false);
     _listener = () {
       if (!langbarState!.listeningForSpeech) _controller.stop();
+      langbarLogger.d("stop mic animation");
     };
     langbarState!.addListener(_listener!);
     _controller = AnimationController(
@@ -166,7 +197,6 @@ class _SpeechButtonState extends State<SpeechButton>
             : themeData.colorScheme.onSurface,
         onPressed: () {
           setState(() {
-            _controller.repeat(reverse: true);
             toggleRecording();
           });
         },

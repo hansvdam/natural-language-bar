@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:langbar/for_langbar_lib/langbar_states.dart';
+import 'package:langbar/for_langbar_lib/utils.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -77,7 +78,7 @@ class HistoryProvider {
 
   insert(HistoryMessage historyMessage) async {
     var result = await db?.insert(tableHistory, historyMessage.toMap());
-    print('inserted: ' + result.toString());
+    langbarLogger.d('inserted: ' + result.toString());
   }
 
   Future<List<HistoryMessage>> getHistoryItems() async {

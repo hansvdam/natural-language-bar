@@ -48,7 +48,9 @@ dependencies:
   image_network: ^2.5.4+1
   # shared_preferences_web is somehow necessary (as a dependency) for web after adding speech, otherwise we get a compile error. Don't understand why:
   shared_preferences_web: ^2.2.1
-  speech_to_text: ^6.3.0
+  speech_to_text:
+    path: ../speech_to_text/speech_to_text
+  #  speech_to_text: ^6.3.0
   logger: ^2.0.2+1
 
 dev_dependencies:
