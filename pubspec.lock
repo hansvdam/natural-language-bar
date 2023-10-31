@@ -464,9 +464,10 @@ packages:
   speech_to_text:
     dependency: "direct main"
     description:
-      path: "../speech_to_text/speech_to_text"
-      relative: true
-    source: path
+      name: speech_to_text
+      sha256: "14c946f4a72fb70d365fe903e748a906a925d20ba3be4a1ec0e9968b1f94adf9"
+      url: "https://pub.dev"
+    source: hosted
     version: "6.4.0"
   speech_to_text_macos:
     dependency: transitive
