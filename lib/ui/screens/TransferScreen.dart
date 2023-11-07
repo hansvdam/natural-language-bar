@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -7,17 +9,16 @@ import '../param_change_detecting_screens.dart';
 import 'default_appbar_scaffold.dart';
 
 class TransferScreen extends DefaultAppbarScreen {
-  TransferScreen(
-      {required super.label,
-      Key? key,
-      fromAccountId = "1",
-      amount,
-      destinationName,
-      description})
+  TransferScreen({required super.label,
+    Key? key,
+    fromAccountId = "1",
+    amount,
+    destinationName,
+    description})
       : super(
-            body: TransferMoneyScreen(
-                amount, destinationName, description, fromAccountId),
-            key: key) {}
+      body: TransferMoneyScreen(
+          amount, destinationName, description, fromAccountId),
+      key: key) {}
 
   static const name = 'transfer';
 }
@@ -30,8 +31,7 @@ class TransferMoneyScreen extends ChangeDetectingStatefulWidget {
 
   final String fromAccountId;
 
-  const TransferMoneyScreen(
-      this.amount, this.destinationName, this.description, this.fromAccountId,
+  const TransferMoneyScreen(this.amount, this.destinationName, this.description, this.fromAccountId,
       {super.key});
 
   @override
@@ -79,7 +79,8 @@ class _TheFutureState extends UpdatingScreenState<TransferMoneyScreen> {
 
   Future<Contact?> findMostlikelyDestinationContact(String s) async {
     var contacts = await readContactsFromCsv(context);
-    return findMatchingContact(contacts, s) ?? Contact(s, null);
+    // insert a dummy iban if contact not in list; just for demo purposes (better than empty field):
+    return findMatchingContact(contacts, s) ?? Contact(s, "GB33BUKB202015555");
   }
 }
 
@@ -102,15 +103,15 @@ class TransferContentWidget extends ChangeDetectingStatefulWidget {
   @override
   String value() =>
       (amount.toString() ?? '') +
-      (destinationContact?.name ?? '') +
-      (description ?? '');
+          (destinationContact?.name ?? '') +
+          (description ?? '');
 }
 
 class TransferContentState extends UpdatingScreenState<TransferContentWidget> {
   final TextEditingController _destinationaccountNumberController =
-      TextEditingController();
+  TextEditingController();
   final TextEditingController _destinationAccountNameController =
-      TextEditingController();
+  TextEditingController();
   final TextEditingController _amountController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
 
@@ -124,13 +125,35 @@ class TransferContentState extends UpdatingScreenState<TransferContentWidget> {
 
   @override
   void initOrUpdateWidgetParams() {
-    _amountController.text = widget.amount?.toStringAsFixed(2) ?? '';
-    _destinationAccountNameController.text =
-        widget.destinationContact?.name.toString() ?? '';
-    _destinationaccountNumberController.text =
-        widget.destinationContact?.iban ?? '';
-    _descriptionController.text = widget.description ?? '';
+    animateFieldContent(widget.amount?.toStringAsFixed(2), _amountController)
+        .then((_) => animateFieldContent(
+            widget.destinationContact?.name, _destinationAccountNameController))
+        .then((_) => animateFieldContent(widget.destinationContact?.iban,
+            _destinationaccountNumberController))
+        .then((_) =>
+            animateFieldContent(widget.description, _descriptionController));
     fromAccount = accounts[widget.fromAccountId]!;
+  }
+
+  Future<void> animateFieldContent(
+      String? injectedContent, TextEditingController textController) async {
+    if (injectedContent == null) {
+      return;
+    }
+
+    var length = injectedContent.length;
+    var periodLength = (1200 / length).toInt();
+    var timer = Timer.periodic(Duration(milliseconds: periodLength), (timer) {
+      if (textController.text.length < length) {
+        textController.text =
+            injectedContent.substring(0, textController.text.length + 1);
+      } else {
+        timer.cancel();
+      }
+    });
+
+    await Future.delayed(Duration(milliseconds: periodLength * length));
+    timer.cancel();
   }
 
   void clear() {
@@ -179,18 +202,18 @@ class TransferContentState extends UpdatingScreenState<TransferContentWidget> {
         SizedBox(height: 20),
         Center(
             child: FilledButton(
-          onPressed: () {
-            // need to clear the transfer screen somehow:
-            context.go("/transfer");
-            var goRouter = GoRouter.of(context);
-            // ugly trick, but we need to clear the Transfer screen first.
-            // tried many things, but this is the only thing that works.
-            Future.delayed(Duration(milliseconds: 50), () {
-              goRouter.go("/home");
-            });
-          },
-          child: const Text('Transfer'),
-        )),
+              onPressed: () {
+                // need to clear the transfer screen somehow:
+                context.go("/transfer");
+                var goRouter = GoRouter.of(context);
+                // ugly trick, but we need to clear the Transfer screen first.
+                // tried many things, but this is the only thing that works.
+                Future.delayed(Duration(milliseconds: 50), () {
+                  goRouter.go("/home");
+                });
+              },
+              child: const Text('Transfer'),
+            )),
       ],
     );
   }
