@@ -1,3 +1,4 @@
+import 'package:langbar/for_langbar_lib/platform_details.dart';
 import 'package:langbar/for_langbar_lib/utils.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
@@ -6,12 +7,13 @@ import 'package:speech_to_text/speech_to_text.dart';
 class Speech {
   static final _speech = SpeechToText();
 
-  static Future<bool> toggleRecording(
-      {required Function(String text) onResult,
-      required Function(bool onListening, String status) onListening}) async {
+  static Future<bool> toggleRecording({required Function(String text) onResult,
+    required Function(bool onListening, String status) onListening}) async {
     langbarLogger.d('toggleRecording');
+    var initing = true;
     if (_speech.statusListener != null) {
       langbarLogger.d('statusListener is not null');
+      initing = false;
     }
     final isAvailable = await _speech.initialize(
         // finalTimeout: Duration(milliseconds: 60),
@@ -35,6 +37,12 @@ class Speech {
         listenMode: ListenMode.dictation,
         // partialResults: false
       );
+      if (initing && PlatformDetails().isWeb) {
+        // need permission on web
+        Future.delayed(Duration(seconds: 1), () {
+          _speech.stop();
+        });
+      }
     }
 
     return isAvailable;
