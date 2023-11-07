@@ -197,10 +197,33 @@ class _SpeechButtonState extends State<SpeechButton>
             : themeData.colorScheme.onSurface,
         onPressed: () {
           setState(() {
-            toggleRecording();
+            if (PlatformDetails().isWeb) {
+              showDialogThenDismiss(context);
+            } else {
+              toggleRecording();
+            }
           });
         },
       );
     });
   }
+}
+
+// function that shows Modal Dailog That Dismisses After 3 seconds():
+
+void showDialogThenDismiss(BuildContext context) async {
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      return AlertDialog(
+          // title: Text('Modal Dialog'),
+          content: Text(
+              'Speech to text is only implemented in mobile apps.\nNot yet for web'));
+    },
+  );
+
+  await Future.delayed(Duration(seconds: 3));
+
+  Navigator.of(context).pop();
 }
