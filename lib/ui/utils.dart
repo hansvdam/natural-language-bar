@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -28,6 +30,31 @@ class _BottomSheetButton extends StatelessWidget {
   }
 }
 
+Future<void> animateFieldContent(
+    String? injectedContent, TextEditingController textController) async {
+  if (injectedContent == null || injectedContent.isEmpty) {
+    return;
+  }
+
+  var length = injectedContent.length;
+  var periodLength = (1200 / length).toInt();
+  var completer = Completer();
+
+  Timer.periodic(Duration(milliseconds: periodLength), (timer) {
+    if (textController.text.length < length) {
+      textController.text =
+          injectedContent.substring(0, textController.text.length + 1);
+    } else {
+      timer.cancel();
+      if (!completer.isCompleted) {
+        completer.complete();
+      }
+    }
+  });
+
+  await completer.future;
+}
+
 class HamburgerMenu extends StatelessWidget {
   const HamburgerMenu({
     required this.scaffoldKey,
@@ -48,13 +75,12 @@ class HamburgerMenu extends StatelessWidget {
   }
 }
 
-PreferredSizeWidget createAppBar(
-    BuildContext context, String title, Function() showBottomSheet,
+PreferredSizeWidget createAppBar(BuildContext context, String title, Function() showBottomSheet,
     {bool leadingHamburger = true}) {
   // trigger when screen goes from and to navigation rail:
   Provider.of<WidthChanged>(context, listen: true);
   ScaffoldWithNavigationBar? parentNavigationbarHolder =
-      context.findAncestorWidgetOfExactType<ScaffoldWithNavigationBar>();
+  context.findAncestorWidgetOfExactType<ScaffoldWithNavigationBar>();
   var leadingHamburgerAndNoNavigationRail =
       parentNavigationbarHolder != null && leadingHamburger;
   return AppBar(
@@ -76,7 +102,7 @@ class ClearButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => IconButton(
-        icon: const Icon(Icons.clear),
-        onPressed: () => controller.clear(),
-      );
+    icon: const Icon(Icons.clear),
+    onPressed: () => controller.clear(),
+  );
 }

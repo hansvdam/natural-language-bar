@@ -19,24 +19,41 @@ enum ActionOnCard {
 }
 
 class CardScreenSate extends ChangeNotifier {
-  ActionOnCard action = ActionOnCard.none;
-  int? limit;
+  ActionOnCard _action = ActionOnCard.none;
 
-  CardScreenSate({action, this.limit}) {
+  // is this the first time the screen is shown? (to be able to
+  // animate values injected from the outside (by the router)):
+  bool _initial = true;
+
+  bool get initial => _initial;
+
+  set initial(bool value) {
+    _initial = value;
+  }
+
+  CardScreenSate({action, int? limit}) : _limit = limit {
     if (action != null) {
-      this.action = action;
+      _action = action;
     } else {
-      this.action = ActionOnCard.none;
+      _action = ActionOnCard.none;
     }
   }
 
-  void setAction(ActionOnCard action) {
-    this.action = action;
+  ActionOnCard get action => _action;
+
+  set action(ActionOnCard action) {
+    _action = action;
+    _initial = false;
     notifyListeners();
   }
 
-  void setLimit(int? limit) {
-    this.limit = limit;
+  int? _limit;
+
+  int? get limit => _limit;
+
+  set limit(int? limit) {
+    _limit = limit;
+    _initial = false;
     notifyListeners();
   }
 }
@@ -81,8 +98,21 @@ class CreditCardScreenBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<CardScreenSate>(
         builder: (BuildContext context, CardScreenSate state, Widget? child) {
-          textEditingController.text = (state.limit ?? '').toString();
-      actionController.text = state.action.name;
+      if (state.initial) {
+        state.initial = false;
+        if (state.action == ActionOnCard.none) {
+          actionController.text = state.action.name;
+        }
+        animateFieldContent(
+                (state.limit ?? '').toString(), textEditingController)
+            .then((_) {
+          if (state.action != ActionOnCard.none) {
+            animateFieldContent(state.action.name, actionController);
+          }
+        });
+      }
+      //     // textEditingController.text = (state._limit ?? '').toString();
+      // actionController.text = state.action.name;
       final List<DropdownMenuEntry<ActionOnCard>> actionEntries =
           <DropdownMenuEntry<ActionOnCard>>[];
       for (final ActionOnCard action in ActionOnCard.values) {
@@ -112,15 +142,15 @@ class CreditCardScreenBody extends StatelessWidget {
                   FilteringTextInputFormatter.digitsOnly
                 ],
                 onChanged: (value) {
-                  state.setLimit(int.tryParse(value));
+                  state.limit = int.tryParse(value);
                 },
               )),
           DropdownMenu<ActionOnCard>(
               controller: actionController,
               label: const Text('Action'),
               dropdownMenuEntries: actionEntries,
-              onSelected: (icon) {
-                state.setAction(icon!);
+              onSelected: (action) {
+                state.action = action!;
               }),
         ],
       );

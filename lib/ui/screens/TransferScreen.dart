@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../../utils/name_matcher.dart';
 import '../models/account.dart';
 import '../param_change_detecting_screens.dart';
+import '../utils.dart';
 import 'default_appbar_scaffold.dart';
 
 class TransferScreen extends DefaultAppbarScreen {
@@ -133,27 +134,6 @@ class TransferContentState extends UpdatingScreenState<TransferContentWidget> {
         .then((_) =>
             animateFieldContent(widget.description, _descriptionController));
     fromAccount = accounts[widget.fromAccountId]!;
-  }
-
-  Future<void> animateFieldContent(
-      String? injectedContent, TextEditingController textController) async {
-    if (injectedContent == null) {
-      return;
-    }
-
-    var length = injectedContent.length;
-    var periodLength = (1200 / length).toInt();
-    var timer = Timer.periodic(Duration(milliseconds: periodLength), (timer) {
-      if (textController.text.length < length) {
-        textController.text =
-            injectedContent.substring(0, textController.text.length + 1);
-      } else {
-        timer.cancel();
-      }
-    });
-
-    await Future.delayed(Duration(milliseconds: periodLength * length));
-    timer.cancel();
   }
 
   void clear() {
