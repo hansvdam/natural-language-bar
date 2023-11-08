@@ -33,7 +33,7 @@ class Speech {
       _speech.listen(
         onResult: (value) => onResult(value.recognizedWords),
         listenFor: Duration(seconds: 30),
-        pauseFor: Duration(seconds: 2),
+        pauseFor: Duration(seconds: 3),
         listenMode: ListenMode.dictation,
         // partialResults: false
       );
