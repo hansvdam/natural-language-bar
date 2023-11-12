@@ -197,11 +197,11 @@ class _SpeechButtonState extends State<SpeechButton>
             : themeData.colorScheme.onSurface,
         onPressed: () {
           setState(() {
-            if (PlatformDetails().isWeb) {
-              showDialogThenDismiss(context);
-            } else {
-              toggleRecording();
-            }
+            // if (PlatformDetails().isWeb) {
+            //   showDialogThenDismiss(context);
+            // } else {
+            toggleRecording();
+            // }
           });
         },
       );

@@ -6,12 +6,12 @@ import 'default_appbar_scaffold.dart';
 const smallSpacing = 10.0;
 
 const String _markdownData = """
-# LangBar
+# Natural Language Bar
 app-'navigation' using natural language.  
 
 ## What is the point of this app?
 
-This is a fake banking app to demonstrate LangBar.
+This is a fake banking app to demonstrate the Natural Language Bar.
 It is **NOT** a proposal for a banking app design,
 but just shows that:\n
 __You can get to any screen/functionality by typing what you want in the *LangBar* below__\n
