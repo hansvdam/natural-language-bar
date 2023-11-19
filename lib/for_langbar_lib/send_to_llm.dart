@@ -15,14 +15,17 @@ import 'llm_go_route.dart';
 void submitToLLM(BuildContext context) {
   var langbarState = Provider.of<LangBarState>(context, listen: false);
   var apiKey2 = getOpenAIKey();
-  var client =
-      OpenAIClient.instanceFor(apiKey: apiKey2, apiBaseUrl: getLlmBaseUrl());
+  // var client =
+  //     OpenAIClient.instanceFor(apiKey: apiKey2, apiBaseUrl: getLlmBaseUrl());
   var sessionToken = getSessionToken();
   if (sessionToken != null) {
     dart_openai.OpenAI.includeHeaders({"session": sessionToken});
   }
-  final llm =
-      ChatOpenAI(apiClient: client, temperature: 0.0, model: 'gpt-3.5-turbo');
+  final llm = ChatOpenAI(
+      apiKey: apiKey2,
+      baseUrl: getLlmBaseUrl(),
+      temperature: 0.0,
+      model: 'gpt-3.5-turbo');
   langbarState.sendingToOpenAI = true;
   sendToOpenai(llm, context);
 }
