@@ -283,9 +283,10 @@ packages:
   langchain_openai:
     dependency: "direct main"
     description:
-      path: "../langchain_dart/packages/langchain_openai"
-      relative: true
-    source: path
+      name: langchain_openai
+      sha256: "886cd45eef7b756d5fd1babd13f53740a4561e79faa8178ba316afe27794e3d8"
+      url: "https://pub.dev"
+    source: hosted
     version: "0.1.1+1"
   lints:
     dependency: transitive
