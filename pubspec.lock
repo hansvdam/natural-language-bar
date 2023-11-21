@@ -276,18 +276,18 @@ packages:
     dependency: "direct main"
     description:
       name: langchain
-      sha256: "004a4e8c21cd1827d28de0d55681a4e7cd87faa999dbdd9edd6df99268bc320b"
+      sha256: "591de0acb6451e2f86f5592a1f182a78ceeb67cdc14ed9ed91539e0ffdd597dd"
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.0+2"
+    version: "0.1.1"
   langchain_openai:
     dependency: "direct main"
     description:
       name: langchain_openai
-      sha256: "886cd45eef7b756d5fd1babd13f53740a4561e79faa8178ba316afe27794e3d8"
+      sha256: dd6353e46d4b99547f99de5df33f18dd1887845278f12f040da76fed226b8eb3
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.1+1"
+    version: "0.1.2+1"
   lints:
     dependency: transitive
     description:
@@ -372,10 +372,10 @@ packages:
     dependency: transitive
     description:
       name: openai_dart
-      sha256: "1386b6d318f6c12b369ec5715d8cb99b2ddc4812a29dd0fcabe146cdad6a0832"
+      sha256: "3dae6b44880f3815a33d1d0a672ea456cbbf722111a20118084146f6a9758bb6"
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.1+1"
+    version: "0.1.1+2"
   path:
     dependency: "direct main"
     description:
@@ -553,18 +553,18 @@ packages:
     dependency: "direct main"
     description:
       name: syncfusion_flutter_charts
-      sha256: "300afb7ffb157207d88c489728bb043e3de2e3a399a34835babacf7841cab897"
+      sha256: "719af736c2fa189a0d6574e0bf23bc32df8ee9589980d456bcf391a8bd55aa1b"
       url: "https://pub.dev"
     source: hosted
-    version: "23.1.44"
+    version: "23.2.4"
   syncfusion_flutter_core:
     dependency: transitive
     description:
       name: syncfusion_flutter_core
-      sha256: "6f3056c548f4e039a8994904836881753c4c7643cd2142d3c226fcb45ec200fe"
+      sha256: "8a1220f978491f56431c66dacf1bb97bf2abcd1458b542fe0dfbf1a630c67260"
       url: "https://pub.dev"
     source: hosted
-    version: "23.1.44"
+    version: "23.2.4"
   synchronized:
     dependency: transitive
     description:

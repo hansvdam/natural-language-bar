@@ -1,7 +1,7 @@
-import 'package:dart_openai/dart_openai.dart' as dart_openai;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:langbar/for_langbar_lib/retriever_tool.dart';
 import 'package:langchain/langchain.dart';
 import 'package:langchain_openai/langchain_openai.dart';
 import 'package:provider/provider.dart';
@@ -15,12 +15,6 @@ import 'llm_go_route.dart';
 void submitToLLM(BuildContext context) {
   var langbarState = Provider.of<LangBarState>(context, listen: false);
   var apiKey2 = getOpenAIKey();
-  // var client =
-  //     OpenAIClient.instanceFor(apiKey: apiKey2, apiBaseUrl: getLlmBaseUrl());
-  var sessionToken = getSessionToken();
-  if (sessionToken != null) {
-    dart_openai.OpenAI.includeHeaders({"session": sessionToken});
-  }
   final llm = ChatOpenAI(
       apiKey: apiKey2,
       baseUrl: getLlmBaseUrl(),
@@ -39,6 +33,10 @@ Future<void> sendToOpenai(ChatOpenAI llm, BuildContext context) async {
   langbarState.historyShowing = false;
   var tools = parseRouters(GoRouter.of(context), routes);
 
+  var tool = RetrieverTool();
+
+  tools.insert(0, tool);
+
   DateTime now = DateTime.now();
   String formattedDate = DateFormat('yyyy-MM-ddTHH:mm:ssZ').format(now);
   final agent = OpenAIFunctionsAgent.fromLLMAndTools(
@@ -46,7 +44,7 @@ Future<void> sendToOpenai(ChatOpenAI llm, BuildContext context) async {
         prompt: PromptTemplate(
           inputVariables: {},
           template:
-              'You are a helpful AI assistant. The current date and time is ${formattedDate}.',
+              'You are a helpful AI assistant. The current date and time is ${formattedDate}. Never directly answer a question yourself, but always use a function call.',
         ),
       ),
       llm: llm,
@@ -61,6 +59,7 @@ Future<void> sendToOpenai(ChatOpenAI llm, BuildContext context) async {
   } catch (e) {
     response = e.toString();
   }
+  print(response);
   langbarState.controllerOutlined.clear();
   langbarState.sendingToOpenAI = false;
   // if response contains spaces, we assume it is not a path, but a response from the AI (when this becomes too much of a hack, we should start responding from tools with more complex objects with fields etc.
@@ -75,7 +74,7 @@ Future<void> sendToOpenai(ChatOpenAI llm, BuildContext context) async {
 }
 
 parseRouters(GoRouter, List<RouteBase> routes, {parentPath}) {
-  var tools = <GenericScreenTool>[];
+  var tools = <BaseTool>[];
   for (var route in routes) {
     String? newPath = null;
     if (route is GoRoute) {

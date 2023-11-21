@@ -37,9 +37,9 @@ dependencies:
   cupertino_icons: ^1.0.6
   go_router: ^12.1.1
   provider: ^6.1.1
-  syncfusion_flutter_charts: ^23.1.44
-  langchain: ^0.1.0+2
-  langchain_openai: ^0.1.1+1
+  syncfusion_flutter_charts: ^23.2.4
+  langchain: ^0.1.1
+  langchain_openai: ^0.1.2+1
   dart_openai: ^4.1.4
   flutter_markdown: ^0.6.18+2
   photo_view: ^0.14.0
