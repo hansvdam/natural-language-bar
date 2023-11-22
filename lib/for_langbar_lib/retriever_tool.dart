@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:langbar/for_langbar_lib/retrieval.dart';
+
 import '../for_langchain/for_langchain.dart';
 
 /// {@template forecasting_tool}
@@ -22,6 +24,7 @@ final class RetrieverTool extends GenericTool {
   @override
   FutureOr<String> runInternal(Map<String, dynamic> toolInput) {
     var userQuestion = toolInput['user_question'];
-    return userQuestion;
+    var returnValue = conversationalRetrievalChain(userQuestion);
+    return returnValue;
   }
 }

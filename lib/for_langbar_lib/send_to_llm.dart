@@ -37,6 +37,8 @@ Future<void> sendToOpenai(ChatOpenAI llm, BuildContext context) async {
 
   tools.insert(0, tool);
 
+  final memory2 = ConversationBufferMemory(returnMessages: true);
+
   DateTime now = DateTime.now();
   String formattedDate = DateFormat('yyyy-MM-ddTHH:mm:ssZ').format(now);
   final agent = OpenAIFunctionsAgent.fromLLMAndTools(

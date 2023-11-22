@@ -276,18 +276,26 @@ packages:
     dependency: "direct main"
     description:
       name: langchain
-      sha256: "591de0acb6451e2f86f5592a1f182a78ceeb67cdc14ed9ed91539e0ffdd597dd"
+      sha256: bdc6cb0888944b7544865af5bdc104af04112831ef19acf1a472380291f6cca7
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.1"
+    version: "0.1.1+1"
   langchain_openai:
     dependency: "direct main"
     description:
       name: langchain_openai
-      sha256: dd6353e46d4b99547f99de5df33f18dd1887845278f12f040da76fed226b8eb3
+      sha256: "9bf5059a98adc03b6dd95e4b9531e61451403f6fdb54d26b5f15cec4219109c0"
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.2+1"
+    version: "0.1.2+2"
+  langchain_pinecone:
+    dependency: "direct main"
+    description:
+      name: langchain_pinecone
+      sha256: ce46df2dcfb292b552f7bea22b5b0cab2d9854b8f0b5ae77bcca2005039eb560
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.6+5"
   lints:
     dependency: transitive
     description:
@@ -408,6 +416,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.14.0"
+  pinecone:
+    dependency: transitive
+    description:
+      name: pinecone
+      sha256: a550434ea1bc0d9e0762c0dbf40b864837326f35230126d3d1e0780961d71e54
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.7.2"
   plugin_platform_interface:
     dependency: transitive
     description:
