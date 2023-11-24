@@ -46,7 +46,7 @@ Future<void> sendToOpenai(ChatOpenAI llm, BuildContext context) async {
         prompt: PromptTemplate(
           inputVariables: {},
           template:
-              'You are a helpful AI assistant. The current date and time is ${formattedDate}. Never directly answer a question yourself, but always use a function call.',
+              'Never directly answer a question yourself, but always use a function call.',
         ),
       ),
       llm: llm,
