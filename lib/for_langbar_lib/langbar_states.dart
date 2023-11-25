@@ -41,10 +41,20 @@ class ChatHistory extends ChangeNotifier {
   }
 }
 
+enum ChatSheetExpansion { part, full }
+
+var screenheight =
+    1000; // store the current screen height, so we can adjust the history height accordingly
+
 class LangBarState extends ChangeNotifier {
   final TextEditingController controllerOutlined = TextEditingController();
 
+  // states changes when the user sends a message:
+  // - last item by the system: action/function -> hide history after typing
+  // - last item by the system: text -> show full history after typing
   bool _historyShowing = false;
+
+  var _historyHeight = 1000;
 
   LangBarState({bool enableSpeech = true}) {
     _speechEnabled = enableSpeech;
@@ -52,9 +62,28 @@ class LangBarState extends ChangeNotifier {
 
   bool get historyShowing => _historyShowing;
 
+  set historyShowing(bool value) {
+    _historyShowing = value;
+    notifyListeners();
+  }
+
   bool _speechEnabled = true;
 
   bool get speechEnabled => _speechEnabled;
+
+  int get historyHeight => _historyHeight;
+
+  set historyExpansion(ChatSheetExpansion value) {
+    switch (value) {
+      case ChatSheetExpansion.part:
+        _historyHeight = screenheight ~/ 3;
+        break;
+      case ChatSheetExpansion.full:
+        _historyHeight = screenheight;
+        break;
+    }
+    notifyListeners();
+  }
 
   set speechEnabled(bool value) {
     _speechEnabled = value;
@@ -74,11 +103,6 @@ class LangBarState extends ChangeNotifier {
 
   // do not use setter here, we use a local textcontroller initialized with this value:
   String text = '';
-
-  set historyShowing(bool value) {
-    _historyShowing = value;
-    notifyListeners();
-  }
 
   bool _showLangbar = true;
   bool _sendingToOpenAI = false;

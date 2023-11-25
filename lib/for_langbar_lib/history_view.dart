@@ -33,7 +33,9 @@ class DividerWidget extends StatelessWidget {
 }
 
 class HistoryView extends StatelessWidget {
-  HistoryView({required this.messages, super.key});
+  final int maxHeigth;
+
+  HistoryView({required this.messages, super.key, required this.maxHeigth});
 
   final List<HistoryMessage> messages;
 
@@ -42,9 +44,9 @@ class HistoryView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-        constraints: const BoxConstraints(
+        constraints: BoxConstraints(
           minHeight: 0.0,
-          maxHeight: 300.0,
+          maxHeight: maxHeigth.toDouble(),
         ),
         child: Column(children: <Widget>[
           GestureDetector(

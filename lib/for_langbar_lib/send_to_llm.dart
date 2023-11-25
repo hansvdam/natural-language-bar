@@ -30,7 +30,6 @@ Future<void> sendToOpenai(ChatOpenAI llm, BuildContext context) async {
   // final forecastTool = ForecastScreen.getTool(GoRouter.of(context));
   // final creditCardTool = CreditCardScreen.getTool(GoRouter.of(context));
   var langbarState = Provider.of<LangBarState>(context, listen: false);
-  langbarState.historyShowing = false;
   var tools = parseRouters(GoRouter.of(context), routes);
 
   var tool = RetrieverTool();
@@ -69,10 +68,15 @@ Future<void> sendToOpenai(ChatOpenAI llm, BuildContext context) async {
   if (response.contains(' ')) {
     chatHistory.add(HistoryMessage(text: query, isHuman: true));
     chatHistory.add(HistoryMessage(text: response, isHuman: false));
+    langbarState.historyExpansion = ChatSheetExpansion.full;
     langbarState.historyShowing = true;
-  } else // add the original query, but the navigation-uri-repsonse as the hyperlink when you click on it
+  } else {
+    // add the original query, but the navigation-uri-repsonse as the hyperlink when you click on it
+    langbarState.historyShowing = false;
+    langbarState.historyExpansion = ChatSheetExpansion.part;
     chatHistory
         .add(HistoryMessage(text: query, isHuman: true, navUri: response));
+  }
 }
 
 parseRouters(GoRouter, List<RouteBase> routes, {parentPath}) {

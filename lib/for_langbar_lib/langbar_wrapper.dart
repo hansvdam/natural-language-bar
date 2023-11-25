@@ -23,7 +23,9 @@ class LangBarWrapper extends StatelessWidget {
               bottomSheet: langbarState.historyShowing &&
                       langbarState.showLangbar &&
                       chatHistory.items.isNotEmpty
-                  ? HistoryView(messages: chatHistory.items)
+                  ? HistoryView(
+                      messages: chatHistory.items,
+                      maxHeigth: langbarState.historyHeight)
                   : null,
               body: Builder(builder: (context) {
                 return body;
