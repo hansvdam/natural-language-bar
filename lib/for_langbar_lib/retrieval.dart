@@ -31,7 +31,7 @@ Future<String> conversationalRetrievalChain(String userQuestion) async {
       apiKey: apiKey2,
       baseUrl: getLlmBaseUrl(),
       temperature: 0.0,
-      model: 'gpt-3.5-turbo');
+      model: 'gpt-4-1106-preview');
   const stringOutputParser = StringOutputParser();
 
   final condenseQuestionPrompt = ChatPromptTemplate.fromTemplate('''
@@ -43,7 +43,7 @@ Follow Up Input: {question}
 Standalone question:''');
 
   final answerPrompt = ChatPromptTemplate.fromTemplate('''
-You are a KNAB representative. Answer the question based only on the following context about KNAB, in the natural language of the question:
+You are a KNAB representative. Answer the question based only on the following context about KNAB, in its original language:
 {context}
 
 Question: {question}''');
