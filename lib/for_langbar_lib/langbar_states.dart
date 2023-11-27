@@ -43,9 +43,6 @@ class ChatHistory extends ChangeNotifier {
 
 enum ChatSheetExpansion { part, full }
 
-var screenheight =
-    1000; // store the current screen height, so we can adjust the history height accordingly
-
 class LangBarState extends ChangeNotifier {
   final TextEditingController controllerOutlined = TextEditingController();
 
@@ -54,7 +51,10 @@ class LangBarState extends ChangeNotifier {
   // - last item by the system: text -> show full history after typing
   bool _historyShowing = false;
 
-  var _historyHeight = 1000;
+  var _historyHeight = 1000.0;
+
+  var screenheight =
+      1000.0; // store the current screen height, so we can adjust the history height accordingly
 
   LangBarState({bool enableSpeech = true}) {
     _speechEnabled = enableSpeech;
@@ -71,12 +71,12 @@ class LangBarState extends ChangeNotifier {
 
   bool get speechEnabled => _speechEnabled;
 
-  int get historyHeight => _historyHeight;
+  double get historyHeight => _historyHeight;
 
   set historyExpansion(ChatSheetExpansion value) {
     switch (value) {
       case ChatSheetExpansion.part:
-        _historyHeight = screenheight ~/ 3;
+        _historyHeight = screenheight / 3.0;
         break;
       case ChatSheetExpansion.full:
         _historyHeight = screenheight;

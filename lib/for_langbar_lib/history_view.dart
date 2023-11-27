@@ -33,7 +33,7 @@ class DividerWidget extends StatelessWidget {
 }
 
 class HistoryView extends StatelessWidget {
-  final int maxHeigth;
+  final double maxHeigth;
 
   HistoryView({required this.messages, super.key, required this.maxHeigth});
 

@@ -46,14 +46,18 @@ class MyApp extends StatelessWidget {
           ),
         ],
         child: Consumer<ChatHistory>(builder: (context, cart, child) {
-          return MaterialApp.router(
-            routerConfig: goRouter,
-            debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-              primarySwatch: Colors.indigo,
-              useMaterial3: true,
-            ),
-          );
+          return LayoutBuilder(builder: (context, constraints) {
+            Provider.of<LangBarState>(context).screenheight =
+                constraints.maxHeight;
+            return MaterialApp.router(
+              routerConfig: goRouter,
+              debugShowCheckedModeBanner: false,
+              theme: ThemeData(
+                primarySwatch: Colors.indigo,
+                useMaterial3: true,
+              ),
+            );
+          });
         }));
   }
 }
