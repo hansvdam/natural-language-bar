@@ -14,8 +14,7 @@ final class RetrieverTool extends GenericTool {
       super.parameters = const [
         UIParameter(
           name: 'user_question',
-          description:
-              'The last user question as self contained question, given the chat history',
+          description: 'The latest user message as a self contained message',
           required: true,
         )
       ]})

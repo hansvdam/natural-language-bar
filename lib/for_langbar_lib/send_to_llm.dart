@@ -35,13 +35,14 @@ Future<void> sendToOpenai(ChatOpenAI llm, BuildContext context) async {
   var tool = RetrieverTool();
 
   tools.insert(0, tool);
+  var chatHistory = Provider.of<ChatHistory>(context, listen: false);
 
-  final memory2 = ConversationBufferMemory(returnMessages: true);
+  ConversationBufferMemory memory = memoryFromChathistory(chatHistory);
 
   DateTime now = DateTime.now();
   String formattedDate = DateFormat('yyyy-MM-ddTHH:mm:ssZ').format(now);
   final agent = OpenAIFunctionsAgent.fromLLMAndTools(
-      systemChatMessage: SystemChatMessagePromptTemplate(
+      systemChatMessage: const SystemChatMessagePromptTemplate(
         prompt: PromptTemplate(
           inputVariables: {},
           template:
@@ -64,7 +65,6 @@ Future<void> sendToOpenai(ChatOpenAI llm, BuildContext context) async {
   langbarState.controllerOutlined.clear();
   langbarState.sendingToOpenAI = false;
   // if response contains spaces, we assume it is not a path, but a response from the AI (when this becomes too much of a hack, we should start responding from tools with more complex objects with fields etc.
-  var chatHistory = Provider.of<ChatHistory>(context, listen: false);
   if (response.contains(' ')) {
     chatHistory.add(HistoryMessage(text: query, isHuman: true));
     chatHistory.add(HistoryMessage(text: response, isHuman: false));
@@ -77,6 +77,27 @@ Future<void> sendToOpenai(ChatOpenAI llm, BuildContext context) async {
     chatHistory
         .add(HistoryMessage(text: query, isHuman: true, navUri: response));
   }
+}
+
+// converts the chat history (as shown to the user) to a memory object that can be used by the LLM
+ConversationBufferMemory memoryFromChathistory(ChatHistory chatHistory) {
+  var historyItems = chatHistory.items;
+  var lastHistoryItems = historyItems.length > 5
+      ? historyItems.sublist(historyItems.length - 5)
+      : historyItems;
+  List<ChatMessage> historyMessages =
+      lastHistoryItems.where((item) => item.isHuman).map((e) {
+    if (e.isHuman) {
+      return ChatMessage.human(ChatMessageContent.text(e.text));
+    } else {
+      return ChatMessage.system(e.text);
+    }
+  }).toList();
+
+  final memory2 = ConversationBufferMemory(
+      chatHistory: ChatMessageHistory(messages: historyMessages),
+      returnMessages: true);
+  return memory2;
 }
 
 parseRouters(GoRouter, List<RouteBase> routes, {parentPath}) {
