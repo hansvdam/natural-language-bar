@@ -11,6 +11,7 @@ import '../routes.dart';
 import 'generic_screen_tool.dart';
 import 'langbar_states.dart';
 import 'llm_go_route.dart';
+import 'my_conversation_buffer_memory.dart';
 
 void submitToLLM(BuildContext context) {
   var langbarState = Provider.of<LangBarState>(context, listen: false);
@@ -25,7 +26,8 @@ void submitToLLM(BuildContext context) {
   sendToOpenai(llm, context);
 }
 
-final memory = ConversationBufferWindowMemory(returnMessages: true);
+final memory = MyConversationBufferWindowMemory(
+    returnMessages: true); // default window length is 5
 
 Future<void> sendToOpenai(ChatOpenAI llm, BuildContext context) async {
   // final forecastTool = ForecastScreen.getTool(GoRouter.of(context));
@@ -62,6 +64,7 @@ Future<void> sendToOpenai(ChatOpenAI llm, BuildContext context) async {
   } catch (e) {
     response = e.toString();
   }
+  await replace_retriever_function_call_with_asistant_respons(response);
   print(response);
   langbarState.controllerOutlined.clear();
   langbarState.sendingToOpenAI = false;
@@ -77,6 +80,19 @@ Future<void> sendToOpenai(ChatOpenAI llm, BuildContext context) async {
     langbarState.historyExpansion = ChatSheetExpansion.part;
     chatHistory
         .add(HistoryMessage(text: query, isHuman: true, navUri: response));
+  }
+}
+
+Future<void> replace_retriever_function_call_with_asistant_respons(
+    response) async {
+  var chatHistoryLLM = memory.chatHistory;
+  var chatHistoryLLMItems = await chatHistoryLLM.getChatMessages();
+  ChatMessage? lastChatMessage = chatHistoryLLMItems.lastOrNull;
+  if (lastChatMessage is AIChatMessage &&
+      lastChatMessage.functionCall != null &&
+      lastChatMessage.functionCall!.name == retriever_name) {
+    await chatHistoryLLM.removeLast();
+    await chatHistoryLLM.addAIChatMessage(response);
   }
 }
 
