@@ -19,12 +19,13 @@ void submitToLLM(BuildContext context) {
       apiKey: apiKey2,
       baseUrl: getLlmBaseUrl(),
       temperature: 0.0,
-      model: 'gpt-3.5-turbo');
+      model: 'gpt-4-1106-preview');
+  // model: 'gpt-3.5-turbo');
   langbarState.sendingToOpenAI = true;
   sendToOpenai(llm, context);
 }
 
-final memory = ConversationBufferMemory(returnMessages: true);
+final memory = ConversationBufferWindowMemory(returnMessages: true);
 
 Future<void> sendToOpenai(ChatOpenAI llm, BuildContext context) async {
   // final forecastTool = ForecastScreen.getTool(GoRouter.of(context));
@@ -37,7 +38,7 @@ Future<void> sendToOpenai(ChatOpenAI llm, BuildContext context) async {
   tools.insert(0, tool);
   var chatHistory = Provider.of<ChatHistory>(context, listen: false);
 
-  ConversationBufferMemory memory = memoryFromChathistory(chatHistory);
+  // ConversationBufferMemory memory = ConversationBufferMemory(returnMessages: true);;
 
   DateTime now = DateTime.now();
   String formattedDate = DateFormat('yyyy-MM-ddTHH:mm:ssZ').format(now);
@@ -82,15 +83,15 @@ Future<void> sendToOpenai(ChatOpenAI llm, BuildContext context) async {
 // converts the chat history (as shown to the user) to a memory object that can be used by the LLM
 ConversationBufferMemory memoryFromChathistory(ChatHistory chatHistory) {
   var historyItems = chatHistory.items;
-  var lastHistoryItems = historyItems.length > 5
-      ? historyItems.sublist(historyItems.length - 5)
+  final historyLength = 2;
+  var lastHistoryItems = historyItems.length > historyLength
+      ? historyItems.sublist(historyItems.length - historyLength)
       : historyItems;
-  List<ChatMessage> historyMessages =
-      lastHistoryItems.where((item) => item.isHuman).map((e) {
+  List<ChatMessage> historyMessages = lastHistoryItems.map((e) {
     if (e.isHuman) {
       return ChatMessage.human(ChatMessageContent.text(e.text));
     } else {
-      return ChatMessage.system(e.text);
+      return ChatMessage.ai(e.text);
     }
   }).toList();
 

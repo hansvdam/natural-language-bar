@@ -15,7 +15,7 @@ final class RetrieverTool extends GenericTool {
         UIParameter(
           name: 'user_question',
           description:
-              'The latest user message as a self contained message, given the chat history.',
+              'The most recent user message as a self contained message, inferring context from previous messages if necessary.',
           required: true,
         )
       ]})
