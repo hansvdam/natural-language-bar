@@ -11,17 +11,17 @@ import 'default_appbar_scaffold.dart';
 
 class TransferScreen extends DefaultAppbarScreen {
   TransferScreen({required super.label,
-    Key? key,
-    fromAccountId = "1",
-    amount,
-    destinationName,
-    description})
+      Key? key,
+      fromAccountId = "1",
+      amount,
+      destinationName,
+      description})
       : super(
-      body: TransferMoneyScreen(
-          amount, destinationName, description, fromAccountId),
-      key: key) {}
+            body: TransferMoneyScreen(
+                amount, destinationName, description, fromAccountId),
+            key: key) {}
 
-  static const name = 'transfer';
+  static const name = 'transfer_money';
 }
 
 class TransferMoneyScreen extends ChangeDetectingStatefulWidget {
@@ -184,14 +184,14 @@ class TransferContentState extends UpdatingScreenState<TransferContentWidget> {
             child: FilledButton(
               onPressed: () {
                 // need to clear the transfer screen somehow:
-                context.go("/transfer");
-                var goRouter = GoRouter.of(context);
-                // ugly trick, but we need to clear the Transfer screen first.
-                // tried many things, but this is the only thing that works.
-                Future.delayed(Duration(milliseconds: 50), () {
-                  goRouter.go("/home");
-                });
-              },
+                context.go("/" + TransferScreen.name);
+            var goRouter = GoRouter.of(context);
+            // ugly trick, but we need to clear the Transfer screen first.
+            // tried many things, but this is the only thing that works.
+            Future.delayed(Duration(milliseconds: 50), () {
+              goRouter.go("/home");
+            });
+          },
               child: const Text('Transfer'),
             )),
       ],

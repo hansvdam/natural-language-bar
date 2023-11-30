@@ -31,7 +31,7 @@ Future<String> conversationalRetrievalChain(String userQuestion) async {
       apiKey: apiKey2,
       baseUrl: getLlmBaseUrl(),
       temperature: 0.0,
-      model: 'gpt-4-1106-preview');
+      model: 'gpt-4');
   const stringOutputParser = StringOutputParser();
 
   final condenseQuestionPrompt = ChatPromptTemplate.fromTemplate('''

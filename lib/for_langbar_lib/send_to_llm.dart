@@ -20,7 +20,8 @@ void submitToLLM(BuildContext context) {
       apiKey: apiKey2,
       baseUrl: getLlmBaseUrl(),
       temperature: 0.0,
-      model: 'gpt-4-1106-preview');
+      model: 'gpt-4');
+  // model: 'gpt-4-1106-preview');
   // model: 'gpt-3.5-turbo');
   langbarState.sendingToOpenAI = true;
   sendToOpenai(llm, context);
@@ -63,6 +64,8 @@ Future<void> sendToOpenai(ChatOpenAI llm, BuildContext context) async {
     response = await executor.run(query);
   } catch (e) {
     response = e.toString();
+    memory
+        .clear(); // make sure an error does not prevent the next query from being processed (strange things in the history may cause bad-request errors)
   }
   await replace_retriever_function_call_with_asistant_respons(response);
   print(response);
