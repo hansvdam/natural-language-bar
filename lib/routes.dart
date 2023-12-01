@@ -6,6 +6,7 @@ import 'package:langbar/ui/screens/TransactionsScreen.dart';
 import 'package:langbar/ui/screens/TransferScreen.dart';
 import 'package:langbar/ui/screens/dummy_screens/RoutePlanner.dart';
 import 'package:langbar/ui/screens/front_screen.dart';
+import 'package:langbar/ui/screens/paymentRequestScreen.dart';
 
 import 'for_langbar_lib/langbar_wrapper.dart';
 import 'for_langbar_lib/llm_go_route.dart';
@@ -77,6 +78,27 @@ List<RouteBase> hamburgerRoutes = [
                         state.uri.queryParameters['action']),
                     limit: int.tryParse(
                         state.uri.queryParameters['limit'] ?? ''))));
+      }),
+  DocumentedGoRoute(
+      path: '/payment_request',
+      name: 'payment_request',
+      description: 'make a payment request',
+      parameters: const [
+        UIParameter(
+          name: 'amount',
+          description: 'amount to reques',
+          type: 'number',
+        )
+      ],
+      modal: true,
+      parentNavigatorKey: _rootNavigatorKey,
+      pageBuilder: (context, state) {
+        return MaterialPage(
+            fullscreenDialog: true,
+            child: LangBarWrapper(
+                body: PaymentRequestScreen(
+                    initialAmount: double.tryParse(
+                        state.uri.queryParameters['amount'] ?? ''))));
       }),
   DocumentedGoRoute(
       name: ForecastScreen.name,

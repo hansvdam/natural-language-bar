@@ -109,6 +109,10 @@ class _DefaultDrawerState extends State<DefaultDrawer> {
               selectedIndex: _selectedIndex,
               label: "Debit Card",
               path: '/debitcard'),
+          DrawerItem(
+              selectedIndex: _selectedIndex,
+              label: "Payment Request",
+              path: '/payment_request'),
           // DrawerItem(
           //     selectedIndex: _selectedIndex,
           //     label: "Weather",
