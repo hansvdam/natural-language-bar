@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'PaymentRequestScreen2.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -22,8 +24,10 @@ class MyApp extends StatelessWidget {
 
 class PaymentRequestScreen extends StatefulWidget {
   final double? initialAmount;
+  final String? purpose;
 
-  PaymentRequestScreen({Key? key, this.initialAmount}) : super(key: key);
+  PaymentRequestScreen({Key? key, this.initialAmount, this.purpose})
+      : super(key: key);
 
   @override
   _PaymentRequestScreenState createState() => _PaymentRequestScreenState();
@@ -34,7 +38,7 @@ class _PaymentRequestScreenState extends State<PaymentRequestScreen>
   late TextEditingController _amountController;
   late AnimationController _animationController;
   late Animation<double> _animation;
-  String _amount = '';
+  String _intialAmount = '';
 
   @override
   void initState() {
@@ -55,8 +59,8 @@ class _PaymentRequestScreenState extends State<PaymentRequestScreen>
         final int cursorPosition = _animation.value.round();
         if (cursorPosition <= intialAmountLength) {
           setState(() {
-            _amount = initialAmountAsString.substring(0, cursorPosition);
-            _amountController.text = _amount;
+            _intialAmount = initialAmountAsString.substring(0, cursorPosition);
+            _amountController.text = _intialAmount;
             _amountController.selection = TextSelection.fromPosition(
                 TextPosition(offset: _amountController.text.length));
           });
@@ -129,8 +133,10 @@ class _PaymentRequestScreenState extends State<PaymentRequestScreen>
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            PaymentRequestScreen(initialAmount: 1500.0)),
+                        builder: (context) => PaymentRequestScreen2(
+                            amount:
+                                double.tryParse(_amountController.text) ?? 0.00,
+                            purpose: 'Lunch')),
                   );
                 },
                 child: Text('Verder'),
