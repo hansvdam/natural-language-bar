@@ -41,7 +41,7 @@ dependencies:
   langchain: ^0.1.1+1
   langchain_openai: ^0.1.2+2
   langchain_pinecone: ^0.0.6+5
-  dart_openai: ^4.1.4
+  dart_openai: ^5.0.0
   flutter_markdown: ^0.6.18+2
   photo_view: ^0.14.0
   encrypt: ^5.0.3

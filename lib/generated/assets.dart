@@ -7,5 +7,6 @@ class Assets {
   static const String imagesAtms = 'assets/images/atms.jpg';
   static const String imagesDrawerBackground =
       'assets/images/drawer_background.jpg';
+  static const String imagesMoney = 'assets/images/money.png';
   static const String imagesOffices = 'assets/images/offices.jpg';
 }

@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import 'PaymentRequestScreen3.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -71,6 +73,11 @@ class _PaymentRequestScreen2State extends State<PaymentRequestScreen2> {
   Widget build(BuildContext context) {
     return Scaffold(
       // backgroundColor: Colors.black,
+      appBar: AppBar(
+        // title: Text('Betaalverzoek'),
+        // backgroundColor: Colors.black,
+        elevation: 0,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -114,7 +121,14 @@ class _PaymentRequestScreen2State extends State<PaymentRequestScreen2> {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => PaymentRequestScreen3(
+                            amount: double.parse(_amountController.text),
+                            purpose: _purposeController.text,
+                          )),
+                );
                 // Handle payment request submission
               },
               child: Text('Nieuw betaalverzoek'),
@@ -126,9 +140,14 @@ class _PaymentRequestScreen2State extends State<PaymentRequestScreen2> {
   }
 
   Widget _buildChip(String label) {
-    return Chip(
-      label: Text(label),
-      backgroundColor: Colors.orange,
+    return InkWell(
+      onTap: () {
+        _purposeController.text = label;
+      },
+      child: Chip(
+        label: Text(label),
+        backgroundColor: Colors.orange,
+      ),
     );
   }
 }
