@@ -57,28 +57,6 @@ Question: {question}''');
     // return documents.map((final d) => d.pageContent).join(separator);
   }
 
-  String formatChatHistory(final List<(String, String)> chatHistory) {
-    final formattedDialogueTurns = chatHistory.map((final dialogueTurn) {
-      final (human, ai) = dialogueTurn;
-      return 'Human: $human\nAssistant: $ai';
-    });
-    return formattedDialogueTurns.join('\n');
-  }
-
-  final inputs = Runnable.fromMap({
-    'standalone_question': Runnable.fromMap({
-          'question': Runnable.getItemFromMap('question'),
-          'chat_history':
-              Runnable.getItemFromMap<List<(String, String)>>('chat_history') |
-                  Runnable.fromFunction(
-                    (final history, final _) => formatChatHistory(history),
-                  ),
-        }) |
-        condenseQuestionPrompt |
-        model |
-        stringOutputParser,
-  });
-
   final context = Runnable.fromMap({
     'context': Runnable.getItemFromMap('standalone_question') |
         retriever |
@@ -88,25 +66,9 @@ Question: {question}''');
     'question': Runnable.getItemFromMap('standalone_question'),
   });
 
-  final conversationalQaChain =
-      inputs | context | answerPrompt | model | stringOutputParser;
-
   final conversationalQaChain2 =
       context | answerPrompt | model | stringOutputParser;
 
-  // final res1 = await conversationalQaChain.invoke({
-  //   'question': 'where did the cat sit?',
-  //   'chat_history': <(String, String)>[],
-  // });
-  // print(res1);
-  // // The methods of payment that are currently accepted are iDEAL, PayPal, and
-  // // credit card.
-
-  // final res2 = await conversationalQaChain2.invoke({
-  //   'question': userQuestion,
-  //   'chat_history': <(String, String)>[],
-  //   // 'chat_history': [('How much did you spend?', 'I spent 100€')],
-  // });
   final res3 = await conversationalQaChain2.invoke({
     'standalone_question': userQuestion,
     'chat_history': <(String, String)>[],
@@ -114,5 +76,4 @@ Question: {question}''');
   });
   print(res3);
   return res3.toString();
-  // Yes, shipping is free on orders over 30€.
 }
