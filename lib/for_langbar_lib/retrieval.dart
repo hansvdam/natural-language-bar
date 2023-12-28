@@ -12,7 +12,7 @@ Future<String> conversationalRetrievalChain(String userQuestion) async {
   // normally never reinitialize this, because on initialization the index is (re)discovered through a call that takes 1000ms, so do this only once per session. IN this case we provide hostUrl, which is a direct link to the index, so we don't need to discover it.
   // This reinit is also more convenenient, becuse we use a dynamic session-token, which is not known at compile time.
   final vectorStore = Pinecone(
-    hostUrl: getLlmBaseUrl()!,
+    hostUrl: getVectorStoreBaseUrl()!,
     environment: pineConeEnvironment(),
     apiKey: getSessionToken(),
     indexName: pineConeIndexName(),
@@ -53,10 +53,18 @@ Question: {question}''');
   final conversationalQaChain2 =
       context | answerPrompt | model | stringOutputParser;
 
-  final res3 = await conversationalQaChain2.invoke({
-    'standalone_question': userQuestion,
-    'chat_history': <(String, String)>[],
-  });
-  print(res3);
-  return res3.toString();
+  var output = "";
+  try {
+    final res3 = await conversationalQaChain2.invoke({
+      'standalone_question': userQuestion,
+      'chat_history': <(String, String)>[],
+    });
+    print(res3);
+    output = res3.toString();
+  } catch (e) {
+    print(e);
+    output =
+        "An error occurred, while retrieving relevant chunks from a vector database.\nTry to configure a pinecone index for customer support questions in retrieval.dart:\n ${e.toString()}";
+  }
+  return output;
 }
