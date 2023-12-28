@@ -67,7 +67,8 @@ Future<void> sendToOpenai(ChatOpenAI llm, BuildContext context) async {
     memory
         .clear(); // make sure an error does not prevent the next query from being processed (strange things in the history may cause bad-request errors)
   }
-  await replace_retriever_function_call_with_asistant_respons(response);
+  await replace_retriever_function_call_with_assistant_response_in_history(
+      response);
   print(response);
   langbarState.controllerOutlined.clear();
   langbarState.sendingToOpenAI = false;
@@ -86,7 +87,7 @@ Future<void> sendToOpenai(ChatOpenAI llm, BuildContext context) async {
   }
 }
 
-Future<void> replace_retriever_function_call_with_asistant_respons(
+Future<void> replace_retriever_function_call_with_assistant_response_in_history(
     response) async {
   var chatHistoryLLM = memory.chatHistory;
   var chatHistoryLLMItems = await chatHistoryLLM.getChatMessages();
