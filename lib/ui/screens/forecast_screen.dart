@@ -141,7 +141,7 @@ class _ForecastScreenState extends State<ForecastScreen> {
                     fit: FlexFit.loose,
                     child: SfCartesianChart(
                         primaryXAxis: DateTimeAxis(),
-                        series: <ChartSeries>[
+                        series: <CartesianSeries>[
                           // Renders line chart
                           LineSeries<List, DateTime>(
                               dataSource: bla,

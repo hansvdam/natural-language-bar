@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:langbar/for_langbar_lib/retrieval.dart';
+import 'package:langchain/langchain.dart';
 
 import '../for_langchain/for_langchain.dart';
 
@@ -9,7 +10,7 @@ const retriever_name = "answer_general_question";
 /// {@template forecasting_tool}
 /// A for forecasting the weather from an api.
 /// {@endtemplate}
-final class RetrieverTool extends GenericTool {
+final class RetrieverTool extends GenericTool<ToolOptions> {
   RetrieverTool(
       {super.name = retriever_name,
       super.description = "Answers general questions.",
@@ -24,7 +25,8 @@ final class RetrieverTool extends GenericTool {
       : super(returnDirect: true) {}
 
   @override
-  FutureOr<String> runInternal(Map<String, dynamic> toolInput) {
+  FutureOr<String> runInternal(final Map<String, dynamic> toolInput,
+      {final ToolOptions? options}) {
     var userQuestion = toolInput['user_question'];
     var returnValue = conversationalRetrievalChain(userQuestion);
     return returnValue;

@@ -23,8 +23,8 @@ Future<String> conversationalRetrievalChain(String userQuestion) async {
   final model = ChatOpenAI(
       apiKey: apiKey2,
       baseUrl: getLlmBaseUrl(),
-      temperature: 0.0,
-      model: 'gpt-4');
+      defaultOptions:
+          const ChatOpenAIOptions(temperature: 0.0, model: 'gpt-4'));
   const stringOutputParser = StringOutputParser();
 
   final answerPrompt = ChatPromptTemplate.fromTemplate('''
