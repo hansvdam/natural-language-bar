@@ -49,12 +49,24 @@ seconds from the first request.
 
 Currently the this project is still in the form of a sample app.
 
-routes are wrapped in a LangbarWrapper (see file routes.dart), which is responsible for showing the NLB at the bottom of
+routes are wrapped in a LangbarWrapper (see file routes.dart), which is responsible for showing the
+NLB at the bottom of
 every screen, but you also omit it on some screens if you prefer.
 This file also shows all functional documentation of the routes.
 
-The actual triggering of routes takes place from LangChain Tools. LangChain Tools are automatically (see file
+The actual triggering of routes takes place from LangChain Tools. LangChain Tools are
+automatically (see file
 send_to_llm.dart)
 extracted from the DocumentedGoRoutes and fed into a LangChain agent that generates the prompt.
 
 ![Langbar flow](https://raw.githubusercontent.com/hansvdam/langbar/main/docs/img/langbarflow1.png)
+
+### RAG
+
+The current version of the app uses the RAG via PineCone API. This is a very simple way to get
+started with RAG. If you don't specify anything for RAG, you get an exception message. You can
+easily create a free account at [PineCone](https://pinecone.io/) and get your own API key. Then you
+can put it in the file retrieval.dart. It is rough, but it works.
+I have personally routed all calls through a firebase proxy to protect keys.
+
+```dart
