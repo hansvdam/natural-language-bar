@@ -46,12 +46,12 @@ Future<void> animateFieldContent(
           injectedContent.substring(0, textController.text.length + 1);
     } else {
       timer.cancel();
+      textController.notifyListeners();
       if (!completer.isCompleted) {
         completer.complete();
       }
     }
   });
-
   await completer.future;
 }
 
@@ -75,12 +75,13 @@ class HamburgerMenu extends StatelessWidget {
   }
 }
 
-PreferredSizeWidget createAppBar(BuildContext context, String title, Function() showBottomSheet,
+PreferredSizeWidget createAppBar(
+    BuildContext context, String title, Function() showBottomSheet,
     {bool leadingHamburger = true}) {
   // trigger when screen goes from and to navigation rail:
   Provider.of<WidthChanged>(context, listen: true);
   ScaffoldWithNavigationBar? parentNavigationbarHolder =
-  context.findAncestorWidgetOfExactType<ScaffoldWithNavigationBar>();
+      context.findAncestorWidgetOfExactType<ScaffoldWithNavigationBar>();
   var leadingHamburgerAndNoNavigationRail =
       parentNavigationbarHolder != null && leadingHamburger;
   return AppBar(
@@ -102,7 +103,7 @@ class ClearButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => IconButton(
-    icon: const Icon(Icons.clear),
-    onPressed: () => controller.clear(),
-  );
+        icon: const Icon(Icons.clear),
+        onPressed: () => controller.clear(),
+      );
 }

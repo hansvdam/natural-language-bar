@@ -18,7 +18,7 @@ enum ActionOnCard {
   }
 }
 
-class CardScreenSate extends ChangeNotifier {
+class CardScreenState extends ChangeNotifier {
   ActionOnCard _action = ActionOnCard.none;
 
   // is this the first time the screen is shown? (to be able to
@@ -31,7 +31,7 @@ class CardScreenSate extends ChangeNotifier {
     _initial = value;
   }
 
-  CardScreenSate({action, int? limit}) : _limit = limit {
+  CardScreenState({action, int? limit}) : _limit = limit {
     if (action != null) {
       _action = action;
     } else {
@@ -77,27 +77,33 @@ class CreditCardScreen extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     return ChangeNotifierProvider(
-      create: (final _) => CardScreenSate(action: action, limit: limit),
+      create: (final _) => CardScreenState(action: action, limit: limit),
       child: CreditCardScreenBody(label, imageSrc),
     );
   }
 }
 
-class CreditCardScreenBody extends StatelessWidget {
+class CreditCardScreenBody extends StatefulWidget {
   final String label;
   final String imageSrc;
 
   CreditCardScreenBody(this.label, this.imageSrc, {super.key});
 
+  @override
+  State<CreditCardScreenBody> createState() => _CreditCardScreenBodyState();
+}
+
+class _CreditCardScreenBodyState extends State<CreditCardScreenBody> {
   final TextEditingController textEditingController = TextEditingController();
+
   final TextEditingController actionController = TextEditingController();
 
-  ActionOnCard? selectedIcon = ActionOnCard.none;
+  final ActionOnCard? selectedIcon = ActionOnCard.none;
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<CardScreenSate>(
-        builder: (BuildContext context, CardScreenSate state, Widget? child) {
+    return Consumer<CardScreenState>(
+        builder: (BuildContext context, CardScreenState state, Widget? child) {
       if (state.initial) {
         state.initial = false;
         if (state.action == ActionOnCard.none) {
@@ -122,7 +128,7 @@ class CreditCardScreenBody extends StatelessWidget {
       List<Widget> children = [];
       children.add(Center(
           child: ImageNetwork(
-              image: imageSrc,
+              image: widget.imageSrc,
               height: 150,
               width: 300,
               fitWeb: BoxFitWeb.contain,
@@ -163,7 +169,7 @@ class CreditCardScreenBody extends StatelessWidget {
           },
           child: const Text('Submit')));
       return Scaffold(
-          appBar: createAppBar(context, label, () {
+          appBar: createAppBar(context, widget.label, () {
             var langbar = Provider.of<LangBarState>(context, listen: false);
             langbar.toggleLangbar();
           }, leadingHamburger: false),
