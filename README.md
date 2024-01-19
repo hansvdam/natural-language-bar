@@ -1,12 +1,11 @@
-# Natural Language Bar langbar
+# Natural Language Bar/Langbar
 
 An input-component for navigating and controlling your app in natural language using an LLM
 using [LangChain.dart](https://github.com/davidmigloz/langchain_dart)
 
 A natural language input field sends a user's request to an LLM along with functions defining the
-screens of the app
-using  
-'function calling'. The response JSON is used to activate the appropriate screen in response.
+screens of the app using 'function calling'. The response JSON is used to activate the appropriate
+screen in response.
 
 Medium
 article: [Natural Language Bar](https://medium.com/towards-data-science/synergy-of-llm-and-gui-beyond-the-chatbot-c8b0e08c6801)
