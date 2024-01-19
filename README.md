@@ -10,8 +10,10 @@ using
 
 Medium
 article: [Natural Language Bar](https://medium.com/towards-data-science/synergy-of-llm-and-gui-beyond-the-chatbot-c8b0e08c6801)
+
 Google Play Demo: [Langbar](https://play.google.com/store/apps/details?id=ai.uxx.langbar)
-LinedIn: [Hans van Dam](https://www.linkedin.com/in/hans-van-dam-71a7866/)
+
+LinkedIn: [Hans van Dam](https://www.linkedin.com/in/hans-van-dam-71a7866/)
 
 ## Getting Started
 
