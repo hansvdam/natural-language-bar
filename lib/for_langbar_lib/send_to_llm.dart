@@ -16,12 +16,12 @@ import 'my_conversation_buffer_memory.dart';
 void submitToLLM(BuildContext context) {
   var langbarState = Provider.of<LangBarState>(context, listen: false);
   var apiKey2 = getOpenAIKey();
+  var baseUrl = getLlmBaseUrl();
   final llm = ChatOpenAI(
-    apiKey: apiKey2,
-    baseUrl: getLlmBaseUrl(),
-    defaultOptions: const ChatOpenAIOptions(temperature: 0.0, model: 'gpt-4'),
-  );
-  // model: 'gpt-4-1106-preview');
+      apiKey: apiKey2,
+      baseUrl: baseUrl ?? 'https://api.openai.com/v1',
+      defaultOptions: const ChatOpenAIOptions(
+          temperature: 0.0, model: 'gpt-4')); // model: 'gpt-4-1106-preview');
   // model: 'gpt-3.5-turbo');
   langbarState.sendingToOpenAI = true;
   sendToOpenai(llm, context);

@@ -38,14 +38,14 @@ dependencies:
   go_router: ^13.0.1
   provider: ^6.1.1
   syncfusion_flutter_charts: ^24.1.43
-  langchain: ^0.3.1+1
-  langchain_openai: ^0.3.1+1
-  langchain_google: ^0.2.2+1
+  langchain: ^0.3.3
+  langchain_openai: ^0.3.3
+  langchain_google: ^0.2.3+1
   #  ollama_dart: ^0.0.2
-  langchain_ollama: ^0.0.2+1
-  langchain_pinecone: ^0.0.6+10
+  langchain_ollama: ^0.0.3+1
+  langchain_pinecone: ^0.0.6+12
   dart_openai: ^5.0.0
-  flutter_markdown: ^0.6.18+2
+  flutter_markdown: ^0.6.18+3
   photo_view: ^0.14.0
   encrypt: ^5.0.3
   sqflite: ^2.3.0

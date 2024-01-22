@@ -15,8 +15,9 @@ var geminiModel = ChatGoogleGenerativeAI(
 enum AIModel { OpenAI, Gemini, Ollama }
 
 Future<String> conversationalRetrievalChain(String userQuestion) async {
-  final embeddings =
-      OpenAIEmbeddings(apiKey: getSessionToken(), baseUrl: getLlmBaseUrl());
+  final embeddings = OpenAIEmbeddings(
+      apiKey: getSessionToken(),
+      baseUrl: getLlmBaseUrl() ?? 'https://api.openai.com/v1');
 
   // normally never reinitialize this, because on initialization the index is (re)discovered through a call that takes 1000ms, so do this only once per session. IN this case we provide hostUrl, which is a direct link to the index, so we don't need to discover it.
   // This reinit is also more convenenient, becuse we use a dynamic session-token, which is not known at compile time.
@@ -36,7 +37,7 @@ Future<String> conversationalRetrievalChain(String userQuestion) async {
     case AIModel.OpenAI:
       model = ChatOpenAI(
           apiKey: apiKey2,
-          baseUrl: getLlmBaseUrl(),
+          baseUrl: getLlmBaseUrl() ?? 'https://api.openai.com/v1',
           defaultOptions:
               const ChatOpenAIOptions(temperature: 0.0, model: 'gpt-4'));
       break;
