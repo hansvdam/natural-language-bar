@@ -11,3 +11,5 @@ String? getSessionToken() {
 String pineConeEnvironment() => "";
 
 String pineConeIndexName() => '';
+
+String getGeminiKey() => "";

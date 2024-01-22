@@ -1,9 +1,18 @@
 // ignore_for_file: avoid_print, avoid_redundant_argument_values
 import 'package:langbar/for_langbar_lib/pinecone/pinecone.dart';
 import 'package:langchain/langchain.dart';
+import 'package:langchain_google/langchain_google.dart';
+import 'package:langchain_ollama/langchain_ollama.dart';
 import 'package:langchain_openai/langchain_openai.dart';
 
 import '../openAIKey.dart';
+
+var geminiModel = ChatGoogleGenerativeAI(
+    apiKey: getGeminiKey(),
+// baseUrl: getLlmBaseUrl(),
+    defaultOptions: const ChatGoogleGenerativeAIOptions(temperature: 0.0));
+
+enum AIModel { OpenAI, Gemini, Ollama }
 
 Future<String> conversationalRetrievalChain(String userQuestion) async {
   final embeddings =
@@ -20,11 +29,32 @@ Future<String> conversationalRetrievalChain(String userQuestion) async {
   );
   final retriever = vectorStore.asRetriever();
   var apiKey2 = getOpenAIKey();
-  final model = ChatOpenAI(
-      apiKey: apiKey2,
-      baseUrl: getLlmBaseUrl(),
-      defaultOptions:
-          const ChatOpenAIOptions(temperature: 0.0, model: 'gpt-4'));
+  AIModel useAIModel = AIModel.OpenAI;
+  var useOpenAI = false;
+  var model;
+  switch (useAIModel) {
+    case AIModel.OpenAI:
+      model = ChatOpenAI(
+          apiKey: apiKey2,
+          baseUrl: getLlmBaseUrl(),
+          defaultOptions:
+              const ChatOpenAIOptions(temperature: 0.0, model: 'gpt-4'));
+      break;
+    case AIModel.Gemini:
+      model = geminiModel;
+      break;
+    case AIModel.Ollama:
+      model = ChatOllama(
+        defaultOptions: ChatOllamaOptions(
+          model: 'phi',
+          temperature: 0,
+        ),
+      );
+      // Add other model here
+      break;
+    default:
+      model = geminiModel;
+  }
   const stringOutputParser = StringOutputParser();
 
   final answerPrompt = ChatPromptTemplate.fromTemplate('''
