@@ -26,6 +26,9 @@ for example type:\n
 - 'I want to speak to someone at the counter'
 
 After your first request, a **↑** button appears, that opens a clickable interaction history.
+Besides action you can also type questions like:\n
+- 'what is crowdsurance?'\n
+The system will then answer based on text from a scraped banking-website (using RAG).
 """;
 
 class FrontScreen extends StatelessWidget {

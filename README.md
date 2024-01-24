@@ -7,10 +7,14 @@ A natural language input field sends a user's request to an LLM along with funct
 screens of the app using 'function calling'. The response JSON is used to activate the appropriate
 screen in response.
 
+![LangBarExplanation](https://raw.githubusercontent.com/hansvdam/langbar/main/docs/img/LangBarExplanation.webp)
+
 Medium
 article: [Natural Language Bar](https://medium.com/towards-data-science/synergy-of-llm-and-gui-beyond-the-chatbot-c8b0e08c6801)
 
 Google Play Demo: [Langbar](https://play.google.com/store/apps/details?id=ai.uxx.langbar)
+
+Web Demo: [Langbar](https://langbar-1d3b9.web.app/home)
 
 LinkedIn: [Hans van Dam](https://www.linkedin.com/in/hans-van-dam-71a7866/)
 
