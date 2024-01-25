@@ -87,6 +87,12 @@ Future<void> sendToOpenai(ChatOpenAI llm, BuildContext context) async {
   }
 }
 
+/**
+ * If the last message in the chat history is a retriever function call, replace it with the response
+ * from the assistant. This is the case when the user asks a general question that is relayed to the
+ * RAG functionality. In the history we do not want to see this intermediate step, but rather see
+ * the result of the RAG call.
+ */
 Future<void> replace_retriever_function_call_with_assistant_response_in_history(
     response) async {
   var chatHistoryLLM = memory.chatHistory;
