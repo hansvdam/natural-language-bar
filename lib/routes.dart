@@ -275,18 +275,19 @@ List<RouteBase> navBarRoutes = [
                 description: 'destination account name to transfer money to',
               ),
               UIParameter(
-                name: 'description',
-                description: 'description of the transfer',
+                name: 'purpose',
+                description:
+                    'Purpose of the transfer. Make sure the message formulation is directed toward the receiver, e.g. "donation for your Library" instead of "as a donation for his library".',
               ),
             ],
             pageBuilder: (context, state) {
               return NoTransitionPage(
                   child: TransferScreen(
-                label: 'Bank Transfer',
+                    label: 'Bank Transfer',
                 amount:
                     double.tryParse(state.uri.queryParameters['amount'] ?? ''),
                 destinationName: state.uri.queryParameters['destinationName'],
-                description: state.uri.queryParameters['description'],
+                description: state.uri.queryParameters['purpose'],
               ));
             },
           ),
