@@ -38,8 +38,8 @@ Future<String> conversationalRetrievalChain(String userQuestion) async {
       model = ChatOpenAI(
           apiKey: apiKey2,
           baseUrl: getLlmBaseUrl() ?? 'https://api.openai.com/v1',
-          defaultOptions:
-              const ChatOpenAIOptions(temperature: 0.0, model: 'gpt-4'));
+          defaultOptions: const ChatOpenAIOptions(
+              temperature: 0.0, model: 'gpt-4-1106-preview'));
       break;
     case AIModel.Gemini:
       model = geminiModel;
