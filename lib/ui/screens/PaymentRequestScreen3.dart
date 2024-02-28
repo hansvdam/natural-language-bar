@@ -94,8 +94,8 @@ class PaymentRequestScreen3 extends StatelessWidget {
             },
             child: Text('Deel betaalverzoek'),
             style: ElevatedButton.styleFrom(
-              primary: Colors.orange,
-              onPrimary: Colors.white,
+              // primary: Colors.orange,
+              // onPrimary: Colors.white,
               minimumSize: Size(double.infinity, 50),
             ),
           ),

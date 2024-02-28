@@ -141,8 +141,8 @@ class _PaymentRequestScreenState extends State<PaymentRequestScreen>
                 },
                 child: Text('Verder'),
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.orange,
-                  onPrimary: Colors.white,
+                  // primary: Colors.orange,
+                  // onPrimary: Colors.white,
                   padding: EdgeInsets.symmetric(vertical: 16.0),
                 ),
               ),
