@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:langbar/for_langbar_lib/function_calling_v3/send_to_llm_dart_only.dart';
 import 'package:langbar/for_langbar_lib/retriever_tool.dart';
 import 'package:langbar/for_langbar_lib/send_to_llm.dart';
-import 'package:langbar/for_langbar_lib/send_to_llm_dart_only.dart';
 import 'package:langchain/langchain.dart';
 import 'package:provider/provider.dart';
 
-import '../openAIKey.dart';
-import '../routes.dart';
-import 'langbar_states.dart';
+import '../../openAIKey.dart';
+import '../../routes.dart';
+import '../langbar_states.dart';
+import '../my_conversation_buffer_memory.dart';
 import 'llm_request_json_model2.dart';
-import 'my_conversation_buffer_memory.dart';
 
 // uses langchain and langchain_openai, and implicitly uses openai_dart
 void submitToLLM(BuildContext context) {
@@ -35,9 +35,10 @@ Future<void> sendToLLMFlutter(BuildContext context) async {
 
   tools.insert(0, tool);
   var chatHistory = Provider.of<ChatHistory>(context, listen: false);
-  List<FunctionDesciption> functionDescriptions =
+  List<FunctionDescription> functionDescriptions =
       functionDescriptionsFromTools(tools);
-  ToolResponse futureFunctionCall = await sendToLLM(functionDescriptions);
+  ToolResponse futureFunctionCall =
+      await sendToLLM(functionDescriptions, query);
   print(futureFunctionCall.toJson());
   // from tools select the one corresponding to futureFunctionCall.name
   BaseTool toolToTrigger =
@@ -47,7 +48,7 @@ Future<void> sendToLLMFlutter(BuildContext context) async {
 
 functionDescriptionsFromTools(List<BaseTool> tools) {
   return tools.map((tool) {
-    return FunctionDesciption(
+    return FunctionDescription(
         name: tool.name,
         description: tool.description,
         parameters: tool.inputJsonSchema);

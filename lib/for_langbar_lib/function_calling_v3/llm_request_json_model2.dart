@@ -5,7 +5,7 @@ class Model {
   List<Message> messages;
   bool stream;
   double temperature;
-  List<FunctionDesciption> functions;
+  List<FunctionDescription> functions;
 
   Model({
     required this.model,
@@ -39,16 +39,23 @@ class Message {
       };
 }
 
-class FunctionDesciption {
+class FunctionDescription {
   String name;
   String description;
   final Map<String, dynamic> parameters;
 
-  FunctionDesciption({
+  FunctionDescription({
     required this.name,
     required this.description,
     required this.parameters,
   });
+
+  Map<String, dynamic> toV3Json() => {
+        'type': 'function',
+        'name': name,
+        'description': description,
+        'parameters': parameters,
+      };
 
   Map<String, dynamic> toJson() => {
         'name': name,

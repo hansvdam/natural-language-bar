@@ -4,8 +4,9 @@ import 'dart:convert';
 // import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import '../for_langchain/for_langchain.dart';
-import '../openAIKey.dart';
+import '../../for_langchain/for_langchain.dart';
+import '../../openAIKey.dart';
+import 'chat_messages.dart';
 import 'llm_request_json_model2.dart';
 
 class Parameter {
@@ -57,16 +58,27 @@ class ToolResponse {
   }
 }
 
-Future<ToolResponse> sendToLLM(List<FunctionDesciption> functions) async {
+var memory = MyConversationBufferWindowMemory2(); // default window length is 5
+
+Future<ToolResponse> sendToLLM(
+    List<FunctionDescription> functions, String query,
+    {bool trelis = false}) async {
+  var functionsMessage = Message(
+    role: 'function_metadata',
+    content: functions.map((e) => e.toV3Json()).toString(),
+  );
+  List<Message> messages = [];
+  messages.add(Message(
+      role: 'system',
+      content:
+          'Never directly answer a question yourself, but always use a function call.'));
+  // messages.add(functionsMessage);
+  messages.addAll(memory.getMessages());
+  var userMessage = Message(role: 'user', content: query);
+  messages.add(userMessage);
   var model = Model(
     model: 'gpt-4-1106-preview',
-    messages: [
-      Message(
-          role: 'system',
-          content:
-              'Never directly answer a question yourself, but always use a function call.'),
-      Message(role: 'user', content: 'cancel my creditcard'),
-    ],
+    messages: messages,
     stream: false,
     temperature: 0.0,
     functions: functions,
@@ -147,7 +159,7 @@ class Album {
 Future<void> main() async {
   print("Hello World");
   var futureFunctionCall = await sendToLLM([
-    FunctionDesciption(
+    FunctionDescription(
         name: 'answer_general_question',
         description: 'Answers general questions.',
         parameters: {
@@ -161,7 +173,7 @@ Future<void> main() async {
           },
           "required": ['user_question'],
         }),
-    FunctionDesciption(
+    FunctionDescription(
         name: 'creditcard',
         description: 'Show your credit card and maybe perform an action on it',
         parameters: {
@@ -179,7 +191,7 @@ Future<void> main() async {
           },
           "required": [],
         })
-  ]);
+  ], 'raise my creditcard limit to 1000');
   print(futureFunctionCall.toJson().toString());
 }
 
