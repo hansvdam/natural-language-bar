@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:langbar/for_langbar_lib/platform_details.dart';
-import 'package:langbar/for_langbar_lib/send_to_llm.dart';
+import 'package:langbar/for_langbar_lib/send_to_llm_trelis_flutter.dart';
 import 'package:langbar/for_langbar_lib/speech.dart';
 import 'package:langbar/for_langbar_lib/utils.dart';
 import 'package:provider/provider.dart';
@@ -69,7 +69,8 @@ class _LangFieldState extends State<LangField> {
   }
 
   void submit(BuildContext context) {
-    submitToLLM(context);
+    // submitToLLM(context);
+    sendToLLMFlutter(context);
   }
 }
 

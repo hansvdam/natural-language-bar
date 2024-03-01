@@ -12,7 +12,7 @@ import 'generic_screen_tool.dart';
 import 'langbar_states.dart';
 import 'llm_go_route.dart';
 import 'my_conversation_buffer_memory.dart';
-
+// uses langchain and langchain_openai, and implicitly uses openai_dart
 void submitToLLM(BuildContext context) {
   var langbarState = Provider.of<LangBarState>(context, listen: false);
   var apiKey2 = getOpenAIKey();
@@ -128,7 +128,7 @@ ConversationBufferMemory memoryFromChathistory(ChatHistory chatHistory) {
   return memory2;
 }
 
-parseRouters(GoRouter, List<RouteBase> routes, {parentPath}) {
+List<BaseTool> parseRouters(GoRouter, List<RouteBase> routes, {parentPath}) {
   var tools = <BaseTool>[];
   for (var route in routes) {
     String? newPath = null;
