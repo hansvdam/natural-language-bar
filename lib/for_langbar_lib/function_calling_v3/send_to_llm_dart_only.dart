@@ -4,8 +4,6 @@ import 'dart:convert';
 // import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import '../../for_langchain/for_langchain.dart';
-import '../../openAIKey.dart';
 import 'chat_messages.dart';
 import 'llm_request_json_model2.dart';
 
@@ -89,10 +87,6 @@ Future<ToolResponse> sendToLLM(
     List<FunctionDescription> functions, String query,
     {bool trelis = false}) async {
   var functionsList = functions.map((e) => e.toV3Json()).toList();
-  var functionsMessage = Message(
-    role: 'function_metadata',
-    content: jsonEncode(functionsList),
-  );
   List<Message> messages = [];
   if (!trelis) {
     messages.add(Message(
@@ -101,6 +95,12 @@ Future<ToolResponse> sendToLLM(
             'Never directly answer a question yourself, but always use a function call.'));
   }
   if (trelis) {
+    // this indentation is needed for the Trelis format, otherwise it will not work as well as without the indentation and newlines:
+    var encoder = JsonEncoder.withIndent('    ');
+    var functionsMessage = Message(
+      role: 'function_metadata',
+      content: encoder.convert(functionsList),
+    );
     messages.add(functionsMessage);
   }
   // messages.add(functionsMessage);
@@ -140,12 +140,14 @@ Future<ToolResponse> sendToLLM(
         'Authorization': 'Bearer $openaikey',
       });
     }
+    Stopwatch stopwatch = Stopwatch()..start();
     final response = await http.post(
       Uri.parse(uri),
       // Uri.parse('https://us-central1-llmproxy1.cloudfunctions.net/defaultOpenAIRequest/chat/completions'),
       headers: headers,
       body: jsonEncodedRequest,
     );
+    print('HTTP post executed in ${stopwatch.elapsed}');
     if (response.statusCode == 200) {
 // If the server did return a 200 OK response,
 // then parse the JSON.
