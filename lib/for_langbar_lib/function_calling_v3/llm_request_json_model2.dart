@@ -1,11 +1,9 @@
-
-
 class Model {
   String model;
-  List<Message> messages;
   bool stream;
   double temperature;
-  List<FunctionDescription> functions;
+  List<Message> messages;
+  List<FunctionDescription>? functions = null;
 
   Model({
     required this.model,
@@ -15,28 +13,47 @@ class Model {
     required this.functions,
   });
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() {
+    if (functions == null) {
+      return {
         'model': model,
-        'messages': messages.map((x) => x.toJson()).toList(),
         'stream': stream,
         'temperature': temperature,
-        'functions': functions.map((x) => x.toJson()).toList(),
+        'messages': messages.map((x) => x.toJson()).toList(),
       };
+    } else {
+      return {
+        'model': model,
+        'stream': stream,
+        'temperature': temperature,
+        'messages': messages.map((x) => x.toJson()).toList(),
+        'functions': functions!.map((x) => x.toJson()).toList(),
+      };
+    }
+  }
 }
 
 class Message {
   String role;
-  String content;
+  String? content = null;
+  String? function_call;
 
-  Message({
-    required this.role,
-    required this.content,
-  });
+  Message({required this.role, this.content, this.function_call});
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() {
+    if (function_call == null) {
+      return {
         'role': role,
         'content': content,
       };
+    } else {
+      return {
+        'role': role,
+        'content': null,
+        'function_call': function_call,
+      };
+    }
+  }
 }
 
 class FunctionDescription {

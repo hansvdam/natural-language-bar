@@ -58,35 +58,50 @@ class ToolResponse {
   }
 }
 
-var memory = MyConversationBufferWindowMemory2(); // default window length is 5
+var memory = ConversationBufferWindowMemory2(); // default window length is 5
 
+/**
+ * Send a message to the language model.
+ *
+ * @param functions A list of function descriptions.
+ * @param query The user's message.
+ * @param Include function calling the format on a format of LLM finetuned in the Trelis format:
+ * function-metadata is encoded in one of the messages with role function_metadata in the format of
+ * openai (agent-)tools (see https://beta.openai.com/docs/api-reference/completions/create-completion/): for Trelis format see:
+ * https://huggingface.co/Trelis/openchat_3.5-function-calling-v3
+ *
+ * @returns A ToolResponse.
+ */
 Future<ToolResponse> sendToLLM(
     List<FunctionDescription> functions, String query,
     {bool trelis = false}) async {
+  var functionsList = functions.map((e) => e.toV3Json()).toList();
   var functionsMessage = Message(
     role: 'function_metadata',
-    content: functions.map((e) => e.toV3Json()).toString(),
+    content: jsonEncode(functionsList),
   );
   List<Message> messages = [];
   messages.add(Message(
       role: 'system',
       content:
           'Never directly answer a question yourself, but always use a function call.'));
+  if (trelis) {
+    messages.add(functionsMessage);
+  }
   // messages.add(functionsMessage);
-  messages.addAll(memory.getMessages());
   var userMessage = Message(role: 'user', content: query);
+  messages.addAll(memory.getMessages());
   messages.add(userMessage);
   var model = Model(
     model: 'gpt-4-1106-preview',
     messages: messages,
     stream: false,
     temperature: 0.0,
-    functions: functions,
+    functions: trelis ? null : functions,
   );
   var jsonEncodedRequest = jsonEncode(model.toJson());
   print(jsonEncodedRequest);
 
-  http.Response response;
   try {
     // test3 key
     final response = await http.post(
@@ -101,8 +116,24 @@ Future<ToolResponse> sendToLLM(
     if (response.statusCode == 200) {
 // If the server did return a 200 OK response,
 // then parse the JSON.
-      return ToolResponse.fromJson(
+      var toolResponse = ToolResponse.fromJson(
           jsonDecode(response.body) as Map<String, dynamic>);
+      memory.add(userMessage);
+      var toolResponseJson = toolResponse.toJson().toString();
+      if (trelis) {
+        // Trelis format
+        memory.add(Message(
+            role: 'function_call',
+            content: toolResponseJson)); // add assistant response to memory
+      } else {
+        // openai format (v2 that is)
+        memory.add(Message(
+            role: 'assistant',
+            content: null,
+            function_call:
+                toolResponseJson)); // add assistant response to memory
+      }
+      return toolResponse;
     } else {
 // If the server did not return a 200 OK response,
 // then throw an exception.
@@ -191,7 +222,7 @@ Future<void> main() async {
           },
           "required": [],
         })
-  ], 'raise my creditcard limit to 1000');
+  ], 'raise my creditcard limit to 1000', trelis: true);
   print(futureFunctionCall.toJson().toString());
 }
 
