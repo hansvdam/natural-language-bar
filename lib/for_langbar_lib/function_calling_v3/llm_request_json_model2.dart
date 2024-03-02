@@ -69,9 +69,11 @@ class FunctionDescription {
 
   Map<String, dynamic> toV3Json() => {
         'type': 'function',
-        'name': name,
-        'description': description,
-        'parameters': parameters,
+        'function': {
+          'name': name,
+          'description': description,
+          'parameters': parameters,
+        },
       };
 
   Map<String, dynamic> toJson() => {

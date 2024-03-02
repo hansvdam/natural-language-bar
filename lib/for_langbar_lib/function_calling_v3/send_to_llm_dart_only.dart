@@ -39,13 +39,26 @@ class ToolResponse {
     required this.parameters,
   });
 
-  factory ToolResponse.fromJson(Map<String, dynamic> json) {
-    var parametersJson =
-        jsonDecode(json['choices'][0]['message']['function_call']['arguments'])
-            as Map<String, dynamic>;
-    var parameters = parametersJson;
+  factory ToolResponse.fromJson(Map<String, dynamic> json, bool trelis) {
+    var functionResponseEncodedIn = 'function_call';
+    if (trelis) {
+      functionResponseEncodedIn = 'content';
+    }
+    var functionCallJsonRaw =
+        json['choices'][0]['message'][functionResponseEncodedIn];
+    var functionCallJson;
+    if (trelis) {
+      functionCallJson = jsonDecode(functionCallJsonRaw);
+    } else {
+      functionCallJson = functionCallJsonRaw;
+    }
+    var parametersJson = functionCallJson['arguments'];
+    if (parametersJson is String) {
+      parametersJson = jsonDecode(parametersJson);
+    }
+    var parameters = parametersJson as Map<String, dynamic>;
     return ToolResponse(
-      name: json['choices'][0]['message']['function_call']['name'],
+      name: functionCallJson['name'],
       parameters: parameters,
     );
   }
@@ -81,10 +94,12 @@ Future<ToolResponse> sendToLLM(
     content: jsonEncode(functionsList),
   );
   List<Message> messages = [];
-  messages.add(Message(
-      role: 'system',
-      content:
-          'Never directly answer a question yourself, but always use a function call.'));
+  if (!trelis) {
+    messages.add(Message(
+        role: 'system',
+        content:
+            'Never directly answer a question yourself, but always use a function call.'));
+  }
   if (trelis) {
     messages.add(functionsMessage);
   }
@@ -92,11 +107,19 @@ Future<ToolResponse> sendToLLM(
   var userMessage = Message(role: 'user', content: query);
   messages.addAll(memory.getMessages());
   messages.add(userMessage);
+  var temperature = 0.0;
+  if (trelis) {
+    temperature = 0.01;
+  }
+  var modelName = 'gpt-4-1106-preview';
+  if (trelis) {
+    modelName = 'Trelis/openchat_3.5-function-calling-v3';
+  }
   var model = Model(
-    model: 'gpt-4-1106-preview',
+    model: modelName,
     messages: messages,
     stream: false,
-    temperature: 0.0,
+    temperature: temperature,
     functions: trelis ? null : functions,
   );
   var jsonEncodedRequest = jsonEncode(model.toJson());
@@ -104,20 +127,30 @@ Future<ToolResponse> sendToLLM(
 
   try {
     // test3 key
-    final response = await http.post(
-      Uri.parse('https://api.openai.com/v1/chat/completions'),
-      // Uri.parse('https://us-central1-llmproxy1.cloudfunctions.net/defaultOpenAIRequest/chat/completions'),
-      headers: <String, String>{
-        'Content-Type': 'application/json',
+
+    var uri = 'https://api.openai.com/v1/chat/completions';
+    if (trelis) {
+      uri = 'http://27.65.59.89:27289/v1/chat/completions';
+    }
+    var headers = <String, String>{
+      'Content-Type': 'application/json',
+    };
+    if (!trelis) {
+      headers.addAll(<String, String>{
         'Authorization': 'Bearer $openaikey',
-      },
+      });
+    }
+    final response = await http.post(
+      Uri.parse(uri),
+      // Uri.parse('https://us-central1-llmproxy1.cloudfunctions.net/defaultOpenAIRequest/chat/completions'),
+      headers: headers,
       body: jsonEncodedRequest,
     );
     if (response.statusCode == 200) {
 // If the server did return a 200 OK response,
 // then parse the JSON.
-      var toolResponse = ToolResponse.fromJson(
-          jsonDecode(response.body) as Map<String, dynamic>);
+      var jsonDecoded = jsonDecode(response.body) as Map<String, dynamic>;
+      var toolResponse = ToolResponse.fromJson(jsonDecoded, trelis);
       memory.add(userMessage);
       var toolResponseJson = toolResponse.toJson().toString();
       if (trelis) {
