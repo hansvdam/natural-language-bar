@@ -47,6 +47,9 @@ class ToolResponse {
         json['choices'][0]['message'][functionResponseEncodedIn];
     var functionCallJson;
     if (trelis) {
+      // trim off some prefix that sometimes gets inserted by accident sometimes when supplying history to the model
+      functionCallJsonRaw =
+          functionCallJsonRaw.substring(functionCallJsonRaw.indexOf('{'));
       functionCallJson = jsonDecode(functionCallJsonRaw);
     } else {
       functionCallJson = functionCallJsonRaw;
@@ -125,13 +128,14 @@ Future<ToolResponse> sendToLLM(List<FunctionDescription> functions,
   var jsonEncodedRequest = jsonEncode(model.toJson());
   print(jsonEncodedRequest);
 
+  var globalResponse; // so the response is still visible in the catch block below
   try {
     // test3 key
     String openaikey = getOpenAIKey();
     var uri = getLlmBaseUrl() + "/chat/completions";
     // var uri = 'https://api.openai.com/v1/chat/completions';
     if (trelis) {
-      uri = 'http://27.65.59.89:27289/v1/chat/completions';
+      uri = 'http://83.238.173.42:40350/v1/chat/completions';
     }
     var headers = <String, String>{
       'Content-Type': 'application/json',
@@ -153,15 +157,20 @@ Future<ToolResponse> sendToLLM(List<FunctionDescription> functions,
 // If the server did return a 200 OK response,
 // then parse the JSON.
       var jsonDecoded = jsonDecode(response.body) as Map<String, dynamic>;
+      globalResponse = jsonDecoded;
       var toolResponse = ToolResponse.fromJson(jsonDecoded, trelis);
       memory.add(userMessage);
-      var toolResponseJson = jsonEncode(toolResponse);
+      // var toolResponseJson = jsonEncode(toolResponse);
+      var rawFunctionCallForTrelis =
+          jsonDecoded['choices'][0]['message']['content'];
+      // ['function_call']; // this is the raw function call
       // var toolResponseJson = toolResponse.toJson().toString();
       if (trelis) {
         // Trelis format
         memory.add(Message(
             role: 'function_call',
-            content: toolResponseJson)); // add assistant response to memory
+            content:
+                rawFunctionCallForTrelis)); // add assistant response to memory
       } else {
         // openai format (v2 that is)
         memory.add(Message(
@@ -260,7 +269,7 @@ Future<void> main() async {
           },
           "required": [],
         })
-  ], memory, 'raise my creditcard limit to 1000', trelis: false);
+  ], memory, 'raise my creditcard limit to 1000', trelis: true);
   print(jsonEncode(futureFunctionCall));
 }
 

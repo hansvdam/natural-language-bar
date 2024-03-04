@@ -42,7 +42,7 @@ Future<void> sendToLLMFlutter(
       functionDescriptionsFromTools(tools);
   try {
     ToolResponse futureFunctionCall =
-        await sendToLLM(functionDescriptions, memory, query);
+        await sendToLLM(functionDescriptions, memory, query, trelis: true);
     print(jsonEncode(futureFunctionCall));
     // from tools select the one corresponding to futureFunctionCall.name
     BaseTool toolToTrigger =
