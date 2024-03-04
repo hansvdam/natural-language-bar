@@ -19,4 +19,8 @@ final class ConversationBufferWindowMemory2 {
   void add(Message userMessage) {
     messages.add(userMessage);
   }
+
+  void clear() {
+    messages.clear();
+  }
 }

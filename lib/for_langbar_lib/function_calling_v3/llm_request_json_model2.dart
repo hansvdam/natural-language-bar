@@ -1,3 +1,5 @@
+import 'send_to_llm_dart_only.dart';
+
 class Model {
   String model;
   bool stream;
@@ -36,7 +38,7 @@ class Model {
 class Message {
   String role;
   String? content = null;
-  String? function_call;
+  ToolResponse? function_call;
 
   Message({required this.role, this.content, this.function_call});
 
@@ -68,19 +70,19 @@ class FunctionDescription {
   });
 
   Map<String, dynamic> toV3Json() => {
-        'type': 'function',
-        'function': {
-          'name': name,
-          'description': description,
-          'parameters': parameters,
-        },
-      };
+    'type': 'function',
+    'function': {
+      'name': name,
+      'description': description,
+      'parameters': parameters,
+    },
+  };
 
   Map<String, dynamic> toJson() => {
-        'name': name,
-        'description': description,
-        'parameters': parameters,
-      };
+    'name': name,
+    'description': description,
+    'parameters': parameters,
+  };
 }
 
 class Parameters {
@@ -94,10 +96,10 @@ class Parameters {
   });
 
   Map<String, dynamic> toJson() => {
-        'type': type,
-        'properties': properties.map((k, v) => MapEntry(k, v.toJson())),
-        'required': required,
-      };
+    'type': type,
+    'properties': properties.map((k, v) => MapEntry(k, v.toJson())),
+    'required': required,
+  };
 }
 
 class Property {
@@ -112,8 +114,8 @@ class Property {
   });
 
   Map<String, dynamic> toJson() => {
-        'description': description,
-        'type': type,
-        if (enumValues != null) 'enum': enumValues,
-      };
+    'description': description,
+    'type': type,
+    if (enumValues != null) 'enum': enumValues,
+  };
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 import 'package:langbar/for_langbar_lib/retriever_tool.dart';
 import 'package:langchain/langchain.dart';
 import 'package:langchain_openai/langchain_openai.dart';
@@ -44,8 +43,8 @@ Future<void> sendToOpenai(ChatOpenAI llm, BuildContext context) async {
 
   // ConversationBufferMemory memory = ConversationBufferMemory(returnMessages: true);;
 
-  DateTime now = DateTime.now();
-  String formattedDate = DateFormat('yyyy-MM-ddTHH:mm:ssZ').format(now);
+  // DateTime now = DateTime.now();
+  // String formattedDate = DateFormat('yyyy-MM-ddTHH:mm:ssZ').format(now);
   final agent = OpenAIFunctionsAgent.fromLLMAndTools(
       systemChatMessage: const SystemChatMessagePromptTemplate(
         prompt: PromptTemplate(

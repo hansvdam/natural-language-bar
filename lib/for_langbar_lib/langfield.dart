@@ -70,7 +70,7 @@ class _LangFieldState extends State<LangField> {
 
   void submit(BuildContext context) {
     // submitToLLM(context);
-    sendToLLMFlutter(context);
+    submitToLLMNoLangchain(context);
   }
 }
 

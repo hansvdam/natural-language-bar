@@ -4,6 +4,7 @@ import 'dart:convert';
 // import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import '../../openAIKey.dart';
 import 'chat_messages.dart';
 import 'llm_request_json_model2.dart';
 
@@ -30,11 +31,11 @@ class Parameter {
 
 class ToolResponse {
   final String name;
-  final Map<String, dynamic> parameters;
+  final Map<String, dynamic> arguments;
 
   const ToolResponse({
     required this.name,
-    required this.parameters,
+    required this.arguments,
   });
 
   factory ToolResponse.fromJson(Map<String, dynamic> json, bool trelis) {
@@ -50,26 +51,25 @@ class ToolResponse {
     } else {
       functionCallJson = functionCallJsonRaw;
     }
-    var parametersJson = functionCallJson['arguments'];
-    if (parametersJson is String) {
-      parametersJson = jsonDecode(parametersJson);
+    var argumentsJson = functionCallJson['arguments'];
+    if (argumentsJson is String) {
+      argumentsJson = jsonDecode(argumentsJson);
     }
-    var parameters = parametersJson as Map<String, dynamic>;
+    var arguments = argumentsJson as Map<String, dynamic>;
     return ToolResponse(
       name: functionCallJson['name'],
-      parameters: parameters,
+      arguments: arguments,
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {
+    var returnValue = {
       'name': name,
-      'parameters': parameters,
+      'arguments': jsonEncode(arguments),
     };
+    return returnValue;
   }
 }
-
-var memory = ConversationBufferWindowMemory2(); // default window length is 5
 
 /**
  * Send a message to the language model.
@@ -83,8 +83,8 @@ var memory = ConversationBufferWindowMemory2(); // default window length is 5
  *
  * @returns A ToolResponse.
  */
-Future<ToolResponse> sendToLLM(
-    List<FunctionDescription> functions, String query,
+Future<ToolResponse> sendToLLM(List<FunctionDescription> functions,
+    ConversationBufferWindowMemory2 memory, String query,
     {bool trelis = false}) async {
   var functionsList = functions.map((e) => e.toV3Json()).toList();
   List<Message> messages = [];
@@ -127,8 +127,9 @@ Future<ToolResponse> sendToLLM(
 
   try {
     // test3 key
-
-    var uri = 'https://api.openai.com/v1/chat/completions';
+    String openaikey = getOpenAIKey();
+    var uri = getLlmBaseUrl() + "/chat/completions";
+    // var uri = 'https://api.openai.com/v1/chat/completions';
     if (trelis) {
       uri = 'http://27.65.59.89:27289/v1/chat/completions';
     }
@@ -154,7 +155,8 @@ Future<ToolResponse> sendToLLM(
       var jsonDecoded = jsonDecode(response.body) as Map<String, dynamic>;
       var toolResponse = ToolResponse.fromJson(jsonDecoded, trelis);
       memory.add(userMessage);
-      var toolResponseJson = toolResponse.toJson().toString();
+      var toolResponseJson = jsonEncode(toolResponse);
+      // var toolResponseJson = toolResponse.toJson().toString();
       if (trelis) {
         // Trelis format
         memory.add(Message(
@@ -165,14 +167,14 @@ Future<ToolResponse> sendToLLM(
         memory.add(Message(
             role: 'assistant',
             content: null,
-            function_call:
-                toolResponseJson)); // add assistant response to memory
+            function_call: toolResponse)); // add assistant response to memory
       }
       return toolResponse;
     } else {
 // If the server did not return a 200 OK response,
 // then throw an exception.
-      throw Exception('Failed to load album');
+      throw Exception(
+          'LLM http call failed: ' + response.statusCode.toString());
     }
   } catch (e) {
     throw Exception('Failed:' + e.toString());
@@ -224,6 +226,7 @@ class Album {
 
 Future<void> main() async {
   print("Hello World");
+  var memory = ConversationBufferWindowMemory2();
   var futureFunctionCall = await sendToLLM([
     FunctionDescription(
         name: 'answer_general_question',
@@ -257,8 +260,8 @@ Future<void> main() async {
           },
           "required": [],
         })
-  ], 'raise my creditcard limit to 1000', trelis: true);
-  print(futureFunctionCall.toJson().toString());
+  ], memory, 'raise my creditcard limit to 1000', trelis: false);
+  print(jsonEncode(futureFunctionCall));
 }
 
 // class MyApp extends StatefulWidget {
