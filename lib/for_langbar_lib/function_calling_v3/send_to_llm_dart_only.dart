@@ -45,24 +45,29 @@ class ToolResponse {
     }
     var functionCallJsonRaw =
         json['choices'][0]['message'][functionResponseEncodedIn];
-    var functionCallJson;
-    if (trelis) {
-      // trim off some prefix that sometimes gets inserted by accident sometimes when supplying history to the model
-      functionCallJsonRaw =
-          functionCallJsonRaw.substring(functionCallJsonRaw.indexOf('{'));
-      functionCallJson = jsonDecode(functionCallJsonRaw);
-    } else {
-      functionCallJson = functionCallJsonRaw;
+    try {
+      var functionCallJson;
+      if (trelis) {
+        // trim off some prefix that sometimes gets inserted by accident sometimes when supplying history to the model
+        functionCallJsonRaw =
+            functionCallJsonRaw.substring(functionCallJsonRaw.indexOf('{'));
+        functionCallJson = jsonDecode(functionCallJsonRaw);
+      } else {
+        functionCallJson = functionCallJsonRaw;
+      }
+      var argumentsJson = functionCallJson['arguments'];
+      if (argumentsJson is String) {
+        argumentsJson = jsonDecode(argumentsJson);
+      }
+      var arguments = argumentsJson as Map<String, dynamic>;
+      return ToolResponse(
+        name: functionCallJson['name'],
+        arguments: arguments,
+      );
+    } catch (e) {
+      throw Exception(
+          'Execption ocured while parsing: \n$functionCallJsonRaw\nnamely:$e');
     }
-    var argumentsJson = functionCallJson['arguments'];
-    if (argumentsJson is String) {
-      argumentsJson = jsonDecode(argumentsJson);
-    }
-    var arguments = argumentsJson as Map<String, dynamic>;
-    return ToolResponse(
-      name: functionCallJson['name'],
-      arguments: arguments,
-    );
   }
 
   Map<String, dynamic> toJson() {
