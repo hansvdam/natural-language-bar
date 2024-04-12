@@ -57,7 +57,7 @@ Future<String> conversationalRetrievalChain(String userQuestion) async {
     default:
       model = geminiModel;
   }
-  const stringOutputParser = StringOutputParser();
+  const stringOutputParser = const StringOutputParser<ChatResult>();
 
   final answerPrompt = ChatPromptTemplate.fromTemplate('''
 You are a KNAB representative. Answer the question concisely based only on the following context about KNAB, in its original language:

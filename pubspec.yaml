@@ -57,6 +57,7 @@ dependencies:
   #    path: ../speech_to_text/speech_to_text
   speech_to_text: ^6.6.1
   logger: ^2.2.0
+  csv: ^6.0.0
 dependency_overrides: # try to remove the following overrides, is needed to support image_network: ^2.5.4+1 (used uuid 3.0.4) vs lanchain (used uuid 4.0.0)
   uuid: '4.0.0'
 

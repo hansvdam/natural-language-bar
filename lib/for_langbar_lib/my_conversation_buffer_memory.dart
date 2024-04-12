@@ -3,31 +3,31 @@ import 'package:langchain/langchain.dart';
 // until the original is fixed we use this.
 // historyMessages.sublist(historyMessages.length - k instead of historyMessages.sublist(historyMessages.length - k * 2
 
-extension ChatMessagesX on List<ChatMessage> {
-  /// This function is to get a string representation of the chat messages
-  /// based on the message content and role.
-  String toBufferString({
-    final String systemPrefix = SystemChatMessage.defaultPrefix,
-    final String humanPrefix = HumanChatMessage.defaultPrefix,
-    final String aiPrefix = AIChatMessage.defaultPrefix,
-    final String functionPrefix = FunctionChatMessage.defaultPrefix,
-  }) {
-    return map(
-      (final m) {
-        return switch (m) {
-          SystemChatMessage _ => '$systemPrefix: ${m.contentAsString}',
-          HumanChatMessage _ => '$humanPrefix: ${m.contentAsString}',
-          AIChatMessage _ => m.functionCall == null
-              ? '$aiPrefix: ${m.contentAsString}'
-              : '$aiPrefix: ${m.functionCall!.name}(${m.functionCall!.arguments})',
-          FunctionChatMessage(name: final n, content: final c) =>
-            '$functionPrefix: $n=$c',
-          final CustomChatMessage m => '${m.role}: ${m.contentAsString}',
-        };
-      },
-    ).join('\n');
-  }
-}
+// extension ChatMessagesX on List<ChatMessage> {
+//   /// This function is to get a string representation of the chat messages
+//   /// based on the message content and role.
+//   String toBufferString({
+//     final String systemPrefix = SystemChatMessage.defaultPrefix,
+//     final String humanPrefix = HumanChatMessage.defaultPrefix,
+//     final String aiPrefix = AIChatMessage.defaultPrefix,
+//     final String functionPrefix = FunctionChatMessage.defaultPrefix,
+//   }) {
+//     return map(
+//       (final m) {
+//         return switch (m) {
+//           SystemChatMessage _ => '$systemPrefix: ${m.contentAsString}',
+//           HumanChatMessage _ => '$humanPrefix: ${m.contentAsString}',
+//           AIChatMessage _ => m.functionCall == null
+//               ? '$aiPrefix: ${m.contentAsString}'
+//               : '$aiPrefix: ${m.functionCall!.name}(${m.functionCall!.arguments})',
+//           FunctionChatMessage(name: final n, content: final c) =>
+//             '$functionPrefix: $n=$c',
+//           final CustomChatMessage m => '${m.role}: ${m.contentAsString}',
+//         };
+//       },
+//     ).join('\n');
+//   }
+// }
 
 /// {@template conversation_buffer_window_memory}
 /// Buffer for storing a conversation in-memory inside a limited size window
@@ -46,7 +46,7 @@ extension ChatMessagesX on List<ChatMessage> {
 final class MyConversationBufferWindowMemory extends BaseChatMemory {
   /// {@macro conversation_buffer_window_memory}
   MyConversationBufferWindowMemory({
-    super.chatHistory,
+    required super.chatHistory,
     super.inputKey,
     super.outputKey,
     super.returnMessages = false,

@@ -28,6 +28,7 @@ void submitToLLM(BuildContext context) {
 }
 
 final memory = MyConversationBufferWindowMemory(
+    chatHistory: ChatMessageHistory(),
     returnMessages: true); // default window length is 5
 
 Future<void> sendToOpenai(ChatOpenAI llm, BuildContext context) async {
