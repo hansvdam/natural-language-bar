@@ -37,7 +37,7 @@ Future<void> animateFieldContent(
   }
 
   var length = injectedContent.length;
-  var periodLength = (1200 / length).toInt();
+  var periodLength = (500 / length).toInt();
   var completer = Completer();
 
   Timer.periodic(Duration(milliseconds: periodLength), (timer) {

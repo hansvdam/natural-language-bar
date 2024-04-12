@@ -16,6 +16,7 @@ enum AIModel { OpenAI, Gemini, Ollama }
 
 Future<String> conversationalRetrievalChain(String userQuestion) async {
   final embeddings = OpenAIEmbeddings(
+      model: 'text-embedding-ada-002',
       apiKey: getSessionToken(),
       baseUrl: getLlmBaseUrl() ?? 'https://api.openai.com/v1');
 

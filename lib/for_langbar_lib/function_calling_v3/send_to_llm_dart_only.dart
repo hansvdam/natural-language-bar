@@ -140,7 +140,7 @@ Future<ToolResponse> sendToLLM(List<FunctionDescription> functions,
     var uri = getLlmBaseUrl() + "/chat/completions";
     // var uri = 'https://api.openai.com/v1/chat/completions';
     if (trelis) {
-      uri = 'http://83.238.173.42:40350/v1/chat/completions';
+      uri = 'http://5.158.194.150:19662/v1/chat/completions';
     }
     var headers = <String, String>{
       'Content-Type': 'application/json',
