@@ -119,7 +119,7 @@ Future<ToolResponse> sendToLLM(List<FunctionDescription> functions,
   if (trelis) {
     temperature = 0.01;
   }
-  var modelName = 'gpt-4-1106-preview';
+  var modelName = 'gpt-4o';
   if (trelis) {
     modelName = 'Trelis/openchat_3.5-function-calling-v3';
   }
