@@ -45,7 +45,7 @@ android {
             keyAlias 'key0'
             keyPassword 'hola1dies'
             storePassword 'hola1dies'
-            storeFile file(project.gradle.gradleUserHomeDir.parent + "/My Drive/langbar/androidRelease/keystore")
+            storeFile file(project.gradle.gradleUserHomeDir.parent + "/Library/CloudStorage/GoogleDrive-hgwvandam@gmail.com/My Drive/langbar/androidRelease/keystore")
         }
     }
 
