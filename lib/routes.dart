@@ -4,9 +4,7 @@ import 'package:langbar/ui/screens/AccountsScreen.dart';
 import 'package:langbar/ui/screens/Contacts.dart';
 import 'package:langbar/ui/screens/TransactionsScreen.dart';
 import 'package:langbar/ui/screens/TransferScreen.dart';
-import 'package:langbar/ui/screens/dummy_screens/RoutePlanner.dart';
 import 'package:langbar/ui/screens/front_screen.dart';
-import 'package:langbar/ui/screens/paymentRequestScreen.dart';
 
 import 'for_langbar_lib/langbar_wrapper.dart';
 import 'for_langbar_lib/llm_go_route.dart';
@@ -14,7 +12,6 @@ import 'for_langchain/for_langchain.dart';
 import 'ui/main_scaffolds.dart';
 import 'ui/screens/CreditCardScreen.dart';
 import 'ui/screens/MapScreen.dart';
-import 'ui/screens/forecast_screen.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigator1Key = GlobalKey<NavigatorState>(debugLabel: 'shell1');
@@ -79,101 +76,101 @@ List<RouteBase> hamburgerRoutes = [
                     limit: int.tryParse(
                         state.uri.queryParameters['limit'] ?? ''))));
       }),
-  DocumentedGoRoute(
-      path: '/payment_request',
-      name: 'payment_request',
-      description: 'make a payment request',
-      parameters: const [
-        UIParameter(
-          name: 'amount',
-          description: 'amount to reques',
-          type: 'number',
-        )
-      ],
-      modal: true,
-      parentNavigatorKey: _rootNavigatorKey,
-      pageBuilder: (context, state) {
-        return MaterialPage(
-            fullscreenDialog: true,
-            child: LangBarWrapper(
-                body: PaymentRequestScreen(
-                    initialAmount: double.tryParse(
-                        state.uri.queryParameters['amount'] ?? ''))));
-      }),
-  DocumentedGoRoute(
-      name: ForecastScreen.name,
-      modal: true,
-      parentNavigatorKey: _rootNavigatorKey,
-      description: "get weather forecast information for a place on earth",
-      parameters: const [
-        UIParameter(
-          name: 'place',
-          description: 'place on earth',
-          required: true,
-        ),
-        UIParameter(
-          name: 'numDays',
-          description: 'The number of days to forecast',
-          type: 'integer',
-        ),
-      ],
-      path: "/${ForecastScreen.name}",
-      pageBuilder: (context, state) {
-        return MaterialPage(
-            fullscreenDialog: true,
-            child: LangBarWrapper(
-              body: ForecastScreen(
-                label: 'Weather Forecast',
-                detailsPath: '/forecast/details',
-                place: state.uri.queryParameters['place'],
-                numDays:
-                    int.tryParse(state.uri.queryParameters['numDays'] ?? '') ??
-                        1,
-              ),
-            ));
-      }),
-  DocumentedGoRoute(
-      path: '/routeplanner',
-      name: 'routeplanner',
-      description:
-          'Plan a public transport trip from A to B in the Netherlands.',
-      parameters: const [
-        UIParameter(
-          name: 'origin',
-          description: 'origin address, train station or postal code.',
-          required: true,
-        ),
-        UIParameter(
-          name: 'destination',
-          description: 'destination address, train station or postal code.',
-          required: true,
-        ),
-        UIParameter(
-          name: 'trip_date_time',
-          description:
-              'Requested DateTime for the departure or arrival of the trip in \'YYYY-MM-DDTHH:MM:SS+02:00\' format. The user will use a time in a 12 hour system, make an intelligent guess about what the user is most likely to mean in terms of a 24 hour system, e.g. not planning for the past.',
-        ),
-        UIParameter(
-          name: 'departure',
-          description:
-              'True to depart at the given time, False to arrive at the given time.',
-          required: true,
-        ),
-        UIParameter(
-          name: 'language',
-          description: 'Language of the input text',
-          required: true,
-        ),
-      ],
-      modal: true,
-      parentNavigatorKey: _rootNavigatorKey,
-      pageBuilder: (context, state) {
-        return MaterialPage(
-            fullscreenDialog: true,
-            child: LangBarWrapper(
-                body:
-                    RoutePlanner(queryParameters: state.uri.queryParameters)));
-      })
+  // DocumentedGoRoute(
+  //     path: '/payment_request',
+  //     name: 'payment_request',
+  //     description: 'make a payment request',
+  //     parameters: const [
+  //       UIParameter(
+  //         name: 'amount',
+  //         description: 'amount to reques',
+  //         type: 'number',
+  //       )
+  //     ],
+  //     modal: true,
+  //     parentNavigatorKey: _rootNavigatorKey,
+  //     pageBuilder: (context, state) {
+  //       return MaterialPage(
+  //           fullscreenDialog: true,
+  //           child: LangBarWrapper(
+  //               body: PaymentRequestScreen(
+  //                   initialAmount: double.tryParse(
+  //                       state.uri.queryParameters['amount'] ?? ''))));
+  //     }),
+  // DocumentedGoRoute(
+  //     name: ForecastScreen.name,
+  //     modal: true,
+  //     parentNavigatorKey: _rootNavigatorKey,
+  //     description: "get weather forecast information for a place on earth",
+  //     parameters: const [
+  //       UIParameter(
+  //         name: 'place',
+  //         description: 'place on earth',
+  //         required: true,
+  //       ),
+  //       UIParameter(
+  //         name: 'numDays',
+  //         description: 'The number of days to forecast',
+  //         type: 'integer',
+  //       ),
+  //     ],
+  //     path: "/${ForecastScreen.name}",
+  //     pageBuilder: (context, state) {
+  //       return MaterialPage(
+  //           fullscreenDialog: true,
+  //           child: LangBarWrapper(
+  //             body: ForecastScreen(
+  //               label: 'Weather Forecast',
+  //               detailsPath: '/forecast/details',
+  //               place: state.uri.queryParameters['place'],
+  //               numDays:
+  //                   int.tryParse(state.uri.queryParameters['numDays'] ?? '') ??
+  //                       1,
+  //             ),
+  //           ));
+  //     }),
+  // DocumentedGoRoute(
+  //     path: '/routeplanner',
+  //     name: 'routeplanner',
+  //     description:
+  //         'Plan a public transport trip from A to B in the Netherlands.',
+  //     parameters: const [
+  //       UIParameter(
+  //         name: 'origin',
+  //         description: 'origin address, train station or postal code.',
+  //         required: true,
+  //       ),
+  //       UIParameter(
+  //         name: 'destination',
+  //         description: 'destination address, train station or postal code.',
+  //         required: true,
+  //       ),
+  //       UIParameter(
+  //         name: 'trip_date_time',
+  //         description:
+  //             'Requested DateTime for the departure or arrival of the trip in \'YYYY-MM-DDTHH:MM:SS+02:00\' format. The user will use a time in a 12 hour system, make an intelligent guess about what the user is most likely to mean in terms of a 24 hour system, e.g. not planning for the past.',
+  //       ),
+  //       UIParameter(
+  //         name: 'departure',
+  //         description:
+  //             'True to depart at the given time, False to arrive at the given time.',
+  //         required: true,
+  //       ),
+  //       UIParameter(
+  //         name: 'language',
+  //         description: 'Language of the input text',
+  //         required: true,
+  //       ),
+  //     ],
+  //     modal: true,
+  //     parentNavigatorKey: _rootNavigatorKey,
+  //     pageBuilder: (context, state) {
+  //       return MaterialPage(
+  //           fullscreenDialog: true,
+  //           child: LangBarWrapper(
+  //               body:
+  //                   RoutePlanner(queryParameters: state.uri.queryParameters)));
+  //     })
 ];
 
 List<RouteBase> navBarRoutes = [
