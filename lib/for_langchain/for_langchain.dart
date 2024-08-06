@@ -27,8 +27,10 @@ class UIParameter {
   }
 }
 
-abstract base class GenericTool<Options extends ToolOptions>
-    extends BaseTool<Options> {
+abstract base class GenericTool<
+    Input extends Object,
+    Options extends ToolOptions,
+    Output extends Object> extends Tool<Input, Options, Output> {
   GenericTool(
       {required super.name,
       required super.description,

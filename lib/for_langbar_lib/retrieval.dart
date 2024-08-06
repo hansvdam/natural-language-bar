@@ -77,7 +77,7 @@ Question: {question}''');
     'context': Runnable.getItemFromMap('standalone_question') |
         retriever |
         Runnable.fromFunction<List<Document>, String>(
-          (final docs, final _) => combineDocuments(docs),
+          invoke: (final docs, final _) => combineDocuments(docs),
         ),
     'question': Runnable.getItemFromMap('standalone_question'),
   });

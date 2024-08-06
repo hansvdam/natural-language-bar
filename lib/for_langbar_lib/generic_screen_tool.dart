@@ -9,7 +9,8 @@ import '../for_langchain/for_langchain.dart';
 /// {@template forecasting_tool}
 /// A for forecasting the weather from an api.
 /// {@endtemplate}
-final class GenericScreenTool extends GenericTool<ToolOptions> {
+final class GenericScreenTool
+    extends GenericTool<Map<String, dynamic>, ToolOptions, String> {
   final GoRouter goRouter;
 
   final String path;
@@ -26,8 +27,8 @@ final class GenericScreenTool extends GenericTool<ToolOptions> {
   }) : super(returnDirect: true) {}
 
   @override
-  FutureOr<String> runInternal(Map<String, dynamic> toolInput,
-      {final ToolOptions? options}) {
+  Future<String> invokeInternal(Map<String, dynamic> toolInput,
+      {final ToolOptions? options}) async {
     Uri uri = Uri(
         path: path,
         queryParameters:
@@ -35,5 +36,10 @@ final class GenericScreenTool extends GenericTool<ToolOptions> {
     var uriString = uri.toString();
     activateUri(uriString, push);
     return uriString;
+  }
+
+  @override
+  Map<String, dynamic> getInputFromJson(Map<String, dynamic> json) {
+    return json;
   }
 }

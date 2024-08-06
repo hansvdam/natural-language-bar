@@ -31,7 +31,7 @@ Future<void> sendToLLMFlutter(
   // final creditCardTool = CreditCardScreen.getTool(GoRouter.of(context));
   var langbarState = Provider.of<LangBarState>(context, listen: false);
   String query = langbarState.controllerOutlined.text;
-  List<BaseTool> tools = parseRouters(GoRouter.of(context), routes);
+  List<Tool> tools = parseRouters(GoRouter.of(context), routes);
 
   var tool = RetrieverTool();
 
@@ -45,7 +45,7 @@ Future<void> sendToLLMFlutter(
         await sendToLLM(functionDescriptions, memory, query, trelis: false);
     print(jsonEncode(futureFunctionCall));
     // from tools select the one corresponding to futureFunctionCall.name
-    BaseTool toolToTrigger =
+    Tool toolToTrigger =
         tools.firstWhere((element) => element.name == futureFunctionCall.name);
     String toolResult = await toolToTrigger.run(futureFunctionCall.arguments);
     if (toolToTrigger is RetrieverTool) {
@@ -70,7 +70,7 @@ Future<void> sendToLLMFlutter(
   langbarState.sendingToOpenAI = false;
 }
 
-functionDescriptionsFromTools(List<BaseTool> tools) {
+functionDescriptionsFromTools(List<Tool> tools) {
   return tools.map((tool) {
     return FunctionDescription(
         name: tool.name,

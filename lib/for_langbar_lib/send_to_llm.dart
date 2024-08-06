@@ -10,7 +10,6 @@ import '../routes.dart';
 import 'generic_screen_tool.dart';
 import 'langbar_states.dart';
 import 'llm_go_route.dart';
-import 'my_conversation_buffer_memory.dart';
 // uses langchain and langchain_openai, and implicitly uses openai_dart
 void submitToLLM(BuildContext context) {
   var langbarState = Provider.of<LangBarState>(context, listen: false);
@@ -27,9 +26,12 @@ void submitToLLM(BuildContext context) {
   sendToOpenai(llm, context);
 }
 
-final memory = MyConversationBufferWindowMemory(
+final memory = ConversationBufferWindowMemory(
     chatHistory: ChatMessageHistory(),
     returnMessages: true); // default window length is 5
+// final memory = MyConversationBufferWindowMemory(
+//     chatHistory: ChatMessageHistory(),
+//     returnMessages: true); // default window length is 5
 
 Future<void> sendToOpenai(ChatOpenAI llm, BuildContext context) async {
   // final forecastTool = ForecastScreen.getTool(GoRouter.of(context));
@@ -46,7 +48,7 @@ Future<void> sendToOpenai(ChatOpenAI llm, BuildContext context) async {
 
   // DateTime now = DateTime.now();
   // String formattedDate = DateFormat('yyyy-MM-ddTHH:mm:ssZ').format(now);
-  final agent = OpenAIFunctionsAgent.fromLLMAndTools(
+  final agent = OpenAIToolsAgent.fromLLMAndTools(
       systemChatMessage: const SystemChatMessagePromptTemplate(
         prompt: PromptTemplate(
           inputVariables: {},
@@ -100,8 +102,8 @@ Future<void> replace_retriever_function_call_with_assistant_response_in_history(
   var chatHistoryLLMItems = await chatHistoryLLM.getChatMessages();
   ChatMessage? lastChatMessage = chatHistoryLLMItems.lastOrNull;
   if (lastChatMessage is AIChatMessage &&
-      lastChatMessage.functionCall != null &&
-      lastChatMessage.functionCall!.name == retriever_name) {
+      lastChatMessage.toolCalls.isNotEmpty &&
+      lastChatMessage.toolCalls.first.name == retriever_name) {
     await chatHistoryLLM.removeLast();
     await chatHistoryLLM.addAIChatMessage(response);
   }
@@ -128,8 +130,8 @@ ConversationBufferMemory memoryFromChathistory(ChatHistory chatHistory) {
   return memory2;
 }
 
-List<BaseTool> parseRouters(GoRouter, List<RouteBase> routes, {parentPath}) {
-  var tools = <BaseTool>[];
+List<Tool> parseRouters(GoRouter, List<RouteBase> routes, {parentPath}) {
+  var tools = <Tool>[];
   for (var route in routes) {
     String? newPath = null;
     if (route is GoRoute) {

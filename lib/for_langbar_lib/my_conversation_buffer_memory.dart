@@ -46,7 +46,7 @@ import 'package:langchain/langchain.dart';
 final class MyConversationBufferWindowMemory extends BaseChatMemory {
   /// {@macro conversation_buffer_window_memory}
   MyConversationBufferWindowMemory({
-    required super.chatHistory,
+    final BaseChatMessageHistory? chatHistory,
     super.inputKey,
     super.outputKey,
     super.returnMessages = false,
@@ -55,27 +55,27 @@ final class MyConversationBufferWindowMemory extends BaseChatMemory {
     this.systemPrefix = SystemChatMessage.defaultPrefix,
     this.humanPrefix = HumanChatMessage.defaultPrefix,
     this.aiPrefix = AIChatMessage.defaultPrefix,
-    this.functionPrefix = FunctionChatMessage.defaultPrefix,
-  });
+    this.toolPrefix = ToolChatMessage.defaultPrefix,
+  }) : super(chatHistory: chatHistory ?? ChatMessageHistory());
 
-  /// Number of messages to keep in the buffer.
+  /// Number of interactions to store in the buffer.
   final int k;
 
   /// The memory key to use for the chat history.
   /// This will be passed as input variable to the prompt.
   final String memoryKey;
 
-  /// The prefix to use for system messages.
+  /// The prefix to use for system messages if [returnMessages] is false.
   final String systemPrefix;
 
-  /// The prefix to use for human messages.
+  /// The prefix to use for human messages if [returnMessages] is false.
   final String humanPrefix;
 
-  /// The prefix to use for AI messages.
+  /// The prefix to use for AI messages if [returnMessages] is false.
   final String aiPrefix;
 
-  /// The prefix to use for function messages.
-  final String functionPrefix;
+  /// The prefix to use for tool messages if [returnMessages] is false.
+  final String toolPrefix;
 
   @override
   Set<String> get memoryKeys => {memoryKey};
@@ -93,7 +93,7 @@ final class MyConversationBufferWindowMemory extends BaseChatMemory {
         systemPrefix: systemPrefix,
         humanPrefix: humanPrefix,
         aiPrefix: aiPrefix,
-        functionPrefix: functionPrefix,
+        toolPrefix: toolPrefix,
       ),
     };
   }
